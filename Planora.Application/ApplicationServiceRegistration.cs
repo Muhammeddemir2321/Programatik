@@ -1,0 +1,17 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Planora.Application.Features.SchoolFeature.Rules;
+using System.Reflection;
+
+namespace Planora.Application
+{
+    public static class ApplicationServiceRegistration
+    {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddMediatR(m => m.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddScoped<SchoolBusinessRules>();
+            return services;
+        }
+    }
+}

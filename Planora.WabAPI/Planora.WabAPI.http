@@ -1,0 +1,6 @@
+@Planora.WabAPI_HostAddress = http://localhost:5141
+
+GET {{Planora.WabAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
