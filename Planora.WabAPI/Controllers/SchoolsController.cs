@@ -1,7 +1,6 @@
 ﻿using Core.Application.Requests;
 using Core.Persistence.Controllers;
 using Core.Persistence.Dynamic;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Planora.Application.Features.SchoolFeature.Commands;
 using Planora.Application.Features.SchoolFeature.Dtos;

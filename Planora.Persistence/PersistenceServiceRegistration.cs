@@ -22,6 +22,7 @@ public static class PersistenceServiceRegistration
                                                  );
         
         services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<ILectureRepository, LectureRepository>();
         return services;
     }
 }
