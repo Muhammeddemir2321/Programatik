@@ -12,7 +12,7 @@ public class DeleteSchoolCommand : IRequest<bool>, ISecuredRequest
     public Guid Id { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { SchoolClaimConstants.Delete };
-    public class DeleteByIdSchoolCommandHandler(
+    public class DeleteSchoolCommandHandler(
         ISchoolRepository schoolRepository,
         SchoolBusinessRules schoolBusinessRules)
         : IRequestHandler<DeleteSchoolCommand, bool>

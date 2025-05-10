@@ -6,6 +6,7 @@ using Planora.Application.Features.SchoolFeature.Dtos;
 using Planora.Application.Features.SchoolFeature.Rules;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
+using System.Text.Json.Serialization;
 
 namespace Planora.Application.Features.SchoolFeature.Commands;
 
@@ -13,6 +14,8 @@ public class CreateSchoolCommand : IRequest<CreatedSchoolDto>, ISecuredRequest
 {
     public string Name { get; set; }
     public string Address { get; set; }
+
+    [JsonIgnore]
     public string[] Roles => new string[] { SchoolClaimConstants.Create };
 
     public class CreateSchoolCommandHandler(

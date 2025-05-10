@@ -13,17 +13,17 @@ public class GetByIdLectureQuery : IRequest<LectureGetByIdDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
     [JsonIgnore]
-    public string[] Roles => [LectureClaimConstants.Get];
+    public string[] Roles => new string[] { LectureClaimConstants.Get };
 
     public class GetByIdLectureQueryHandler
-        (ILectureRepository LectureRepository,
+        (ILectureRepository lectureRepository,
          IMapper mapper,
          LectureBusinessRules LectureBusinessRules)
         : IRequestHandler<GetByIdLectureQuery, LectureGetByIdDto>
     {
         public async Task<LectureGetByIdDto> Handle(GetByIdLectureQuery request, CancellationToken cancellationToken)
         {
-            var lecture = await LectureRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
+            var lecture = await lectureRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
 
             await LectureBusinessRules.LectureShouldExistWhenRequested(lecture);
             return mapper.Map<LectureGetByIdDto>(lecture);

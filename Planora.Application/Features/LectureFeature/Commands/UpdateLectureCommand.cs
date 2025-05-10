@@ -20,17 +20,17 @@ public class UpdateLectureCommand : IRequest<UpdatedLectureDto>, ISecuredRequest
 
 
     public class UpdateLectureCommandHandler(
-        ILectureRepository LectureRepository,
+        ILectureRepository lectureRepository,
         IMapper mapper,
-        LectureBusinessRules LectureBusinessRules)
+        LectureBusinessRules lectureBusinessRules)
         : IRequestHandler<UpdateLectureCommand, UpdatedLectureDto>
     {
         public async Task<UpdatedLectureDto> Handle(UpdateLectureCommand request, CancellationToken cancellationToken)
         {
-            await LectureBusinessRules.LectureNameMustNotBeEmpty(request.Name);
-            await LectureBusinessRules.LectureNameMustBeUniqueWhenUpdate(request.Id, request.Name);
+            await lectureBusinessRules.LectureNameMustNotBeEmpty(request.Name);
+            await lectureBusinessRules.LectureNameMustBeUniqueWhenUpdate(request.Id, request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
-            var updatedLecture = await LectureRepository.UpdateAsync(mappedLecture, cancellationToken: cancellationToken);
+            var updatedLecture = await lectureRepository.UpdateAsync(mappedLecture, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedLectureDto>(updatedLecture);
         }
     }

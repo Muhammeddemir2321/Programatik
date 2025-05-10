@@ -3,6 +3,6 @@ using Planora.Domain.Entities;
 
 namespace Planora.Application.Services.Repositories;
 
-public interface IClassCourseAssignmentRepository: IAsyncRepository<ClassCourseAssignment>, IRepository<ClassCourseAssignment>
+public interface IClassCourseAssignmentRepository: IAsyncRepository<ClassCourseAssignment>, IRepository<ClassCourseAssignment>, IDynamicRepository<ClassCourseAssignment>
 {
 }

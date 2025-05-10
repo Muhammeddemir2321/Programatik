@@ -2,11 +2,10 @@
 using Core.CrossCuttingConcerns.Exceptions;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
-using System.Xml.Linq;
 
 namespace Planora.Application.Features.LectureFeature.Rules;
 
-public class LectureBusinessRules(ILectureRepository LectureRepository)
+public class LectureBusinessRules(ILectureRepository lectureRepository)
 {
     public async Task LectureShouldExistWhenRequested(Lecture? Lecture)
     {
@@ -15,12 +14,12 @@ public class LectureBusinessRules(ILectureRepository LectureRepository)
 
         await Task.CompletedTask;
     }
-    public async Task LectureNameMustBeUniqeWhenCreate(string? LectureName)
+    public async Task LectureNameMustBeUniqeWhenCreate(string? lectureName)
     {
-        var lecture = await LectureRepository.GetAsync(c => c.Name == LectureName);
+        var lecture = await lectureRepository.GetAsync(c => c.Name == lectureName);
         if (lecture != null)
             throw new BusinessException("Name already taken", ErrorConstants.NameAlreadyTaken)
-                .WithParam("LectureName", LectureName ?? string.Empty);
+                .WithParam("LectureName", lectureName ?? string.Empty);
     }
     public async Task LectureNameMustNotBeEmpty(string? name)
     {
@@ -30,7 +29,7 @@ public class LectureBusinessRules(ILectureRepository LectureRepository)
     }
     public async Task LectureNameMustBeUniqueWhenUpdate(Guid id, string LectureName)
     {
-        var Lecture = await LectureRepository.GetAsync(c => c.Id != id && c.Name == LectureName);
+        var Lecture = await lectureRepository.GetAsync(c => c.Id != id && c.Name == LectureName);
         if (Lecture != null) throw new BusinessException("Name already taken", ErrorConstants.NameAlreadyTaken)
                 .WithParam("LectureName", LectureName ?? string.Empty);
     }

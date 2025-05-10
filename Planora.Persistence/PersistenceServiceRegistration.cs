@@ -21,8 +21,13 @@ public static class PersistenceServiceRegistration
         }
                                                  );
         
-        services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<IClassCourseAssignmentRepository, ClassCourseAssignmentRepository>();
+        services.AddScoped<IClassSectionRepository, ClassSectionRepository>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IGradeRepository, GradeRepository>();
         services.AddScoped<ILectureRepository, LectureRepository>();
+        services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<ITeacherRepository, TeacherRepository>();
         return services;
     }
 }

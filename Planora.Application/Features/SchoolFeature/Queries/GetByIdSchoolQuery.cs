@@ -13,7 +13,7 @@ public class GetByIdSchoolQuery : IRequest<SchoolGetByIdDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
     [JsonIgnore]
-    public string[] Roles => [SchoolClaimConstants.Get];
+    public string[] Roles => new string[] { SchoolClaimConstants.Get };
 
     public class GetByIdSchoolQueryHandler
         (ISchoolRepository schoolRepository,
