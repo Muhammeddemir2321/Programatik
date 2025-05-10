@@ -2,12 +2,12 @@
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using MediatR;
-using Planora.Application.Features.GradeFeatures.Constants;
-using Planora.Application.Features.GradeFeatures.Models;
+using Planora.Application.Features.GradeFeature.Constants;
+using Planora.Application.Features.GradeFeature.Models;
 using Planora.Application.Services.Repositories;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.GradeFeatures.Queries;
+namespace Planora.Application.Features.GradeFeature.Queries;
 
 public class ListAllGradeQuery : IRequest<GradeListModel>, ISecuredRequest
 {
@@ -16,9 +16,9 @@ public class ListAllGradeQuery : IRequest<GradeListModel>, ISecuredRequest
     public string[] Roles => new string[] { GradeClaimConstants.List };
 
     public class ListAllGradeQueryHandler(IGradeRepository gradeRepository, IMapper mapper)
-        : IRequestHandler<ListAllGradeByDynamicQuery, GradeListModel>
+        : IRequestHandler<ListAllGradeQuery, GradeListModel>
     {
-        public async Task<GradeListModel> Handle(ListAllGradeByDynamicQuery request, CancellationToken cancellationToken)
+        public async Task<GradeListModel> Handle(ListAllGradeQuery request, CancellationToken cancellationToken)
         {
             var grades=await gradeRepository.GetListAsync(index: request.PageRequest.Page, size: request.PageRequest.PageSize, cancellationToken: cancellationToken);
             return mapper.Map<GradeListModel>(grades);

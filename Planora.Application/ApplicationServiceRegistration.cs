@@ -2,6 +2,7 @@
 using Planora.Application.Features.GradeFeatures.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
+using Planora.Application.Features.TeacherFeature.Rules;
 using System.Reflection;
 
 namespace Planora.Application
@@ -15,6 +16,7 @@ namespace Planora.Application
             services.AddScoped<LectureBusinessRules>();
             services.AddScoped<SchoolBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
+            services.AddScoped<TeacherBusinessRules>();
             return services;
         }
     }

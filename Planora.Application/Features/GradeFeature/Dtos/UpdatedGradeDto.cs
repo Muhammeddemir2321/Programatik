@@ -1,4 +1,4 @@
-﻿namespace Planora.Application.Features.GradeFeatures.Dtos;
+﻿namespace Planora.Application.Features.GradeFeature.Dtos;
 
 public class UpdatedGradeDto
 {

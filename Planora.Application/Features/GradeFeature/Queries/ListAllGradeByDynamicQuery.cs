@@ -3,12 +3,12 @@ using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Dynamic;
 using MediatR;
-using Planora.Application.Features.GradeFeatures.Constants;
-using Planora.Application.Features.GradeFeatures.Models;
+using Planora.Application.Features.GradeFeature.Constants;
+using Planora.Application.Features.GradeFeature.Models;
 using Planora.Application.Services.Repositories;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.GradeFeatures.Queries;
+namespace Planora.Application.Features.GradeFeature.Queries;
 
 public class ListAllGradeByDynamicQuery : IRequest<GradeListModel>, ISecuredRequest
 {

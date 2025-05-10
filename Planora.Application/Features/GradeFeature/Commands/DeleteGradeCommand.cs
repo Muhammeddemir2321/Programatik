@@ -1,20 +1,18 @@
 ﻿using Core.Application.Pipelines.Authorization;
 using MediatR;
-using Planora.Application.Features.GradeFeatures.Constants;
-using Planora.Application.Features.GradeFeatures.Rules;
-using Planora.Application.Features.LectureFeature.Commands;
-using Planora.Application.Features.LectureFeature.Rules;
+using Planora.Application.Features.GradeFeature.Constants;
+using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Services.Repositories;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.GradeFeatures.Commands;
+namespace Planora.Application.Features.GradeFeature.Commands;
 
 public class DeleteGradeCommand : IRequest<bool>, ISecuredRequest
 {
     public Guid Id { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { GradeClaimConstants.Delete };
-    public class DeleteLectureCommandHandler(
+    public class DeleteGradeCommandHandler(
         IGradeRepository gradeRepository,
         GradeBusinessRules gradeBusinessRules)
         : IRequestHandler<DeleteGradeCommand, bool>

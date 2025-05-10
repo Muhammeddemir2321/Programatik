@@ -1,16 +1,11 @@
 ﻿using Core.Application.Requests;
 using Core.Persistence.Controllers;
 using Core.Persistence.Dynamic;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.GradeFeatures.Commands;
-using Planora.Application.Features.GradeFeatures.Dtos;
-using Planora.Application.Features.GradeFeatures.Models;
-using Planora.Application.Features.GradeFeatures.Queries;
-using Planora.Application.Features.LectureFeature.Commands;
-using Planora.Application.Features.LectureFeature.Dtos;
-using Planora.Application.Features.LectureFeature.Models;
-using Planora.Application.Features.LectureFeature.Queries;
+using Planora.Application.Features.GradeFeature.Commands;
+using Planora.Application.Features.GradeFeature.Dtos;
+using Planora.Application.Features.GradeFeature.Models;
+using Planora.Application.Features.GradeFeature.Queries;
 
 namespace Planora.WabAPI.Controllers
 {

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using Core.Application.Pipelines.Authorization;
 using MediatR;
-using Planora.Application.Features.GradeFeatures.Constants;
-using Planora.Application.Features.GradeFeatures.Dtos;
-using Planora.Application.Features.GradeFeatures.Rules;
+using Planora.Application.Features.GradeFeature.Constants;
+using Planora.Application.Features.GradeFeature.Dtos;
+using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Services.Repositories;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.GradeFeatures.Queries;
+namespace Planora.Application.Features.GradeFeature.Queries;
 
 public class GetByIdGradeQuery : IRequest<GradeGetByIdDto>, ISecuredRequest
 {

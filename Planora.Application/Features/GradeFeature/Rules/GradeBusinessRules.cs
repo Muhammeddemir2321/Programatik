@@ -3,7 +3,7 @@ using Core.CrossCuttingConcerns.Exceptions;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
-namespace Planora.Application.Features.GradeFeatures.Rules;
+namespace Planora.Application.Features.GradeFeature.Rules;
 
 public class GradeBusinessRules(IGradeRepository gradeRepository)
 {

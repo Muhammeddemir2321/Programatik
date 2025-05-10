@@ -1,6 +1,6 @@
 ﻿using Core.Application.Constants;
 
-namespace Planora.Application.Features.GradeFeatures.Constants;
+namespace Planora.Application.Features.GradeFeature.Constants;
 [ClaimConstantGroup("Grade")]
 public class GradeClaimConstants
 {
