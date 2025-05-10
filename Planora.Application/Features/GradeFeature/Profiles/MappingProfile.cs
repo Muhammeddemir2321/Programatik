@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Core.Persistence.Paging;
-using Planora.Application.Features.GradeFeatures.Commands;
-using Planora.Application.Features.GradeFeatures.Dtos;
-using Planora.Application.Features.GradeFeatures.Models;
+using Planora.Application.Features.GradeFeature.Commands;
+using Planora.Application.Features.GradeFeature.Dtos;
+using Planora.Application.Features.GradeFeature.Models;
 using Planora.Domain.Entities;
 
 namespace Planora.Application.Features.GradeFeatures.Profiles;

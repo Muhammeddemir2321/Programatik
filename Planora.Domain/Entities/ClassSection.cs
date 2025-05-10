@@ -2,7 +2,7 @@
 
 namespace Planora.Domain.Entities;
 
-public class ClassSection : Entity<Guid>
+public class ClassSection : Entity<Guid>, ISchoolEntity
 {
     public string Name { get; set; }
     public Guid SchoolId { get; set; }

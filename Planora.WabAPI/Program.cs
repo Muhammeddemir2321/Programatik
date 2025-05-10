@@ -3,6 +3,7 @@ using Planora.Persistence;
 using Core.Extensions.SystemExtensions;
 using Core.Utilities.IoC;
 using Planora.Persistence.Contexts;
+using Planora.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddInfrastructureServices();
 builder.Services.AddControllers();
 builder.ConfigureCustomApplicationBuilder(typeof(Program).Assembly);
 

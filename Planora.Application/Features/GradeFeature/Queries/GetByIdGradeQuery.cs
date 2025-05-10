@@ -22,7 +22,7 @@ public class GetByIdGradeQuery : IRequest<GradeGetByIdDto>, ISecuredRequest
         public async Task<GradeGetByIdDto> Handle(GetByIdGradeQuery request, CancellationToken cancellationToken)
         {
             var grade = await gradeRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
-            await gradeBusinessRules.GradeShouldExistWhenRequested(grade);
+            await gradeBusinessRules.GradeShouldExistWhenRequestedAsync(grade);
             return mapper.Map<GradeGetByIdDto>(grade);
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Planora.Domain.Entities;
 
-public class Course : Entity<Guid>
+public class Course : Entity<Guid>, ISchoolEntity
 {
     public string Name { get; set; }
     public string? WeeklyHours { get; set; }

@@ -24,7 +24,7 @@ public class UpdateGradeCommand : IRequest<UpdatedGradeDto>, ISecuredRequest
     {
         public async Task<UpdatedGradeDto> Handle(UpdateGradeCommand request, CancellationToken cancellationToken)
         {
-            await gradeBusinessRules.GradeNameMustBeUniqueWhenUpdate(request.Id, request.Name);
+            await gradeBusinessRules.GradeNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedGrade = mapper.Map<Grade>(request);
             var updatedGrade = await gradeRepository.UpdateAsync(mappedGrade, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedGradeDto>(updatedGrade);

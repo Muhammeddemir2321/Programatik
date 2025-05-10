@@ -25,7 +25,7 @@ public class GetByIdLectureQuery : IRequest<LectureGetByIdDto>, ISecuredRequest
         {
             var lecture = await lectureRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
 
-            await LectureBusinessRules.LectureShouldExistWhenRequested(lecture);
+            await LectureBusinessRules.LectureShouldExistWhenRequestedAsync(lecture);
             return mapper.Map<LectureGetByIdDto>(lecture);
         }
     }

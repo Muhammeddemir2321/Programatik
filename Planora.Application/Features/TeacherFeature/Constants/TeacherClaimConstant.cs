@@ -2,7 +2,7 @@
 
 namespace Planora.Application.Features.TeacherFeature.Constants;
 
-[ClaimConstantGroup("Grade")]
+[ClaimConstantGroup("Teacher")]
 public class TeacherClaimConstants
 {
     public const string Create = "Teacher.Create";

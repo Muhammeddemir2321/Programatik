@@ -28,9 +28,9 @@ public class UpdateSchoolCommand : IRequest<UpdatedSchoolDto>, ISecuredRequest
     {
         public async Task<UpdatedSchoolDto> Handle(UpdateSchoolCommand request, CancellationToken cancellationToken)
         {
-            await schoolBusinessRules.SchoolNameMustNotBeEmpty(request.Name);
-            await schoolBusinessRules.SchoolAddressMustNotBeEmpty(request.Address);
-            await schoolBusinessRules.SchoolNameMustBeUniqueWhenUpdate(request.Id, request.Name);
+            await schoolBusinessRules.SchoolNameMustNotBeEmptyAsync(request.Name);
+            await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address);
+            await schoolBusinessRules.SchoolNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedSchool = mapper.Map<School>(request);
             var updatedSchool = await schoolRepository.UpdateAsync(mappedSchool, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedSchoolDto>(updatedSchool);

@@ -24,9 +24,9 @@ public class CreateSchoolCommand : IRequest<CreatedSchoolDto>, ISecuredRequest
     {
         public async Task<CreatedSchoolDto> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
         {
-            await schoolBusinessRules.SchoolNameMustNotBeEmpty(request.Name);  //Validationda yap
-            await schoolBusinessRules.SchoolAddressMustNotBeEmpty(request.Address); //Validationda yap
-            await schoolBusinessRules.SchoolNameMustBeUniqeWhenCreate(request.Name);
+            await schoolBusinessRules.SchoolNameMustNotBeEmptyAsync(request.Name);  //Validationda yap
+            await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address); //Validationda yap
+            await schoolBusinessRules.SchoolNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedschool = mapper.Map<School>(request);
             var createdschool = await schoolRepository.AddAsync(mappedschool, cancellationToken: cancellationToken);
             return mapper.Map<CreatedSchoolDto>(createdschool);

@@ -22,8 +22,8 @@ public class CreateLectureCommand : IRequest<CreatedLectureDto>, ISecuredRequest
     {
         public async Task<CreatedLectureDto> Handle(CreateLectureCommand request, CancellationToken cancellationToken)
         {
-            await lectureBusinessRules.LectureNameMustNotBeEmpty(request.Name);
-            await lectureBusinessRules.LectureNameMustBeUniqeWhenCreate(request.Name);
+            await lectureBusinessRules.LectureNameMustNotBeEmptyAsync(request.Name);
+            await lectureBusinessRules.LectureNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
             var createdLecture = await lectureRepository.AddAsync(mappedLecture, cancellationToken: cancellationToken);
             return mapper.Map<CreatedLectureDto>(createdLecture);

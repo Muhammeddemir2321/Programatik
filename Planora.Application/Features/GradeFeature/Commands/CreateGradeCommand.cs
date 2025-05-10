@@ -21,7 +21,7 @@ public class CreateGradeCommand : IRequest<CreatedGradeDto>, ISecuredRequest
     {
         public async Task<CreatedGradeDto> Handle(CreateGradeCommand request, CancellationToken cancellationToken)
         {
-            await gradeBusinessRules.GradeNameMustBeUniqeWhenCreate(request.Name);
+            await gradeBusinessRules.GradeNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedGrade = mapper.Map<Grade>(request);
             var createdGrade = await gradeRepository.AddAsync(mappedGrade, cancellationToken: cancellationToken);
             return mapper.Map<CreatedGradeDto>(createdGrade);

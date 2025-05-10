@@ -25,7 +25,7 @@ public class GetByIdSchoolQuery : IRequest<SchoolGetByIdDto>, ISecuredRequest
         {
             var school = await schoolRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
 
-            await schoolBusinessRules.SchoolShouldExistWhenRequested(school);
+            await schoolBusinessRules.SchoolShouldExistWhenRequestedAsync(school);
             return mapper.Map<SchoolGetByIdDto>(school);
         }
     }

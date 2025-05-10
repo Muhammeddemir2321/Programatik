@@ -20,7 +20,7 @@ public class DeleteTeacherCommand : IRequest<bool>, ISecuredRequest
         public async Task<bool> Handle(DeleteTeacherCommand request, CancellationToken cancellationToken)
         {
             var Teacher = await teacherRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-            await teacherBusinessRules.TeacherShouldExistWhenRequested(Teacher);
+            await teacherBusinessRules.TeacherShouldExistWhenRequestedAsync(Teacher);
             await teacherRepository.DeleteAsync(Teacher!, cancellationToken: cancellationToken);
             return true;
 

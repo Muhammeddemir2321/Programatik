@@ -20,7 +20,7 @@ public class DeleteLectureCommand : IRequest<bool>, ISecuredRequest
         public async Task<bool> Handle(DeleteLectureCommand request, CancellationToken cancellationToken)
         {
             var lecture = await lectureRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-            await lectureBusinessRules.LectureShouldExistWhenRequested(lecture);
+            await lectureBusinessRules.LectureShouldExistWhenRequestedAsync(lecture);
             await lectureRepository.DeleteAsync(lecture!, cancellationToken: cancellationToken);
             return true;
 

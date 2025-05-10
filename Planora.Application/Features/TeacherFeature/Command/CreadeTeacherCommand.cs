@@ -13,6 +13,7 @@ namespace Planora.Application.Features.TeacherFeatures.Commands;
 public class CreateTeacherCommand : IRequest<CreatedTeacherDto>, ISecuredRequest
 {
     public string FullName { get; set; }
+    public Guid LectureId { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Create };
     public class CreateTeachereCommandHandler(
@@ -21,7 +22,7 @@ public class CreateTeacherCommand : IRequest<CreatedTeacherDto>, ISecuredRequest
     {
         public async Task<CreatedTeacherDto> Handle(CreateTeacherCommand request, CancellationToken cancellationToken)
         {
-            await teacherBusinessRules.TeacherFullNameMustBeUniqeWhenCreate(request.FullName);
+            await teacherBusinessRules.TeacherFullNameMustBeUniqeWhenCreateAsync(request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
             var createdTeacher = await teacherRepository.AddAsync(mappedTeacher, cancellationToken: cancellationToken);
             return mapper.Map<CreatedTeacherDto>(createdTeacher);

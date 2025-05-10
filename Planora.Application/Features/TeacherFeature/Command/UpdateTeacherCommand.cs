@@ -14,6 +14,7 @@ public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
     public string FullName { get; set; }
+    public Guid LectureId { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Update };
     public class UpdateTeacherCommandHandler(
@@ -24,7 +25,7 @@ public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
     {
         public async Task<UpdatedTeacherDto> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)
         {
-            await teacherBusinessRules.TeacherFullNameMustBeUniqueWhenUpdate(request.Id, request.FullName);
+            await teacherBusinessRules.TeacherFullNameMustBeUniqueWhenUpdateAsync(request.Id, request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
             var updatedTeacher = await teacherRepository.UpdateAsync(mappedTeacher, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedTeacherDto>(updatedTeacher);

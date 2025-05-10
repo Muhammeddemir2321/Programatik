@@ -20,7 +20,7 @@ public class DeleteGradeCommand : IRequest<bool>, ISecuredRequest
         public async Task<bool> Handle(DeleteGradeCommand request, CancellationToken cancellationToken)
         {
             var grade = await gradeRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-            await gradeBusinessRules.GradeShouldExistWhenRequested(grade);
+            await gradeBusinessRules.GradeShouldExistWhenRequestedAsync(grade);
             await gradeRepository.DeleteAsync(grade!, cancellationToken: cancellationToken);
             return true;
 

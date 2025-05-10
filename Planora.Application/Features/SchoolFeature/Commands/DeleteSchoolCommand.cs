@@ -20,7 +20,7 @@ public class DeleteSchoolCommand : IRequest<bool>, ISecuredRequest
         public async Task<bool> Handle(DeleteSchoolCommand request, CancellationToken cancellationToken)
         {
             var school = await schoolRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-            await schoolBusinessRules.SchoolShouldExistWhenRequested(school);
+            await schoolBusinessRules.SchoolShouldExistWhenRequestedAsync(school);
             await schoolRepository.DeleteAsync(school!, cancellationToken: cancellationToken);
             return true;
 
