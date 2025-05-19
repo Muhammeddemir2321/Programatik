@@ -8,7 +8,7 @@ using Planora.Domain.Entities;
 
 namespace Planora.Persistence.Contexts;
 
-public class PlanoraDbContext : IdentityDbContext<BaseUser, IdentityRole<Guid>, Guid>
+public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, Guid>
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
     public PlanoraDbContext(DbContextOptions dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) :base(dbContextOptions)

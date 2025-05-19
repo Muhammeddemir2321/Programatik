@@ -3,6 +3,6 @@
 public class UserListDto
 {
     public Guid SchoolId { get; set; }
-    public Guid BaseUserId { get; set; }
+    public Guid IdentityId { get; set; }
     public bool IsVerify { get; set; }
 }

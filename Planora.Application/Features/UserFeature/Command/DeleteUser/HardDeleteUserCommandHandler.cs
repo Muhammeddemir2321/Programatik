@@ -4,19 +4,19 @@ using Planora.Application.Services.Repositories;
 
 namespace Planora.Application.Features.UserFeature.Command.DeleteUser;
 
-public class SoftDeleteUserCommandHandler(
+public class HardDeleteUserCommandHandler(
     IUserRepository userRepository,
     UserBusinessRules userBusinessRules,
     IMediator mediator)
-    : IRequestHandler<SoftDeleteUserCommand, bool>
+    : IRequestHandler<HardDeleteUserCommand, bool>
 {
-    public async Task<bool> Handle(SoftDeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(HardDeleteUserCommand request, CancellationToken cancellationToken)
     {
         var user = await userRepository.GetAsync(u => u.Id == request.Id, cancellationToken: cancellationToken);
         await userBusinessRules.UserShouldExistWhenRequestedAsync(user);
-        request.SoftDeleteIdentityCommand.Id = user!.IdentityId;
-        await userRepository.SoftDeleteAsync(user, cancellationToken: cancellationToken);
-        await mediator.Send(request.SoftDeleteIdentityCommand);
+        request.HardDeleteIdentityCommand.Id = user!.IdentityId;
+        await userRepository.DeleteAsync(user, cancellationToken: cancellationToken);
+        await mediator.Send(request.HardDeleteIdentityCommand);
         return true;
     }
 }

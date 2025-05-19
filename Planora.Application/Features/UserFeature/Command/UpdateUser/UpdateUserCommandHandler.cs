@@ -17,8 +17,8 @@ public class UpdateUserCommandHandler(
     {
         var user = await userRepository.GetAsync(u => u.Id == request.Id, cancellationToken: cancellationToken);
         await userBusinessRules.UserShouldExistWhenRequestedAsync(user);
-        request.UpdateBaseUserCommand.Id = user!.BaseUserId;
-        await mediator.Send(request.UpdateBaseUserCommand);
+        request.UpdateIdentityCommand.Id = user!.IdentityId;
+        await mediator.Send(request.UpdateIdentityCommand);
         var mappedUser = mapper.Map<User>(request);
         var updatedUser = await userRepository.UpdateAsync(mappedUser, cancellationToken: cancellationToken);
         return mapper.Map<UpdatedUserDto>(updatedUser);

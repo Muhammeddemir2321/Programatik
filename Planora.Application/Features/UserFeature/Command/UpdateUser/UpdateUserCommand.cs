@@ -1,6 +1,6 @@
 ﻿using Core.Application.Pipelines.Authorization;
 using MediatR;
-using Planora.Application.Features.BaseUserFeature.Commad;
+using Planora.Application.Features.IdentityFeature.Commad;
 using Planora.Application.Features.UserFeature.Constants;
 
 namespace Planora.Application.Features.UserFeature.Command.UpdateUser;
@@ -10,6 +10,6 @@ public class UpdateUserCommand : IRequest<UpdatedUserDto>, ISecuredRequest
     public Guid Id { get; set; }
     public Guid SchoolId { get; set; }
     public bool IsVerify { get; set; }
-    public UpdateBaseUserCommand UpdateBaseUserCommand { get; set; }
+    public UpdateIdentityCommand UpdateIdentityCommand { get; set; }
     public string[] Roles => [UserClaimConstants.Update];
 }

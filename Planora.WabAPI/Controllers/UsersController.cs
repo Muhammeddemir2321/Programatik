@@ -2,7 +2,6 @@
 using Core.Persistence.Controllers;
 using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.BaseUserFeature.Commad;
 using Planora.Application.Features.UserFeature.Command.CreateUser;
 using Planora.Application.Features.UserFeature.Command.DeleteUser;
 using Planora.Application.Features.UserFeature.Command.UpdateUser;

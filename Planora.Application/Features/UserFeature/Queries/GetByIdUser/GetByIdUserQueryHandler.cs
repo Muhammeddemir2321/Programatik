@@ -14,7 +14,7 @@ public class GetByIdUserQueryHandler(
 {
     public async Task<UserGetByIdDto> Handle(GetByIdUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetAsync(i => i.Id == request.Id, include: user => user.Include(u => u.BaseUser), cancellationToken: cancellationToken);
+        var user = await userRepository.GetAsync(i => i.Id == request.Id, include: user => user.Include(i => i.Identity), cancellationToken: cancellationToken);
 
         await userBusinessRules.UserShouldExistWhenRequestedAsync(user);
 

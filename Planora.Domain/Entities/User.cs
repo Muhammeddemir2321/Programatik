@@ -9,8 +9,8 @@ public class User : BaseTimeStampEntity<Guid>, ISchoolEntity
     public Guid SchoolId { get; set; }
     public School School { get; set; }
 
-    public Guid BaseUserId { get; set; }
-    public BaseUser BaseUser { get; set; }
+    public Guid IdentityId { get; set; }
+    public Identity Identity { get; set; }
     public bool IsVerify { get; set; }
 
 } 

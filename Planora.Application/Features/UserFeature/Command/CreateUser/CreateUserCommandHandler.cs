@@ -15,10 +15,10 @@ public class CreateUserCommandHandler(
 {
     public async Task<CreatedUserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var createdIdentity=await mediator.Send(request.createBaseUserCommand, cancellationToken);
+        var createdIdentity=await mediator.Send(request.createIdentityCommand, cancellationToken);
         var mappedUser = mapper.Map<User>(request);
         mappedUser.IsVerify = false;
-        mappedUser.BaseUserId = createdIdentity.Id;
+        mappedUser.IdentityId = createdIdentity.Id;
         var createdUser = await userRepository.AddAsync(mappedUser, cancellationToken: cancellationToken);
         return mapper.Map<CreatedUserDto>(createdUser);
     }
