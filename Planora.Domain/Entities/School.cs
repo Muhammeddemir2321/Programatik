@@ -11,6 +11,7 @@ public class School : Entity<Guid>
     public  ICollection<Teacher> Teachers { get; set; }
     public  ICollection<Course> Courses { get; set; }
     public  ICollection<ClassCourseAssignment> ClassCourseAssignments { get; set; }
+    public  ICollection<User> Users { get; set; }
 
     public School()
     {
@@ -18,6 +19,7 @@ public class School : Entity<Guid>
         Teachers = new HashSet<Teacher>();
         Courses = new HashSet<Course>();
         ClassCourseAssignments = new HashSet<ClassCourseAssignment>();
+        Users = new HashSet<User>();
     }
 }
 

@@ -8,7 +8,7 @@ using System.Threading;
 namespace Core.Persistence.Repositories
 {
     public class EfBaseTimeStampRepositoryBase<TEntity, TContext> : EfRepositoryBase<TEntity, TContext>, IAsyncBaseTimeStampRepository<TEntity>, IBaseTimeStampRepository<TEntity>
-        where TEntity : BaseTimeStampEntity
+        where TEntity : BaseTimeStampEntity, new()
         where TContext : DbContext
     {
         public EfBaseTimeStampRepositoryBase(TContext context):base(context) { }

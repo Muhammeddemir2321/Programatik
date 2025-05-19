@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Planora.Application.Features.BaseUserFeature.Rules;
 using Planora.Application.Features.CourseFeature.Rules;
 using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
 using Planora.Application.Features.TeacherFeature.Rules;
+using Planora.Application.Features.UserFeature.Rules;
 using System.Reflection;
 
 namespace Planora.Application
@@ -19,6 +21,8 @@ namespace Planora.Application
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();
             services.AddScoped<CourseBusinessRules>();
+            services.AddScoped<BaseUserBusinessRules>();
+            services.AddScoped<UserBusinessRules>();
             return services;
         }
     }

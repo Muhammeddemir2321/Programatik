@@ -1,13 +1,14 @@
-﻿using Core.Persistence.Repositories;
+﻿using Core.Security.Entities;
 using Core.Utilities.IoC;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace Planora.Persistence.Contexts;
 
-public class PlanoraDbContext : DbContext
+public class PlanoraDbContext : IdentityDbContext<BaseUser, IdentityRole<Guid>, Guid>
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
     public PlanoraDbContext(DbContextOptions dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) :base(dbContextOptions)
@@ -22,6 +23,7 @@ public class PlanoraDbContext : DbContext
     public DbSet<Grade> Grades { get; set; }
     public DbSet<Lecture> Lectures { get; set; }
     public DbSet<ClassSection> ClassSections { get; set; }
+    public DbSet<User> Users { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -48,21 +50,44 @@ public class PlanoraDbContext : DbContext
 
         var schoolId = _planoraUserContextAccessor.SchoolId;
 
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (typeof(ISchoolEntity).IsAssignableFrom(entityType.ClrType))
-            {
-                var parameter = Expression.Parameter(entityType.ClrType, "e");
-                var property = Expression.Property(parameter, nameof(ISchoolEntity.SchoolId));
-                var constant = Expression.Constant(schoolId);
-                var equality = Expression.Equal(property, constant);
-                var lambda = Expression.Lambda(equality, parameter);
+        modelBuilder.Entity<Teacher>()
+            .HasQueryFilter(t => t.SchoolId == schoolId);
 
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
-            }
-        }
+        modelBuilder.Entity<Course>()
+            .HasQueryFilter(c => c.SchoolId == schoolId);
+
+        modelBuilder.Entity<ClassSection>()
+            .HasQueryFilter(cs => cs.SchoolId == schoolId);
+
+        modelBuilder.Entity<ClassCourseAssignment>()
+            .HasQueryFilter(ca => ca.SchoolId == schoolId);
 
         base.OnModelCreating(modelBuilder);
     }
+
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanoraDbContext).Assembly);
+
+    //    var schoolId = _planoraUserContextAccessor.SchoolId;
+
+    //    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+    //    {
+    //        if (typeof(ISchoolEntity).IsAssignableFrom(entityType.ClrType))
+    //        {
+    //            if (schoolId == null)
+    //                throw new InvalidOperationException("SchoolId context üzerinden alınamadı.");
+    //            var parameter = Expression.Parameter(entityType.ClrType, "e");
+    //            var property = Expression.Property(parameter, nameof(ISchoolEntity.SchoolId));
+    //            var constant = Expression.Constant(schoolId.Value, typeof(Guid));
+    //            var equality = Expression.Equal(property, constant);
+    //            var lambda = Expression.Lambda(equality, parameter);
+
+    //            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+    //        }
+    //    }
+
+    //    base.OnModelCreating(modelBuilder);
+    //}
 
 }

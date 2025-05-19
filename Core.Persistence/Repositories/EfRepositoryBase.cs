@@ -12,7 +12,7 @@ public abstract class EfRepositoryBase<TEntity, TContext> :
     IAsyncRepository<TEntity>,
     IRepository<TEntity>,
     IDynamicRepository<TEntity>
-    where TEntity : Entity
+    where TEntity : Entity, new()
     where TContext : DbContext
 {
     protected TContext Context { get; private set; }

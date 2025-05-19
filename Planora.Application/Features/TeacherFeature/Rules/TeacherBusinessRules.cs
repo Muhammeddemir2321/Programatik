@@ -21,10 +21,10 @@ public class TeacherBusinessRules(ITeacherRepository teacherRepository)
             throw new BusinessException("FullName already taken", ErrorConstants.NameAlreadyTaken)
                 .WithParam("TeacherFullName", fullName ?? string.Empty);
     }
-    public async Task TeacherFullNameMustBeUniqueWhenUpdateAsync(Guid id, string fullNAme)
+    public async Task TeacherFullNameMustBeUniqueWhenUpdateAsync(Guid id, string fullName)
     {
-        var teacher = await teacherRepository.GetAsync(c => c.Id != id && c.FullName == fullNAme);
+        var teacher = await teacherRepository.GetAsync(c => c.Id != id && c.FullName == fullName);
         if (teacher != null) throw new BusinessException("FullName already taken", ErrorConstants.NameAlreadyTaken)
-                .WithParam("teacherFullName", fullNAme ?? string.Empty);
+                .WithParam("teacherFullName", fullName ?? string.Empty);
     }
 }

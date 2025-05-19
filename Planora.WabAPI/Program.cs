@@ -5,6 +5,8 @@ using Core.Utilities.IoC;
 using Planora.Persistence.Contexts;
 using Planora.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Core.Security.Entities;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,9 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddControllers();
 builder.ConfigureCustomApplicationBuilder(typeof(Program).Assembly);
-
+builder.Services.AddIdentity<BaseUser, IdentityRole<Guid>>()
+        .AddEntityFrameworkStores<PlanoraDbContext>()
+        .AddDefaultTokenProviders();
 
 
 

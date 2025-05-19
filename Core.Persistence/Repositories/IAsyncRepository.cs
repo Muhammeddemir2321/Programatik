@@ -1,9 +1,10 @@
 ﻿using System.Linq.Expressions;
 using Core.Persistence.Paging;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Core.Persistence.Repositories;
-public interface IAsyncRepository<T> :IQuery<T> where T : Entity
+public interface IAsyncRepository<T> :IQuery<T> where T :Entity , new()
 {
     Task<T?> GetAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, CancellationToken cancellationToken = default);
 
@@ -21,4 +22,5 @@ public interface IAsyncRepository<T> :IQuery<T> where T : Entity
     Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
     Task<T> UpdateAsync(T entity, CancellationToken cancellationToken = default);
     Task<T> DeleteAsync(T entity, CancellationToken cancellationToken = default);
+     
 }

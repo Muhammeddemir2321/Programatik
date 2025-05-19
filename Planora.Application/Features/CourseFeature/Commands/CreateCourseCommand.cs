@@ -23,8 +23,7 @@ public class CreateCourseCommand : IRequest<CreatedCourseDto>, ISecuredRequest
     {
         public async Task<CreatedCourseDto> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
-            GetByIdLectureQuery getLectureQuery = new() { Id = request.LectureId };
-            var lecture = await mediator.Send(getLectureQuery, cancellationToken: cancellationToken);
+            var lecture = await mediator.Send(new GetByIdLectureQuery { Id = request.LectureId }, cancellationToken);
             var mappedCourse = mapper.Map<Course>(request);
             mappedCourse.Name = lecture.Name!;
             var createdCourse = await courseRepository.AddAsync(mappedCourse, cancellationToken: cancellationToken);
