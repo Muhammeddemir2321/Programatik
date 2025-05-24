@@ -1,4 +1,5 @@
 using Core.Extensions.SystemExtensions;
+using Core.Security.Configuration;
 using Core.Security.Entities;
 using Core.Utilities.IoC;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,8 @@ builder.Services.AddIdentity<Identity, IdentityRole<Guid>>()
         .AddEntityFrameworkStores<PlanoraDbContext>()
         .AddDefaultTokenProviders();
 
-
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<Core.Security.Configuration.TokenOptions>();
+builder.Services.AddCustomTokenAuth(tokenOptions);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,8 +1,8 @@
-﻿using Planora.Application.Features.IdentityFeature.Dtos;
+﻿using Planora.Application.Features.IdentityFeature.Queries.ListAllIdentityQuery;
 
 namespace Planora.Application.Features.IdentityFeature.Models;
 
 public class IdentityListModel
 {
-    public IdentityListDto Items { get; set; }
+    public List<IdentityListDto> Items { get; set; }
 }

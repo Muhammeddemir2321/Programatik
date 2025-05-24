@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Persistence.Paging;
-using Planora.Application.Features.UserFeature.Command.CreateUser;
-using Planora.Application.Features.UserFeature.Command.UpdateUser;
+using Planora.Application.Features.UserFeature.Commands.CreateUser;
+using Planora.Application.Features.UserFeature.Commands.UpdateUser;
 using Planora.Application.Features.UserFeature.Models;
 using Planora.Application.Features.UserFeature.Queries.GetByIdUser;
 using Planora.Application.Features.UserFeature.Queries.ListAllUser;

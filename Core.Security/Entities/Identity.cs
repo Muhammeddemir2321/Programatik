@@ -14,4 +14,15 @@ public class Identity : IdentityUser<Guid>
     public DateTime? DeletedAt { get; set; }
     public Guid? DeletedUserId { get; set; }
     public bool IsDeleted { get; set; } = false;
+
+    public virtual ICollection<IdentityAuthority> IdentityAuthorities { get; set; }
+    public virtual ICollection<IdentityOperationClaim> IdentityOperationClaims { get; set; }
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+
+    public Identity()
+    {
+        IdentityAuthorities = new HashSet<IdentityAuthority>();
+        IdentityOperationClaims = new HashSet<IdentityOperationClaim>();
+        RefreshTokens = new HashSet<RefreshToken>();
+    }
 }

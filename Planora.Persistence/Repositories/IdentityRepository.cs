@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Planora.Application.Services.Repositories;
+using Planora.Domain.Entities;
 using System.Linq.Expressions;
 
 namespace Planora.Persistence.Repositories;
@@ -77,5 +78,10 @@ public class IdentityRepository(UserManager<Identity> userManager) : IIdentityRe
     public Task<Identity> SoftDeleteAsync(Identity entity, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<bool> CheckPasswordAsync(Identity entity, string password)
+    {
+        return await userManager.CheckPasswordAsync(entity, password);
     }
 }

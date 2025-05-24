@@ -1,6 +1,7 @@
 ﻿using Core.Application.Requests;
 using Core.Persistence.Controllers;
 using Core.Persistence.Dynamic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Planora.Application.Features.SchoolFeature.Commands;
 using Planora.Application.Features.SchoolFeature.Dtos;
@@ -9,8 +10,10 @@ using Planora.Application.Features.SchoolFeature.Queries;
 
 namespace Planora.WabAPI.Controllers
 {
-    [Route("api/[controller]")]
+
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
     public class SchoolsController : BaseController
     {
         [HttpPost("GetAll")]
@@ -20,6 +23,7 @@ namespace Planora.WabAPI.Controllers
             SchoolListModel result = await Mediator.Send(getListSchoolQuery);
             return Ok(result);
         }
+        [Authorize]
         [HttpGet("GetList")]
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {
@@ -27,7 +31,6 @@ namespace Planora.WabAPI.Controllers
             SchoolListModel result = await Mediator.Send(getListSchoolQuery);
             return Ok(result);
         }
-
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -54,5 +57,7 @@ namespace Planora.WabAPI.Controllers
             await Mediator.Send(deleteSchoolCommand);
             return NoContent();
         }
+        [HttpGet("test")]
+        public IActionResult Test() => Ok("test başarılı");
     }
 }

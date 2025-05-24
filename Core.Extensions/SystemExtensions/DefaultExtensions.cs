@@ -1,7 +1,12 @@
-﻿using Core.Utilities.IoC;
+﻿using Core.Security;
+using Core.Security.Configuration;
+using Core.Security.Encryption;
+using Core.Utilities.IoC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace Core.Extensions.SystemExtensions;
@@ -15,7 +20,6 @@ public static class DefaultExtensions
             .AddJsonFile("general.settings.json")
             .Build();
         builder.Configuration.AddConfiguration(configuration);
-        var origins = configuration.GetSection("AllowedHostList").Get<string[]>();
         builder.Services.AddCors(
             policy =>
             {
@@ -29,12 +33,43 @@ public static class DefaultExtensions
             options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
         });
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddAuthentication();
-        
-        
-        builder.Services.AddDistributedMemoryCache();
+
+        builder.Services.Configure<TokenOptions>(
+        builder.Configuration.GetSection("TokenOptions"));
+        builder.Services.AddSecurityServices();
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "JWT Token'ınızı giriniz. Örnek: Bearer <token>"
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
 
         
+
         builder.Services.AddHttpContextAccessor();
         ServiceTool.Create(builder.Services);
 
@@ -42,13 +77,43 @@ public static class DefaultExtensions
     }
     public static WebApplication ConfigureCustomApplication(this WebApplication app)
     {
+
         app.UseSwagger();
         app.UseSwaggerUI();
-        app.MapControllers();
         app.UseHttpsRedirection();
-        app.UseAuthorization();
-        app.UseAuthentication();
+
         app.UseCors();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
         return app;
+    }
+
+    public static void AddCustomTokenAuth(this IServiceCollection services, TokenOptions tokenOptions)
+    {
+        services.AddAuthentication(opt =>
+        {
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+        {
+
+            opts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            {
+
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+
+                ValidIssuer = tokenOptions.Issuer,
+                ValidAudience = tokenOptions.Audience,
+                IssuerSigningKey = SigningHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+
+            };
+        });
     }
 }

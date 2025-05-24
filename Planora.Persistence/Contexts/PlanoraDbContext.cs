@@ -24,6 +24,10 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     public DbSet<Lecture> Lectures { get; set; }
     public DbSet<ClassSection> ClassSections { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<AuthorityOperationClaim> AuthorityOperationClaims { get; set; }
+    public DbSet<IdentityOperationClaim> IdentityOperationClaims { get; set; }
+    public DbSet<OperationClaim> OperationClaims { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

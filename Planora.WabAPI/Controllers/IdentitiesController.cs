@@ -2,10 +2,16 @@
 using Core.Persistence.Controllers;
 using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.IdentityFeature.Commad;
-using Planora.Application.Features.IdentityFeature.Dtos;
+using Planora.Application.Features.IdentityFeature.Commands;
+using Planora.Application.Features.IdentityFeature.Commands.CreateIdentity;
+using Planora.Application.Features.IdentityFeature.Commands.CreateSupervisor;
+using Planora.Application.Features.IdentityFeature.Commands.HardDeleteIdentity;
+using Planora.Application.Features.IdentityFeature.Commands.SoftDeleteIdentity;
+using Planora.Application.Features.IdentityFeature.Commands.UpdateIdentity;
 using Planora.Application.Features.IdentityFeature.Models;
-using Planora.Application.Features.IdentityFeature.Queries;
+using Planora.Application.Features.IdentityFeature.Queries.GetByIdIdentity;
+using Planora.Application.Features.IdentityFeature.Queries.ListAllIdentityByDynamic;
+using Planora.Application.Features.IdentityFeature.Queries.ListAllIdentityQuery;
 
 namespace Planora.WabAPI.Controllers
 {

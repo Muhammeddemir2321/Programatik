@@ -39,4 +39,6 @@ public interface IIdentityRepository
     Task<Identity> AddAsync(Identity entity,string password);
     Task<Identity> UpdateAsync(Identity entity);
     Task DeleteAsync(Identity entity);
+    Task<bool> CheckPasswordAsync(Identity entity, string password);
+
 }

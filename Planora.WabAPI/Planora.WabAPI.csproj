@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Extensions\Core.Extensions.csproj" />
+    <ProjectReference Include="..\Core.Security\Core.Security.csproj" />
     <ProjectReference Include="..\Planora.Application\Planora.Application.csproj" />
     <ProjectReference Include="..\Planora.Infrastructure\Planora.Infrastructure.csproj" />
     <ProjectReference Include="..\Planora.Persistence\Planora.Persistence.csproj" />
