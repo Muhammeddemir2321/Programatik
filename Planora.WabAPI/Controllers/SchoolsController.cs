@@ -13,7 +13,6 @@ namespace Planora.WabAPI.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class SchoolsController : BaseController
     {
         [HttpPost("GetAll")]
@@ -23,7 +22,6 @@ namespace Planora.WabAPI.Controllers
             SchoolListModel result = await Mediator.Send(getListSchoolQuery);
             return Ok(result);
         }
-        [Authorize]
         [HttpGet("GetList")]
         public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
         {

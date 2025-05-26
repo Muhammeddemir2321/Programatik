@@ -1,5 +1,4 @@
 ﻿using Core.Security.Entities;
-using Core.Utilities.IoC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +10,8 @@ namespace Planora.Persistence.Contexts;
 public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, Guid>
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
-    public PlanoraDbContext(DbContextOptions dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) :base(dbContextOptions)
+    public PlanoraDbContext(DbContextOptions<PlanoraDbContext> dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) :base(dbContextOptions)
     {
-        ServiceTool.SetDbContextOptions(dbContextOptions);
         _planoraUserContextAccessor = planoraUserContextAccessor;
     }
     public DbSet<School> Schools { get; set; }

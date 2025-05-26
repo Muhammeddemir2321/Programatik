@@ -17,7 +17,7 @@ public class UpdateGradeCommand : IRequest<UpdatedGradeDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { GradeClaimConstants.Update };
     public class UpdateGradeCommandHandler(
-        IGradeRepository gradeRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         IMapper mapper,
         GradeBusinessRules gradeBusinessRules)
         : IRequestHandler<UpdateGradeCommand, UpdatedGradeDto>
@@ -26,7 +26,8 @@ public class UpdateGradeCommand : IRequest<UpdatedGradeDto>, ISecuredRequest
         {
             await gradeBusinessRules.GradeNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedGrade = mapper.Map<Grade>(request);
-            var updatedGrade = await gradeRepository.UpdateAsync(mappedGrade, cancellationToken: cancellationToken);
+            var updatedGrade = await planoraUnitOfWork.Grades.UpdateAsync(mappedGrade, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<UpdatedGradeDto>(updatedGrade);
         }
     }

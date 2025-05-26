@@ -1,7 +1,6 @@
 using Core.Extensions.SystemExtensions;
-using Core.Security.Configuration;
+using Core.Security;
 using Core.Security.Entities;
-using Core.Utilities.IoC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Planora.Application;
@@ -13,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddSecurityServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
@@ -31,8 +31,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.ConfigureCustomApplication();
-var context = ServiceTool.GetService<PlanoraDbContext>();
-await context.Database.MigrateAsync();
-
-ServiceTool.SetAppplication<WebApplication>(app);
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<PlanoraDbContext>();
+    await context.Database.MigrateAsync();
+}
 app.Run();

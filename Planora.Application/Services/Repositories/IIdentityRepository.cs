@@ -19,7 +19,6 @@ public interface IIdentityRepository
                                             int index = 0, int size = 10, bool enableTracking = true,
                                             CancellationToken cancellationToken = default);
     Task<Identity> SoftDeleteAsync(Identity entity, CancellationToken cancellationToken = default);
-    Task<Identity> RestoreAsync(Identity entity, CancellationToken cancellationToken = default);
 
     Task<Identity?> GetAsync(Expression<Func<Identity, bool>>? predicate = null,
                                                 Func<IQueryable<Identity>, IOrderedQueryable<Identity>>? orderBy = null,

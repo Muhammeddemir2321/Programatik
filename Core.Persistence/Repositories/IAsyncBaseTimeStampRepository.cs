@@ -17,5 +17,4 @@ public interface IAsyncBaseTimeStampRepository<T> :IAsyncRepository<T> where T :
                                             int index=0, int size=10,bool enableTracking=true,
                                             CancellationToken cancellationToken = default);
     Task<T> SoftDeleteAsync(T entity,CancellationToken cancellationToken = default);
-    Task<T> RestoreAsync(T entity,CancellationToken cancellationToken = default);
 }

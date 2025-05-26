@@ -21,7 +21,7 @@ public class UpdateSchoolCommand : IRequest<UpdatedSchoolDto>, ISecuredRequest
 
 
     public class UpdateSchoolCommandHandler(
-        ISchoolRepository schoolRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         IMapper mapper,
         SchoolBusinessRules schoolBusinessRules)
         : IRequestHandler<UpdateSchoolCommand, UpdatedSchoolDto>
@@ -32,7 +32,8 @@ public class UpdateSchoolCommand : IRequest<UpdatedSchoolDto>, ISecuredRequest
             await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address);
             await schoolBusinessRules.SchoolNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedSchool = mapper.Map<School>(request);
-            var updatedSchool = await schoolRepository.UpdateAsync(mappedSchool, cancellationToken: cancellationToken);
+            var updatedSchool = await planoraUnitOfWork.Schools.UpdateAsync(mappedSchool, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<UpdatedSchoolDto>(updatedSchool);
         }
     }

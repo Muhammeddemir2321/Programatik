@@ -7,5 +7,7 @@ namespace Planora.Persistance.Repositories;
 
 public class AuthorityOperationClaimRepository : EfRepositoryBase<AuthorityOperationClaim, PlanoraDbContext>, IAuthorityOperationClaimRepository
 {
-    public AuthorityOperationClaimRepository(PlanoraDbContext context) : base(context) { }
+    public AuthorityOperationClaimRepository(PlanoraDbContext context) : base(context)
+    {
+    }
 }

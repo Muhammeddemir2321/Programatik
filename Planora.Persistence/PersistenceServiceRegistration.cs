@@ -18,13 +18,11 @@ public static class PersistenceServiceRegistration
     {
         Configuration = configuration;
         var env = configuration.GetValue<string>("GeneralSettings:Environment") ?? "Debug";
-        services.AddDbContext<PlanoraDbContext>(options =>
+        services.AddDbContextFactory<PlanoraDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString(env));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        
-
 
 
 
@@ -43,6 +41,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IAuthorityOperationClaimRepository, AuthorityOperationClaimRepository>();
         services.AddScoped<IAuthorityRepository, AuthorityRepository>();
         services.AddScoped<IOperationClaimRepository, OperationClaimRepository>();
+        services.AddScoped<IPlanoraUnitOfWork, PlanoraUnitOfWork>();
         return services;
     }
 }

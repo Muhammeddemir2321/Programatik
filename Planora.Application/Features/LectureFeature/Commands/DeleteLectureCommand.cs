@@ -13,15 +13,16 @@ public class DeleteLectureCommand : IRequest<bool>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { LectureClaimConstants.Delete };
     public class DeleteByIdLectureCommandHandler(
-        ILectureRepository lectureRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         LectureBusinessRules lectureBusinessRules)
         : IRequestHandler<DeleteLectureCommand, bool>
     {
         public async Task<bool> Handle(DeleteLectureCommand request, CancellationToken cancellationToken)
         {
-            var lecture = await lectureRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
+            var lecture = await planoraUnitOfWork.Lectures.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
             await lectureBusinessRules.LectureShouldExistWhenRequestedAsync(lecture);
-            await lectureRepository.DeleteAsync(lecture!, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.Lectures.DeleteAsync(lecture!, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return true;
 
         }

@@ -1,6 +1,6 @@
 ﻿namespace Core.Persistence.Paging;
 
-public record Paginate<T>(int From, int Index, int Size, int Count, int Pages, IList<T> Items) : IPaginate<T>
+public record Paginate<T>(int From, int Index, int Size, int Count, int Pages, IReadOnlyList<T>? Items) : IPaginate<T>
 {
     internal Paginate(IEnumerable<T> source, int index, int size, int from) : this(default, default, default, default, default, default)
     {
@@ -37,7 +37,7 @@ public record Paginate<T>(int From, int Index, int Size, int Count, int Pages, I
     public bool HasNext => Index - From + 1 < Pages;
 }
 
-internal record Paginate<TSource, TResult>(int Index, int Size, int Count, int Pages, int From, IList<TResult> Items) : IPaginate<TResult>
+internal record Paginate<TSource, TResult>(int Index, int Size, int Count, int Pages, int From, IReadOnlyList<TResult>? Items) : IPaginate<TResult>
 {
     public Paginate(IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> converter,
                     int index, int size, int from) : this(default, default, default, default, default, default)

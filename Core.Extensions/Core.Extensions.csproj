@@ -34,7 +34,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Core.Security\Core.Security.csproj" />
-	  <ProjectReference Include="..\Core.Utilities\Core.Utilities.csproj" />
 	</ItemGroup>
 
 </Project>

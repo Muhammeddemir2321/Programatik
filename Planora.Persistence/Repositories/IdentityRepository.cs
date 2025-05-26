@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Planora.Application.Services.Repositories;
-using Planora.Domain.Entities;
 using System.Linq.Expressions;
-
-namespace Planora.Persistence.Repositories;
 
 public class IdentityRepository(UserManager<Identity> userManager) : IIdentityRepository
 {
     public async Task<Identity?> GetAsync(Expression<Func<Identity, bool>> predicate, Func<IQueryable<Identity>, IOrderedQueryable<Identity>>? orderBy = null, Func<IQueryable<Identity>, IIncludableQueryable<Identity, object>>? include = null, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
-        return await userManager.Users.FirstOrDefaultAsync(predicate);
+        return await userManager.Users.FirstOrDefaultAsync(predicate,cancellationToken:cancellationToken);
+    }
+    public async Task<List<Identity>> GetAllAsync()
+    {
+        return await userManager.Users.ToListAsync();
     }
     public async Task<IPaginate<Identity>> GetListAsync(Expression<Func<Identity, bool>>? predicate = null, Func<IQueryable<Identity>, IOrderedQueryable<Identity>>? orderBy = null, Func<IQueryable<Identity>, IIncludableQueryable<Identity, object>>? include = null, int index = 0, int size = 10, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
@@ -51,35 +52,22 @@ public class IdentityRepository(UserManager<Identity> userManager) : IIdentityRe
     }
     public async Task DeleteAsync(Identity entity)
     {
-        var result= await userManager.DeleteAsync(entity);
+        var result = await userManager.DeleteAsync(entity);
     }
 
-    public async Task<List<Identity>> GetAllAsync()
-    {
-        return await userManager.Users.ToListAsync();
-    }
-
-
+ 
     public Task<IPaginate<Identity>> GetListDeletedAsync(Expression<Func<Identity, bool>>? predicate = null, Func<IQueryable<Identity>, IOrderedQueryable<Identity>>? orderBy = null, Func<IQueryable<Identity>, IIncludableQueryable<Identity, object>>? include = null, int index = 0, int size = 10, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
-
     public Task<IPaginate<Identity>> GetListNotDeletedAsync(Expression<Func<Identity, bool>>? predicate = null, Func<IQueryable<Identity>, IOrderedQueryable<Identity>>? orderBy = null, Func<IQueryable<Identity>, IIncludableQueryable<Identity, object>>? include = null, int index = 0, int size = 10, bool enableTracking = true, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
-
-    public Task<Identity> RestoreAsync(Identity entity, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Identity> SoftDeleteAsync(Identity entity, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
-
     public async Task<bool> CheckPasswordAsync(Identity entity, string password)
     {
         return await userManager.CheckPasswordAsync(entity, password);

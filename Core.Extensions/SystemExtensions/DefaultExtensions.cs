@@ -1,7 +1,6 @@
 ﻿using Core.Security;
 using Core.Security.Configuration;
 using Core.Security.Encryption;
-using Core.Utilities.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +24,7 @@ public static class DefaultExtensions
             {
                 policy.AddDefaultPolicy(c =>
                 {
-                    c.WithOrigins(origins).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    c.AllowAnyHeader().AllowAnyMethod().AllowCredentials();
                 });
             });
         builder.Services.AddControllers(options =>
@@ -36,7 +35,6 @@ public static class DefaultExtensions
 
         builder.Services.Configure<TokenOptions>(
         builder.Configuration.GetSection("TokenOptions"));
-        builder.Services.AddSecurityServices();
 
         builder.Services.AddSwaggerGen(c =>
         {
@@ -71,7 +69,6 @@ public static class DefaultExtensions
         
 
         builder.Services.AddHttpContextAccessor();
-        ServiceTool.Create(builder.Services);
 
         return builder;
     }

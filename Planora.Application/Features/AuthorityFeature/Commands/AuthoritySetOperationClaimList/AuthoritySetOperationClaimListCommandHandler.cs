@@ -5,35 +5,45 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.AuthorityFeature.Commands.AuthoritySetOperationClaimList;
 
 public class AuthoritySetOperationClaimListCommandHandler(
-    IAuthorityOperationClaimRepository authorityOperationClaimRepository,
-    IAuthorityRepository authorityRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     AuthorityBusinessRules authorityBusinessRules)
     : IRequestHandler<AuthoritySetOperationClaimListCommand, bool>
 {
 
     public async Task<bool> Handle(AuthoritySetOperationClaimListCommand request, CancellationToken cancellationToken)
     {
-        var authority = await authorityRepository.GetAsync(u => u.Id == request.AuthorityId, cancellationToken: cancellationToken);
+        var authority = await planoraUnitOfWork.Authorities.GetAsync(u => u.Id == request.AuthorityId, cancellationToken: cancellationToken);
         await authorityBusinessRules.AuthorityShouldExistWhenRequestedAsync(authority);
-        var claimResponse = await authorityOperationClaimRepository.GetAllAsync(l => l.AuthorityId == request.AuthorityId, enableTracking: false, cancellationToken: cancellationToken);
+        var claimResponse = await planoraUnitOfWork.AuthorityOperationClaims.GetAllAsync(l => l.AuthorityId == request.AuthorityId, enableTracking: false, cancellationToken: cancellationToken);
         var claims = claimResponse.ToList();
-        request.OperationClaims.ForEach(e =>
+        return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            var claim = claims.Where(c => c.OperationClaimId == e)?.FirstOrDefault();
-            if (claim is null)
-                authorityOperationClaimRepository.Add(new()
+            foreach (var e in request.OperationClaims)
+            {
+                var claim = claims.FirstOrDefault(c => c.OperationClaimId == e);
+                if (claim is null)
                 {
-                    AuthorityId = authority.Id,
-                    OperationClaimId = e
-                });
+                    await planoraUnitOfWork.AuthorityOperationClaims.AddAsync(new()
+                    {
+                        AuthorityId = authority.Id,
+                        OperationClaimId = e
+                    });
+                }
+            }
+
+            if (request.RemoveExclude)
+            {
+                foreach (var e in claims)
+                {
+                    var claim = request.OperationClaims.FirstOrDefault(c => c == e.OperationClaimId);
+                    if (!request.OperationClaims.Contains(e.OperationClaimId))
+                    {
+                        await planoraUnitOfWork.AuthorityOperationClaims.DeleteAsync(e);
+                    }
+                }
+            }
+
+            return true;
         });
-        if (!request.RemoveExclude) return true;
-        claims.ForEach(e =>
-        {
-            var claim = request.OperationClaims.Where(c => c == e.OperationClaimId)?.FirstOrDefault();
-            if (claim is null)
-                authorityOperationClaimRepository.Delete(e);
-        });
-        return true;
     }
 }

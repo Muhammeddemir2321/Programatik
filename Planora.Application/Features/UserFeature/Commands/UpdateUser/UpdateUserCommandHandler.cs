@@ -7,7 +7,7 @@ using Planora.Domain.Entities;
 namespace Planora.Application.Features.UserFeature.Commands.UpdateUser;
 
 public class UpdateUserCommandHandler(
-    IUserRepository userRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     UserBusinessRules userBusinessRules,
     IMapper mapper,
     IMediator mediator)
@@ -15,12 +15,15 @@ public class UpdateUserCommandHandler(
 {
     public async Task<UpdatedUserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetAsync(u => u.Id == request.Id, cancellationToken: cancellationToken);
-        await userBusinessRules.UserShouldExistWhenRequestedAsync(user);
-        request.UpdateIdentityCommand.Id = user!.IdentityId;
-        await mediator.Send(request.UpdateIdentityCommand);
-        var mappedUser = mapper.Map<User>(request);
-        var updatedUser = await userRepository.UpdateAsync(mappedUser, cancellationToken: cancellationToken);
-        return mapper.Map<UpdatedUserDto>(updatedUser);
+        return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
+        {
+            var user = await planoraUnitOfWork.Users.GetAsync(u => u.Id == request.Id, cancellationToken: cancellationToken);
+            await userBusinessRules.UserShouldExistWhenRequestedAsync(user);
+            request.UpdateIdentityCommand.Id = user!.IdentityId;
+            await mediator.Send(request.UpdateIdentityCommand);
+            var mappedUser = mapper.Map<User>(request);
+            var updatedUser = await planoraUnitOfWork.Users.UpdateAsync(mappedUser, cancellationToken: cancellationToken);
+            return mapper.Map<UpdatedUserDto>(updatedUser);
+        });
     }
 }

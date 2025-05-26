@@ -18,7 +18,7 @@ public class CreateCourseCommand : IRequest<CreatedCourseDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { CourseClaimConstants.Create };
     public class CreateCourseeCommandHandler(
-        ICourseRepository courseRepository, IMapper mapper, CourseBusinessRules courseBusinessRules, IMediator mediator)
+        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, CourseBusinessRules courseBusinessRules, IMediator mediator)
         : IRequestHandler<CreateCourseCommand, CreatedCourseDto>
     {
         public async Task<CreatedCourseDto> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
@@ -26,7 +26,8 @@ public class CreateCourseCommand : IRequest<CreatedCourseDto>, ISecuredRequest
             var lecture = await mediator.Send(new GetByIdLectureQuery { Id = request.LectureId }, cancellationToken);
             var mappedCourse = mapper.Map<Course>(request);
             mappedCourse.Name = lecture.Name!;
-            var createdCourse = await courseRepository.AddAsync(mappedCourse, cancellationToken: cancellationToken);
+            var createdCourse = await planoraUnitOfWork.Courses.AddAsync(mappedCourse, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<CreatedCourseDto>(createdCourse);
         }
     }

@@ -5,15 +5,16 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.OperationClaimFeature.Commands.DeleteOperationClaim;
 
 public class DeleteByIdOperationClaimCommandHandler(
-    IOperationClaimRepository operationClaimRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     OperationClaimBusinessRules operationClaimBusinessRules)
     : IRequestHandler<DeleteOperationClaimCommand, bool>
 {
     public async Task<bool> Handle(DeleteOperationClaimCommand request, CancellationToken cancellationToken)
     {
-        var operationClaim = await operationClaimRepository.GetAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
+        var operationClaim = await planoraUnitOfWork.OperationClaims.GetAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
         await operationClaimBusinessRules.OperationClaimShouldExistWhenRequested(operationClaim);
-        await operationClaimRepository.DeleteAsync(operationClaim, cancellationToken);
+        await planoraUnitOfWork.OperationClaims.DeleteAsync(operationClaim!, cancellationToken);
+        await planoraUnitOfWork.CommitAsync();
         return true;
     }
 }

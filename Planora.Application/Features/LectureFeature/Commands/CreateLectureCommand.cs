@@ -17,7 +17,7 @@ public class CreateLectureCommand : IRequest<CreatedLectureDto>, ISecuredRequest
     public string[] Roles => new string[] { LectureClaimConstants.Create };
 
     public class CreateLectureCommandHandler(
-        ILectureRepository lectureRepository, IMapper mapper, LectureBusinessRules lectureBusinessRules)
+        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, LectureBusinessRules lectureBusinessRules)
         : IRequestHandler<CreateLectureCommand, CreatedLectureDto>
     {
         public async Task<CreatedLectureDto> Handle(CreateLectureCommand request, CancellationToken cancellationToken)
@@ -25,7 +25,8 @@ public class CreateLectureCommand : IRequest<CreatedLectureDto>, ISecuredRequest
             await lectureBusinessRules.LectureNameMustNotBeEmptyAsync(request.Name);
             await lectureBusinessRules.LectureNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
-            var createdLecture = await lectureRepository.AddAsync(mappedLecture, cancellationToken: cancellationToken);
+            var createdLecture = await planoraUnitOfWork.Lectures.AddAsync(mappedLecture, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<CreatedLectureDto>(createdLecture);
         }
     }

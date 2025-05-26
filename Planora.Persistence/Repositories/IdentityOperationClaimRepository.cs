@@ -7,5 +7,7 @@ namespace Uroflow.Persistance.Repositories;
 
 public class IdentityOperationClaimRepository : EfRepositoryBase<IdentityOperationClaim, PlanoraDbContext>, IIdentityOperationClaimRepository
 {
-    public IdentityOperationClaimRepository(PlanoraDbContext context) : base(context) { }
+    public IdentityOperationClaimRepository(PlanoraDbContext context) : base(context)
+    {
+    }
 }

@@ -13,15 +13,16 @@ public class DeleteGradeCommand : IRequest<bool>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { GradeClaimConstants.Delete };
     public class DeleteGradeCommandHandler(
-        IGradeRepository gradeRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         GradeBusinessRules gradeBusinessRules)
         : IRequestHandler<DeleteGradeCommand, bool>
     {
         public async Task<bool> Handle(DeleteGradeCommand request, CancellationToken cancellationToken)
         {
-            var grade = await gradeRepository.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
+            var grade = await planoraUnitOfWork.Grades.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
             await gradeBusinessRules.GradeShouldExistWhenRequestedAsync(grade);
-            await gradeRepository.DeleteAsync(grade!, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.Grades.DeleteAsync(grade!, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return true;
 
         }

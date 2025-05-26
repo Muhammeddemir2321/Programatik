@@ -18,7 +18,7 @@ public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Update };
     public class UpdateTeacherCommandHandler(
-        ITeacherRepository teacherRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         IMapper mapper,
         TeacherBusinessRules teacherBusinessRules)
         : IRequestHandler<UpdateTeacherCommand, UpdatedTeacherDto>
@@ -27,7 +27,8 @@ public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
         {
             await teacherBusinessRules.TeacherFullNameMustBeUniqueWhenUpdateAsync(request.Id, request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
-            var updatedTeacher = await teacherRepository.UpdateAsync(mappedTeacher, cancellationToken: cancellationToken);
+            var updatedTeacher = await planoraUnitOfWork.Teachers.UpdateAsync(mappedTeacher, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<UpdatedTeacherDto>(updatedTeacher);
         }
     }

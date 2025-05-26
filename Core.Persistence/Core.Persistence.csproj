@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Utilities\Core.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="general.settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

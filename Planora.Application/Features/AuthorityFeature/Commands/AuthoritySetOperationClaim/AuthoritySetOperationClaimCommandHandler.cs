@@ -6,22 +6,22 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.AuthorityFeature.Commands.AuthoritySetOperationClaim;
 
 public class AuthoritySetOperationClaimCommandHandler(
-    IAuthorityOperationClaimRepository authorityOperationClaimRepository,
-    IAuthorityRepository authorityRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     AuthorityBusinessRules authorityBusinessRules)
     : IRequestHandler<AuthoritySetOperationClaimCommand, bool>
 {
     public async Task<bool> Handle(AuthoritySetOperationClaimCommand request, CancellationToken cancellationToken)
     {
-        var authority = await authorityRepository.GetAsync(u => u.Id == request.AuthorityId, cancellationToken: cancellationToken);
+        var authority = await planoraUnitOfWork.Authorities.GetAsync(u => u.Id == request.AuthorityId, cancellationToken: cancellationToken);
         await authorityBusinessRules.AuthorityShouldExistWhenRequestedAsync(authority);
-        var claim = await authorityOperationClaimRepository.GetAsync(l => l.AuthorityId == request.AuthorityId && l.OperationClaimId == request.OperationClaimId, cancellationToken: cancellationToken);
+        var claim = await planoraUnitOfWork.AuthorityOperationClaims.GetAsync(l => l.AuthorityId == request.AuthorityId && l.OperationClaimId == request.OperationClaimId, cancellationToken: cancellationToken);
         if (claim is null)
-            authorityOperationClaimRepository.Add(new AuthorityOperationClaim
+            await planoraUnitOfWork.AuthorityOperationClaims.AddAsync(new AuthorityOperationClaim
             {
                 AuthorityId = authority.Id,
                 OperationClaimId = request.OperationClaimId
             });
+        await planoraUnitOfWork.CommitAsync();
         return true;
     }
 }

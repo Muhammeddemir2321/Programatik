@@ -9,6 +9,5 @@ public class CourseRepository : EfRepositoryBase<Course, PlanoraDbContext>, ICou
 {
     public CourseRepository(PlanoraDbContext context) : base(context)
     {
-        
     }
 }

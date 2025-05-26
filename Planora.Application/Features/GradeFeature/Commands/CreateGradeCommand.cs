@@ -16,14 +16,15 @@ public class CreateGradeCommand : IRequest<CreatedGradeDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { GradeClaimConstants.Create };
     public class CreateGradeeCommandHandler(
-        IGradeRepository gradeRepository, IMapper mapper, GradeBusinessRules gradeBusinessRules)
+        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, GradeBusinessRules gradeBusinessRules)
         : IRequestHandler<CreateGradeCommand, CreatedGradeDto>
     {
         public async Task<CreatedGradeDto> Handle(CreateGradeCommand request, CancellationToken cancellationToken)
         {
             await gradeBusinessRules.GradeNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedGrade = mapper.Map<Grade>(request);
-            var createdGrade = await gradeRepository.AddAsync(mappedGrade, cancellationToken: cancellationToken);
+            var createdGrade = await planoraUnitOfWork.Grades.AddAsync(mappedGrade, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<CreatedGradeDto>(createdGrade);
         }
     }

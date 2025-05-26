@@ -10,14 +10,13 @@ namespace Planora.Application.Features.AuthFeature.Commands.CreateToken;
 
 public class CreateTokenCommandHandler(
     AuthBusinessRules authBusinessRules,
-    IIdentityRepository identityRepository,
-    IAuthService authService,
-    IRefreshTokenRepository refreshTokenRepository)
+    IPlanoraUnitOfWork planoraUnitOfWork,
+    IAuthService authService)
     : IRequestHandler<CreateTokenCommand, TokenDto>
 {
     public async Task<TokenDto> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
-        var identity = await identityRepository.GetAsync(i => i.UserName == request.UserName,
+        var identity = await planoraUnitOfWork.Identities.GetAsync(i => i.UserName == request.UserName,
                 include: identity => identity.Include(i => i.IdentityOperationClaims)
                 .ThenInclude(ioc => ioc.OperationClaim)
                     .Include(i => i.IdentityAuthorities)
@@ -26,7 +25,7 @@ public class CreateTokenCommandHandler(
                     .ThenInclude(aop => aop.OperationClaim)
                 , cancellationToken: cancellationToken);
         await authBusinessRules.IdentityShouldExistWhenRequestedAsync(identity);
-        if (!await identityRepository.CheckPasswordAsync(identity, request.Password))
+        if (!await planoraUnitOfWork.Identities.CheckPasswordAsync(identity, request.Password))
             authBusinessRules.PasswordIsWrongAsync();
         if (identity.UserName == "supervisor")
         {
@@ -36,22 +35,25 @@ public class CreateTokenCommandHandler(
             });
         }
 
-        var refreshTokens = await refreshTokenRepository.GetAllAsync(r => r.IdentityId == identity.Id, cancellationToken: cancellationToken);
-
-        foreach (var token in refreshTokens)
+        var refreshTokens = await planoraUnitOfWork.RefreshTokens.GetAllAsync(r => r.IdentityId == identity.Id, cancellationToken: cancellationToken);
+        
+        return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            await refreshTokenRepository.DeleteAsync(token, cancellationToken: cancellationToken);
-        }
-        AccessToken createdAccessToken = await authService.CreateAccessToken(identity);
-        RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identity, request.IpAddress);
-        RefreshToken addedRefreshToken = await authService.AddRefreshToken(createdRefreshToken);
+            foreach (var token in refreshTokens)
+            {
+                await planoraUnitOfWork.RefreshTokens.DeleteAsync(token, cancellationToken: cancellationToken);
+            }
+            AccessToken createdAccessToken = await authService.CreateAccessToken(identity);
+            RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identity, request.IpAddress);
+            RefreshToken addedRefreshToken = await authService.AddRefreshToken(createdRefreshToken);
 
-        TokenDto tokenDto = new()
-        {
-            AccessToken = createdAccessToken,
-            RefreshToken = addedRefreshToken.Token,
-            RefreshTokenExpiration = addedRefreshToken.Expires
-        };
-        return tokenDto;
+            TokenDto tokenDto = new()
+            {
+                AccessToken = createdAccessToken,
+                RefreshToken = addedRefreshToken.Token,
+                RefreshTokenExpiration = addedRefreshToken.Expires
+            };
+            return tokenDto;
+        });
     }
 }

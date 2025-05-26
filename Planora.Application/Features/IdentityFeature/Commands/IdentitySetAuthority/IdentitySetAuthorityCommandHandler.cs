@@ -6,22 +6,25 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.IdentityFeature.Commands.IdentitySetAuthority;
 
 public class IdentitySetAuthorityCommandHandler(
-    IIdentityAuthorityRepository identityAuthorityRepository,
-    IIdentityRepository identityRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     IdentityBusinessRules identityBusinessRules)
     : IRequestHandler<IdentitySetAuthorityCommand, bool>
 {
     public async Task<bool> Handle(IdentitySetAuthorityCommand request, CancellationToken cancellationToken)
     {
-        var identity = await identityRepository.GetAsync(u => u.Id == request.IdentityId, cancellationToken: cancellationToken);
+        var identity = await planoraUnitOfWork.Identities.GetAsync(u => u.Id == request.IdentityId, cancellationToken: cancellationToken);
         await identityBusinessRules.IdentityShouldExistWhenRequestedAsync(identity);
-        var authority = await identityAuthorityRepository.GetAsync(l => l.IdentityId == request.IdentityId && l.AuthorityId == request.AuthorityId, cancellationToken: cancellationToken);
+        var authority = await planoraUnitOfWork.IdentityAuthorities.GetAsync(l => l.IdentityId == request.IdentityId && l.AuthorityId == request.AuthorityId, cancellationToken: cancellationToken);
         if (authority is null)
-            await identityAuthorityRepository.AddAsync(new IdentityAuthority
+        {
+            await planoraUnitOfWork.IdentityAuthorities.AddAsync(new IdentityAuthority
             {
                 IdentityId = identity.Id,
                 AuthorityId = request.AuthorityId
             }, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
+        }
+            
         return true;
     }
 }

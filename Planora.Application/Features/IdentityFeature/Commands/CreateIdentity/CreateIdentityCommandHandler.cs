@@ -6,14 +6,15 @@ using Planora.Application.Services.Repositories;
 
 namespace Planora.Application.Features.IdentityFeature.Commands.CreateIdentity;
 
-public class CreateIdentityCommandHandler(IIdentityRepository baseUserRepository, IMapper mapper, IdentityBusinessRules baseUserBusinessRules)
+public class CreateIdentityCommandHandler(IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, IdentityBusinessRules identityBusinessRules)
     : IRequestHandler<CreateIdentityCommand, CreatedIdentityDto>
 {
     public async Task<CreatedIdentityDto> Handle(CreateIdentityCommand request, CancellationToken cancellationToken)
     {
-        await baseUserBusinessRules.UserNameMustBeUniqeWhenCreateAsync(request.Username);
+        await identityBusinessRules.UserNameMustBeUniqeWhenCreateAsync(request.Username);
         var mappedUser = mapper.Map<Identity>(request);
-        var createdUser = await baseUserRepository.AddAsync(mappedUser, request.Password);
+        var createdUser = await planoraUnitOfWork.Identities.AddAsync(mappedUser, request.Password);
+        await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedIdentityDto>(createdUser);
     }
 }

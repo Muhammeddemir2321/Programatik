@@ -7,7 +7,7 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.AuthorityFeature.Commands.CreateAuthority;
 
 public class CreateAuthorityCommandHandler(
-    IAuthorityRepository authorityRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     IMapper mapper,
     AuthorityBusinessRules authorityBusinessRules)
     : IRequestHandler<CreateAuthorityCommand, CreatedAuthorityDto>
@@ -16,7 +16,8 @@ public class CreateAuthorityCommandHandler(
     {
         await authorityBusinessRules.NameMustBeUniqueWhenCreateAsync(request.Name);
         var mappedAuthority = mapper.Map<Authority>(request);
-        var createdAuthority = await authorityRepository.AddAsync(mappedAuthority, cancellationToken: cancellationToken);
+        var createdAuthority = await planoraUnitOfWork.Authorities.AddAsync(mappedAuthority, cancellationToken: cancellationToken);
+        await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedAuthorityDto>(createdAuthority);
     }
 }

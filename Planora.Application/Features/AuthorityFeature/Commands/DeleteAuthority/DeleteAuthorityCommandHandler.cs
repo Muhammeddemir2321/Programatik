@@ -5,15 +5,16 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.AuthorityFeature.Commands.DeleteAuthority;
 
 public class DeleteAuthorityCommandHandler(
-    IAuthorityRepository authorityRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     AuthorityBusinessRules authorityBusinessRules)
     : IRequestHandler<DeleteAuthorityCommand, bool>
 {
     public async Task<bool> Handle(DeleteAuthorityCommand request, CancellationToken cancellationToken)
     {
-        var authority = await authorityRepository.GetAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
+        var authority = await planoraUnitOfWork.Authorities.GetAsync(e => e.Id == request.Id, cancellationToken: cancellationToken);
         await authorityBusinessRules.AuthorityShouldExistWhenRequestedAsync(authority);
-        await authorityRepository.DeleteAsync(authority, cancellationToken: cancellationToken);
+        await planoraUnitOfWork.Authorities.DeleteAsync(authority, cancellationToken: cancellationToken);
+        await planoraUnitOfWork.CommitAsync();
         return true;
     }
 }

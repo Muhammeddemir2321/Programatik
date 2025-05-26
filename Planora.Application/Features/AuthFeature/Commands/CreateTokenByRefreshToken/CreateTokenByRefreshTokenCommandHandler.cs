@@ -10,19 +10,18 @@ using Planora.Application.Services.Repositories;
 namespace Planora.Application.Features.AuthFeature.Commands.CreateTokenByRefreshToken;
 
 public class CreateTokenByRefreshTokenCommandHandler(
-    IRefreshTokenRepository refreshTokenRepository,
-        AuthBusinessRules authBusinessRules,
-        IIdentityRepository identityRepository,
-        IAuthService authService) 
+    IPlanoraUnitOfWork planoraUnitOfWork,
+    AuthBusinessRules authBusinessRules,
+    IAuthService authService) 
     : IRequestHandler<CreateTokenByRefreshTokenCommand, TokenDto>
 {
     public async Task<TokenDto> Handle(CreateTokenByRefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var refreshToken = await refreshTokenRepository.GetAsync(r => r.Token == request.RefreshToken, cancellationToken: cancellationToken);
+        var refreshToken = await planoraUnitOfWork.RefreshTokens.GetAsync(r => r.Token == request.RefreshToken, cancellationToken: cancellationToken);
         await authBusinessRules.RefreshShouldExistWhenRequestedAsync(refreshToken);
         await authBusinessRules.RefreshTokenExpiredAsync(refreshToken!);
 
-        var identity = await identityRepository.GetAsync(i => i.Id == refreshToken!.IdentityId,
+        var identity = await planoraUnitOfWork.Identities.GetAsync(i => i.Id == refreshToken!.IdentityId,
                 include: identity => identity.Include(i => i.IdentityOperationClaims)
                 .ThenInclude(ioc => ioc.OperationClaim)
                 .Include(i => i.IdentityAuthorities)
@@ -46,7 +45,7 @@ public class CreateTokenByRefreshTokenCommandHandler(
         refreshToken!.Token = createdRefreshToken.Token;
         refreshToken.Expires = createdRefreshToken.Expires;
         refreshToken.CreatedByIp = request.IpAddress;
-
+        await planoraUnitOfWork.CommitAsync();
         TokenDto tokenDto = new()
         {
             AccessToken = createdAccessToken,

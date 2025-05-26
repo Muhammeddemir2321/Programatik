@@ -23,27 +23,13 @@ public static class IQueryableDynamicFilterExtensions
             { "doesnotcontain", "Contains" }
         };
 
-    public static IQueryable<T> ToDynamic<T>(
-        this IQueryable<T> query, Dynamic dynamic)
+    public static IQueryable<T> ToDynamic<T>(this IQueryable<T> query, Dynamic dynamic)
     {
-        if (dynamic.Filter is not null) query = Filter(query, dynamic.Filter);
+        if (dynamic.Filter is not null && dynamic.Filter.Filters is not null) query = Filter(query, dynamic.Filter);
         if (dynamic.Sort is not null && dynamic.Sort.Any()) query = Sort(query, dynamic.Sort);
         return query;
     }
-
-    private static IQueryable<T> Filter<T>(
-        IQueryable<T> queryable, Filter filter)
-    {
-        IList<Filter> filters = GetAllFilters(filter);
-        string?[] values = filters.Select(f => f.Value).ToArray();
-        string where = Transform(filter, filters);
-        queryable = queryable.Where(where, values);
-
-        return queryable;
-    }
-
-    private static IQueryable<T> Sort<T>(
-        IQueryable<T> queryable, IEnumerable<Sort> sort)
+    private static IQueryable<T> Sort<T>(IQueryable<T> queryable, IEnumerable<Sort> sort)
     {
         if (sort.Any())
         {
@@ -54,30 +40,48 @@ public static class IQueryableDynamicFilterExtensions
         return queryable;
     }
 
+    private static IQueryable<T> Filter<T>(IQueryable<T> queryable, Filter filter)
+    {
+        IList<Filter> filters = GetAllFilters(filter);
+        string?[] values = filters.Select(f => f.Value).ToArray();
+        string where = Transform(filter, filters);
+        queryable = queryable.Where(where, values);
+
+        return queryable;
+    }
+
+
     public static IList<Filter> GetAllFilters(Filter filter)
     {
-        List<Filter> filters = new();
-        GetFilters(filter, filters);
+        List<Filter> filters = new() { filter };
+
+        if (filter.Filters is not null && filter.Filters.Any())
+        {
+            foreach (var child in filter.Filters)
+                filters.AddRange(GetAllFilters(child));
+        }
+
         return filters;
     }
 
-    private static void GetFilters(Filter filter, IList<Filter> filters)
-    {
-        filters.Add(filter);
-        if (filter.Filters is not null && filter.Filters.Any())
-            foreach (Filter item in filter.Filters)
-                GetFilters(item, filters);
-    }
 
     public static string Transform(Filter filter, IList<Filter> filters)
     {
         int index = filters.IndexOf(filter);
-        string comparison = Operators[filter.Operator];
         StringBuilder where = new();
 
+        if (string.IsNullOrWhiteSpace(filter.Operator) || !Operators.TryGetValue(filter.Operator, out string? comparison))
+        {
+            if (filter.Filters is not null && filter.Filters.Any() && filter.Logic is not null)
+            {
+                var inner = string.Join($" {filter.Logic} ", filter.Filters.Select(f => Transform(f, filters)));
+                return $"({inner})";
+            }
+            return string.Empty;
+        }
         if (!string.IsNullOrEmpty(filter.Value))
         {
-            if (filter.Operator == "doesnotcontain")
+            if (comparison == "doesnotcontain")
                 where.Append($"(!np({filter.Field}).{comparison}(@{index}))");
             else if (comparison == "StartsWith" ||
                      comparison == "EndsWith" ||
@@ -86,16 +90,14 @@ public static class IQueryableDynamicFilterExtensions
             else
                 where.Append($"np({filter.Field}) {comparison} @{index}");
         }
-        else if (filter.Operator == "isnull" || filter.Operator == "isnotnull")
+        else if (comparison == "isnull" || comparison == "isnotnull")
         {
             where.Append($"np({filter.Field}) {comparison}");
         }
-        else if (filter.Operator == "empty" || filter.Operator == "notempty")
+        else if (comparison == "empty" || comparison == "notempty")
+        {
             where.Append($"np({filter.Field}) {comparison} \"\"");
-
-        if (filter.Logic is not null && filter.Filters is not null && filter.Filters.Any())
-            return
-                $"{where} {filter.Logic} ({string.Join($" {filter.Logic} ", filter.Filters.Select(f => Transform(f, filters)).ToArray())})";
+        }
 
         return where.ToString();
     }

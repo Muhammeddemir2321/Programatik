@@ -7,7 +7,7 @@ using Planora.Domain.Entities;
 namespace Planora.Application.Features.UserFeature.Commands.CreateUser;
 
 public class CreateUserCommandHandler(
-    IUserRepository userRepository,
+    IPlanoraUnitOfWork planoraUnitOfWork,
     UserBusinessRules userBusinessRules,
     IMapper mapper,
     IMediator mediator)
@@ -15,11 +15,15 @@ public class CreateUserCommandHandler(
 {
     public async Task<CreatedUserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var createdIdentity=await mediator.Send(request.createIdentityCommand, cancellationToken);
-        var mappedUser = mapper.Map<User>(request);
-        mappedUser.IsVerify = false;
-        mappedUser.IdentityId = createdIdentity.Id;
-        var createdUser = await userRepository.AddAsync(mappedUser, cancellationToken: cancellationToken);
-        return mapper.Map<CreatedUserDto>(createdUser);
+        return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
+        {
+            var createdIdentity = await mediator.Send(request.createIdentityCommand, cancellationToken);
+            var mappedUser = mapper.Map<User>(request);
+            mappedUser.IsVerify = false;
+            mappedUser.IdentityId = createdIdentity.Id;
+            var createdUser = await planoraUnitOfWork.Users.AddAsync(mappedUser, cancellationToken: cancellationToken);
+            return mapper.Map<CreatedUserDto>(createdUser);
+        });
+        
     }
 }

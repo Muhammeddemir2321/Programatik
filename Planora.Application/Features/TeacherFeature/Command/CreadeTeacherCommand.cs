@@ -17,14 +17,15 @@ public class CreateTeacherCommand : IRequest<CreatedTeacherDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Create };
     public class CreateTeachereCommandHandler(
-        ITeacherRepository teacherRepository, IMapper mapper, TeacherBusinessRules teacherBusinessRules)
+        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, TeacherBusinessRules teacherBusinessRules)
         : IRequestHandler<CreateTeacherCommand, CreatedTeacherDto>
     {
         public async Task<CreatedTeacherDto> Handle(CreateTeacherCommand request, CancellationToken cancellationToken)
         {
             await teacherBusinessRules.TeacherFullNameMustBeUniqeWhenCreateAsync(request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
-            var createdTeacher = await teacherRepository.AddAsync(mappedTeacher, cancellationToken: cancellationToken);
+            var createdTeacher = await planoraUnitOfWork.Teachers.AddAsync(mappedTeacher, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<CreatedTeacherDto>(createdTeacher);
         }
     }

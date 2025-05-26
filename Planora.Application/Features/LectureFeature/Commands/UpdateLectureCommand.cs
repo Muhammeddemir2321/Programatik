@@ -20,7 +20,7 @@ public class UpdateLectureCommand : IRequest<UpdatedLectureDto>, ISecuredRequest
 
 
     public class UpdateLectureCommandHandler(
-        ILectureRepository lectureRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         IMapper mapper,
         LectureBusinessRules lectureBusinessRules)
         : IRequestHandler<UpdateLectureCommand, UpdatedLectureDto>
@@ -30,7 +30,8 @@ public class UpdateLectureCommand : IRequest<UpdatedLectureDto>, ISecuredRequest
             await lectureBusinessRules.LectureNameMustNotBeEmptyAsync(request.Name);
             await lectureBusinessRules.LectureNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
-            var updatedLecture = await lectureRepository.UpdateAsync(mappedLecture, cancellationToken: cancellationToken);
+            var updatedLecture = await planoraUnitOfWork.Lectures.UpdateAsync(mappedLecture, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<UpdatedLectureDto>(updatedLecture);
         }
     }

@@ -7,7 +7,7 @@ namespace Planora.Persistence.Repositories;
 
 public class UserRepository : EfBaseTimeStampRepositoryBase<User, PlanoraDbContext>, IUserRepository
 {
-    public UserRepository(PlanoraDbContext context) : base(context)
+    public UserRepository(PlanoraDbContext context, IUserContextAccessor userContextAccessor) : base(context, userContextAccessor)
     {
     }
 }

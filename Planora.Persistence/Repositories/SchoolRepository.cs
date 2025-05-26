@@ -7,8 +7,7 @@ namespace Planora.Persistence.Repositories;
 
 public class SchoolRepository : EfRepositoryBase<School, PlanoraDbContext>, ISchoolRepository
 {
-    public SchoolRepository(PlanoraDbContext context):base(context)
+    public SchoolRepository(PlanoraDbContext context) : base(context)
     {
-        
     }
 }

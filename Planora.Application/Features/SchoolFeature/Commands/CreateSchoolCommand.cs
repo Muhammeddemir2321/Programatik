@@ -19,7 +19,7 @@ public class CreateSchoolCommand : IRequest<CreatedSchoolDto>, ISecuredRequest
     public string[] Roles => new string[] { SchoolClaimConstants.Create };
 
     public class CreateSchoolCommandHandler(
-        ISchoolRepository schoolRepository, IMapper mapper, SchoolBusinessRules schoolBusinessRules)
+        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, SchoolBusinessRules schoolBusinessRules)
         : IRequestHandler<CreateSchoolCommand, CreatedSchoolDto>
     {
         public async Task<CreatedSchoolDto> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
@@ -28,7 +28,8 @@ public class CreateSchoolCommand : IRequest<CreatedSchoolDto>, ISecuredRequest
             await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address); //Validationda yap
             await schoolBusinessRules.SchoolNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedschool = mapper.Map<School>(request);
-            var createdschool = await schoolRepository.AddAsync(mappedschool, cancellationToken: cancellationToken);
+            var createdschool = await planoraUnitOfWork.Schools.AddAsync(mappedschool, cancellationToken: cancellationToken);
+            await planoraUnitOfWork.CommitAsync();
             return mapper.Map<CreatedSchoolDto>(createdschool);
         }
     }

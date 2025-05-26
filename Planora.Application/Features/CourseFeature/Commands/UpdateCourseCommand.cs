@@ -19,7 +19,7 @@ public class UpdateCourseCommand : IRequest<UpdatedCourseDto>, ISecuredRequest
     [JsonIgnore]
     public string[] Roles => new string[] { CourseClaimConstants.Update };
     public class UpdateCourseCommandHandler(
-        ICourseRepository courseRepository,
+        IPlanoraUnitOfWork planoraUnitOfWork,
         IMapper mapper,
         CourseBusinessRules courseBusinessRules, IMediator mediator)
         : IRequestHandler<UpdateCourseCommand, UpdatedCourseDto>
@@ -30,7 +30,7 @@ public class UpdateCourseCommand : IRequest<UpdatedCourseDto>, ISecuredRequest
             var lecture = await mediator.Send(getLectureQuery, cancellationToken: cancellationToken);
             var mappedCourse = mapper.Map<Course>(request);
             mappedCourse.Name = lecture.Name!;
-            var updatedCourse = await courseRepository.UpdateAsync(mappedCourse, cancellationToken: cancellationToken);
+            var updatedCourse = await planoraUnitOfWork.Courses.UpdateAsync(mappedCourse, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedCourseDto>(updatedCourse);
         }
     }
