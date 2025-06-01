@@ -11,10 +11,12 @@ public class ClassSection : Entity<Guid>, ISchoolEntity
     public  School School { get; set; }
     public  Grade Grade { get; set; }
 
-    public  ICollection<ClassCourseAssignment> ClassCourseAssignments { get; set; }
+    public  ICollection<LessonSchedule> LessonSchedules { get; set; }
+    public  ICollection<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
 
     public ClassSection()
     {
-        ClassCourseAssignments = new HashSet<ClassCourseAssignment>();
+        LessonSchedules = new HashSet<LessonSchedule>();
+        ClassTeachingAssignments = new HashSet<ClassTeachingAssignment>();
     }
 }

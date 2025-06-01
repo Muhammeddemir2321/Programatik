@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Core.Persistence.Repositories;
 
-public interface IAsyncBaseTimeStampRepository<T> :IAsyncRepository<T> where T : BaseTimeStampEntity, new()
+public interface IAsyncBaseTimeStampRepository<T> :IAsyncRepository<T> where T : BaseTimeStampEntity
 {
     Task<IPaginate<T>> GetListNotDeletedAsync(Expression<Func<T, bool>>? predicate = null,
                                                 Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,

@@ -6,27 +6,29 @@ namespace Planora.Persistence.Repositories;
 
 public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWork
 {
+    public ISchoolRepository Schools { get; }
+    public ILectureRepository Lectures { get; }
+    public IGradeRepository Grades { get; }
+    public ITeacherRepository Teachers { get; }
+    public IClassSectionRepository ClassSections { get; }
+    public ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
+    public IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
+    public ILessonScheduleRepository LessonSchedules { get; }
+    public IUserRepository Users { get; }
+    public IIdentityRepository Identities { get; }
     public IAuthorityOperationClaimRepository AuthorityOperationClaims { get; }
     public IAuthorityRepository Authorities { get; }
-    public IClassCourseAssignmentRepository ClassCourseAssignments { get; }
-    public IClassSectionRepository ClassSections { get; }
-    public ICourseRepository Courses { get; }
-    public IGradeRepository Grades { get; }
     public IIdentityAuthorityRepository IdentityAuthorities { get; }
     public IIdentityOperationClaimRepository IdentityOperationClaims { get; }
-    public IIdentityRepository Identities { get; }
-    public ILectureRepository Lectures { get; }
     public IOperationClaimRepository OperationClaims { get; }
     public IRefreshTokenRepository RefreshTokens { get; }
-    public ISchoolRepository Schools { get; }
-    public ITeacherRepository Teachers { get; }
-    public IUserRepository Users { get; }
     public PlanoraUnitOfWork(PlanoraDbContext context,
         IAuthorityOperationClaimRepository authorityOperationClaims,
         IAuthorityRepository authorities,
-        IClassCourseAssignmentRepository classCourseAssignments,
+        ILessonScheduleRepository lessonSchedules,
         IClassSectionRepository classSections,
-        ICourseRepository courses,
+        IClassTeachingAssignmentRepository classTeachingAssignments,
+        ISchoolScheduleSettingRepository schoolScheduleSettings,
         IGradeRepository grades,
         IIdentityAuthorityRepository identityAuthorities,
         IIdentityOperationClaimRepository identityOperationClaims,
@@ -42,9 +44,10 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
     {
         AuthorityOperationClaims = authorityOperationClaims;
         Authorities = authorities;
-        ClassCourseAssignments = classCourseAssignments;
+        LessonSchedules = lessonSchedules;
         ClassSections = classSections;
-        Courses = courses;
+        ClassTeachingAssignments = classTeachingAssignments;
+        SchoolScheduleSettings = schoolScheduleSettings;
         Grades = grades;
         IdentityAuthorities = identityAuthorities;
         IdentityOperationClaims = identityOperationClaims;

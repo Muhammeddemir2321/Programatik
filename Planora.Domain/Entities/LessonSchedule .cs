@@ -1,0 +1,18 @@
+﻿using Core.Persistence.Repositories;
+
+namespace Planora.Domain.Entities;
+
+public class LessonSchedule : Entity<Guid>, ISchoolEntity
+{
+    public Guid SchoolId { get; set; }
+    public School School { get; set; }
+    public Guid ClassSectionId { get; set; }   
+    public int DayOfWeek { get; set; }         // Pazartesi = 1, Salı = 2, ...
+    public int LessonIndex { get; set; }       // Gün içindeki ders saati (1 → 08:30, 2 → 09:25 ...)
+    public Guid LectureId { get; set; }        
+    public Guid TeacherId { get; set; }        
+
+    public ClassSection ClassSection { get; set; }
+    public Lecture Lecture { get; set; }
+    public Teacher Teacher { get; set; }
+}

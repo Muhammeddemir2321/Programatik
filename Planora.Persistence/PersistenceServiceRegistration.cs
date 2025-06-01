@@ -26,12 +26,13 @@ public static class PersistenceServiceRegistration
 
 
 
-        services.AddScoped<IClassCourseAssignmentRepository, ClassCourseAssignmentRepository>();
+        services.AddScoped<ILessonScheduleRepository, LessonScheduleRepository>();
         services.AddScoped<IClassSectionRepository, ClassSectionRepository>();
-        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IClassTeachingAssignmentRepository, ClassTeachingAssignmentRepository>();
         services.AddScoped<IGradeRepository, GradeRepository>();
         services.AddScoped<ILectureRepository, LectureRepository>();
         services.AddScoped<ISchoolRepository, SchoolRepository>();
+        services.AddScoped<ISchoolScheduleSettingRepository, SchoolScheduleSettingsRepository>();
         services.AddScoped<ITeacherRepository, TeacherRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IIdentityRepository, IdentityRepository>();

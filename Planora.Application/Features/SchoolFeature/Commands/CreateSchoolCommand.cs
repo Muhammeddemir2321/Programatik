@@ -24,8 +24,6 @@ public class CreateSchoolCommand : IRequest<CreatedSchoolDto>, ISecuredRequest
     {
         public async Task<CreatedSchoolDto> Handle(CreateSchoolCommand request, CancellationToken cancellationToken)
         {
-            await schoolBusinessRules.SchoolNameMustNotBeEmptyAsync(request.Name);  //Validationda yap
-            await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address); //Validationda yap
             await schoolBusinessRules.SchoolNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedschool = mapper.Map<School>(request);
             var createdschool = await planoraUnitOfWork.Schools.AddAsync(mappedschool, cancellationToken: cancellationToken);

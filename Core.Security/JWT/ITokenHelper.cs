@@ -4,6 +4,6 @@ namespace Core.Security.JWT;
 
 public interface ITokenHelper
 {
-    AccessToken CreateToken(Identity identity);
-    RefreshToken CreateRefreshToken(Identity identity, string ipAddress);
+    AccessToken CreateToken(IdentityJwt identity);
+    RefreshToken CreateRefreshToken(IdentityJwt identity, string ipAddress);
 }

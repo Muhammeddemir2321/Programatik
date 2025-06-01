@@ -38,9 +38,14 @@ public class CreateTokenByRefreshTokenCommandHandler(
                 OperationClaim = new() { Group = "supervisor", Name = "supervisor" }
             });
         }
-
-        AccessToken createdAccessToken = await authService.CreateAccessToken(identity);
-        RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identity, request.IpAddress);
+        var user = await planoraUnitOfWork.Users.GetAsync(i => i.IdentityId == identity.Id, cancellationToken: cancellationToken);
+        IdentityJwt identityJwt = new()
+        {
+            Identity = identity,
+            SchoolId = user?.SchoolId ?? Guid.Empty
+        };
+        AccessToken createdAccessToken = await authService.CreateAccessToken(identityJwt);
+        RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identityJwt, request.IpAddress);
 
         refreshToken!.Token = createdRefreshToken.Token;
         refreshToken.Expires = createdRefreshToken.Expires;

@@ -16,8 +16,9 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     }
     public DbSet<School> Schools { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
-    public DbSet<Course> Courses { get; set; }
-    public DbSet<ClassCourseAssignment>  ClassCourseAssignments{ get; set; }
+    public DbSet<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
+    public DbSet<LessonSchedule> LessonSchedules { get; set; }
+    public DbSet<SchoolScheduleSetting> SchoolScheduleSettings { get; set; }
     public DbSet<Grade> Grades { get; set; }
     public DbSet<Lecture> Lectures { get; set; }
     public DbSet<ClassSection> ClassSections { get; set; }
@@ -55,13 +56,16 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
         modelBuilder.Entity<Teacher>()
             .HasQueryFilter(t => t.SchoolId == schoolId);
 
-        modelBuilder.Entity<Course>()
+        modelBuilder.Entity<ClassTeachingAssignment>()
             .HasQueryFilter(c => c.SchoolId == schoolId);
 
         modelBuilder.Entity<ClassSection>()
             .HasQueryFilter(cs => cs.SchoolId == schoolId);
 
-        modelBuilder.Entity<ClassCourseAssignment>()
+        modelBuilder.Entity<LessonSchedule>()
+            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+
+        modelBuilder.Entity<SchoolScheduleSetting>()
             .HasQueryFilter(ca => ca.SchoolId == schoolId);
 
         base.OnModelCreating(modelBuilder);

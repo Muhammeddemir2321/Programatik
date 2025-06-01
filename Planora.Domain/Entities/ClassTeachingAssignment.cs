@@ -1,0 +1,16 @@
+﻿using Core.Persistence.Repositories;
+
+namespace Planora.Domain.Entities;
+
+public class ClassTeachingAssignment : Entity<Guid>, ISchoolEntity
+{
+    public Guid SchoolId { get; set; }
+    public School School { get; set; }
+    public Guid LectureId { get; set; }
+    public Lecture Lecture { get; set; }
+    public Guid TeacherId { get; set; }
+    public Teacher Teacher { get; set; }
+    public Guid ClassSectionId { get; set; }
+    public ClassSection ClassSection { get; set; }
+    public int WeeklyHourCount { get; set; }
+}

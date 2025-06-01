@@ -27,13 +27,13 @@ public class AuthManager : IAuthService
         RefreshToken addedRefreshToken = await _refreshTokenRepository.AddAsync(refreshToken);
         return addedRefreshToken;
     }
-    public async Task<AccessToken> CreateAccessToken(Identity identity)
+    public async Task<AccessToken> CreateAccessToken(IdentityJwt identityJwt)
     {
-        IList<IdentityAuthority> identityAuthorities = await _identityAuthorityRepository.GetAllAsync(a => a.IdentityId == identity.Id, include: u =>
+        IList<IdentityAuthority> identityAuthorities = await _identityAuthorityRepository.GetAllAsync(a => a.IdentityId == identityJwt.Identity.Id, include: u =>
                                                                 u.Include(u => u.Authority)
         );
         IList<IdentityOperationClaim> identityOperationClaims =
-           await _identityOperationClaimRepository.GetAllAsync(u => u.IdentityId == identity.Id,
+           await _identityOperationClaimRepository.GetAllAsync(u => u.IdentityId == identityJwt.Identity.Id,
                                                             include: u =>
                                                                 u.Include(u => u.OperationClaim)
            );
@@ -41,13 +41,14 @@ public class AuthManager : IAuthService
             identityAuthorities.Select(u => u.Authority).ToList();
         IList<OperationClaim> operationClaims =
             identityOperationClaims.Select(u => u.OperationClaim).ToList();
-        AccessToken accessToken = _tokenHelper.CreateToken(identity);
+
+        AccessToken accessToken = _tokenHelper.CreateToken(identityJwt);
         return accessToken;
     }
 
-    public async Task<RefreshToken> CreateRefreshToken(Identity identity, string ipAddress)
+    public async Task<RefreshToken> CreateRefreshToken(IdentityJwt identityJwt, string ipAddress)
     {
-        RefreshToken refreshToken = _tokenHelper.CreateRefreshToken(identity, ipAddress);
+        RefreshToken refreshToken = _tokenHelper.CreateRefreshToken(identityJwt, ipAddress);
         return await Task.FromResult(refreshToken);
     }
 }

@@ -34,17 +34,21 @@ public class CreateTokenCommandHandler(
                 OperationClaim = new() { Group = "supervisor", Name = "supervisor" }
             });
         }
-
+        var user = await planoraUnitOfWork.Users.GetAsync(i => i.IdentityId == identity.Id, cancellationToken: cancellationToken);
         var refreshTokens = await planoraUnitOfWork.RefreshTokens.GetAllAsync(r => r.IdentityId == identity.Id, cancellationToken: cancellationToken);
-        
+        IdentityJwt identityJwt = new()
+        {
+            Identity = identity,
+            SchoolId = user?.SchoolId ?? Guid.Empty
+        };
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
             foreach (var token in refreshTokens)
             {
                 await planoraUnitOfWork.RefreshTokens.DeleteAsync(token, cancellationToken: cancellationToken);
             }
-            AccessToken createdAccessToken = await authService.CreateAccessToken(identity);
-            RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identity, request.IpAddress);
+            AccessToken createdAccessToken = await authService.CreateAccessToken(identityJwt);
+            RefreshToken createdRefreshToken = await authService.CreateRefreshToken(identityJwt, request.IpAddress);
             RefreshToken addedRefreshToken = await authService.AddRefreshToken(createdRefreshToken);
 
             TokenDto tokenDto = new()

@@ -28,8 +28,6 @@ public class UpdateSchoolCommand : IRequest<UpdatedSchoolDto>, ISecuredRequest
     {
         public async Task<UpdatedSchoolDto> Handle(UpdateSchoolCommand request, CancellationToken cancellationToken)
         {
-            await schoolBusinessRules.SchoolNameMustNotBeEmptyAsync(request.Name);
-            await schoolBusinessRules.SchoolAddressMustNotBeEmptyAsync(request.Address);
             await schoolBusinessRules.SchoolNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedSchool = mapper.Map<School>(request);
             var updatedSchool = await planoraUnitOfWork.Schools.UpdateAsync(mappedSchool, cancellationToken: cancellationToken);

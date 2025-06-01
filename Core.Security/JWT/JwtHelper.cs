@@ -18,22 +18,22 @@ public class JwtHelper : ITokenHelper
     {
         _tokenOptions = tokenOptions.Value;
     }
-    public AccessToken CreateToken(Identity identity)
+    public AccessToken CreateToken(IdentityJwt identityJwt)
     {
         _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration);
         SecurityKey securityKey = SigningHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
         SigningCredentials signingCredentials = SigningHelper.CreateSigningCredentials(securityKey);
-        var operationClaims = identity.IdentityOperationClaims.Select(iop => iop.OperationClaim).ToList();
-        JwtSecurityToken jwt = CreateJwtSecurityToken(identity, signingCredentials, operationClaims);
+        var operationClaims = identityJwt.Identity.IdentityOperationClaims.Select(iop => iop.OperationClaim).ToList();
+        JwtSecurityToken jwt = CreateJwtSecurityToken(identityJwt, signingCredentials, operationClaims);
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
         string? token = jwtSecurityTokenHandler.WriteToken(jwt);
         return new AccessToken(token, _accessTokenExpiration);
     }
-    public RefreshToken CreateRefreshToken(Identity identity, string ipAddress)
+    public RefreshToken CreateRefreshToken(IdentityJwt identityJwt, string ipAddress)
     {
         RefreshToken refreshToken = new()
         {
-            IdentityId = identity.Id,
+            IdentityId = identityJwt.Identity.Id,
             Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
             Expires = DateTime.UtcNow.AddDays(_tokenOptions.RefreshTokenExpiration),
             Created = DateTime.UtcNow,
@@ -42,7 +42,7 @@ public class JwtHelper : ITokenHelper
 
         return refreshToken;
     }
-    private JwtSecurityToken CreateJwtSecurityToken(Identity identity,
+    private JwtSecurityToken CreateJwtSecurityToken(IdentityJwt identityJwt,
                                                    SigningCredentials signingCredentials,
                                                    IList<OperationClaim> operationClaims)
     {
@@ -51,17 +51,18 @@ public class JwtHelper : ITokenHelper
             _tokenOptions.Audience,
             expires: _accessTokenExpiration,
             notBefore: DateTime.Now,
-            claims: SetClaims(identity, operationClaims),
+            claims: SetClaims(identityJwt, operationClaims),
             signingCredentials: signingCredentials
         );
         return jwt;
     }
-    private IEnumerable<Claim> SetClaims(Identity identity, IList<OperationClaim> operationClaims)
+    private IEnumerable<Claim> SetClaims(IdentityJwt identityJwt, IList<OperationClaim> operationClaims)
     {
         List<Claim> claims = new();
-        claims.AddNameIdentifier(identity.Id.ToString());
-        claims.AddUsername(identity.UserName!);
+        claims.AddNameIdentifier(identityJwt.Identity.Id.ToString());
+        claims.AddUsername(identityJwt.Identity.UserName!);
         //claims.AddRoles(operationClaims.Select(c => c.Name).ToArray());
+        claims.AddSchoolId(identityJwt.SchoolId);
         return claims;
     }
 }

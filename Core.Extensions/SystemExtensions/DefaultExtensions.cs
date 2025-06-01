@@ -1,6 +1,8 @@
-﻿using Core.Security;
+﻿using Core.Application.Pipelines.Authorization;
+using Core.Application.Pipelines.Validation;
 using Core.Security.Configuration;
 using Core.Security.Encryption;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -66,7 +68,8 @@ public static class DefaultExtensions
             });
         });
 
-        
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         builder.Services.AddHttpContextAccessor();
 

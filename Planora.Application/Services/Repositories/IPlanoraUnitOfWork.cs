@@ -4,20 +4,21 @@ namespace Planora.Application.Services.Repositories;
 
 public interface IPlanoraUnitOfWork : IUnitOfWork
 {
-    IAuthorityOperationClaimRepository AuthorityOperationClaims { get; }
-    IAuthorityRepository Authorities { get; }
-    IClassCourseAssignmentRepository ClassCourseAssignments { get; }
-    IClassSectionRepository ClassSections { get; }
-    ICourseRepository Courses { get; }
+    ISchoolRepository Schools { get; }
+    ILectureRepository Lectures { get; }
     IGradeRepository Grades { get; }
+    ITeacherRepository Teachers { get; }
+    IClassSectionRepository ClassSections { get; }
+    ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
+    IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
+    ILessonScheduleRepository LessonSchedules { get; }
+    IUserRepository Users { get; }
+    IIdentityRepository Identities { get; }
     IIdentityAuthorityRepository IdentityAuthorities { get; }
     IIdentityOperationClaimRepository IdentityOperationClaims { get; }
-    IIdentityRepository Identities { get; }
-    ILectureRepository Lectures { get; }
     IOperationClaimRepository OperationClaims { get; }
     IRefreshTokenRepository RefreshTokens { get; }
-    ISchoolRepository Schools { get; }
-    ITeacherRepository Teachers { get; }
-    IUserRepository Users { get; }
+    IAuthorityOperationClaimRepository AuthorityOperationClaims { get; }
+    IAuthorityRepository Authorities { get; }
 
 }

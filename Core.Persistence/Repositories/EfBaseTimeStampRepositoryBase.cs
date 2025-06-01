@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace Core.Persistence.Repositories
 {
     public class EfBaseTimeStampRepositoryBase<TEntity, TContext> : EfRepositoryBase<TEntity, TContext>, IAsyncBaseTimeStampRepository<TEntity>, IBaseTimeStampRepository<TEntity>
-        where TEntity : BaseTimeStampEntity, new()
+        where TEntity : BaseTimeStampEntity
         where TContext : DbContext
     {
         private readonly IUserContextAccessor _userContextAccessor;

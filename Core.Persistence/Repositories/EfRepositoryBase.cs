@@ -10,7 +10,7 @@ public abstract class EfRepositoryBase<TEntity, TContext> :
     IAsyncRepository<TEntity>,
     IRepository<TEntity>,
     IDynamicRepository<TEntity>
-    where TEntity : Entity, new()
+    where TEntity : Entity
     where TContext : DbContext
 {
     private readonly SemaphoreSlim Semaphore = new(1, 1);

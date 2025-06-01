@@ -6,11 +6,13 @@ public class Lecture : Entity<Guid>
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public ICollection<Course> Courses { get; set; }
     public ICollection<Teacher> Teachers { get; set; }
+    public ICollection<LessonSchedule> LessonSchedules { get; set; }
+    public ICollection<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
     public Lecture()
     {
-        Courses = new HashSet<Course>();
         Teachers = new HashSet<Teacher>();
+        LessonSchedules = new HashSet<LessonSchedule>();
+        ClassTeachingAssignments = new HashSet<ClassTeachingAssignment>();
     }
 }

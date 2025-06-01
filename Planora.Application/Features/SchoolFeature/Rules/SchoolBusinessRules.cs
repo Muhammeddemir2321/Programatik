@@ -22,18 +22,6 @@ public class SchoolBusinessRules(ISchoolRepository schoolRepository)
             throw new BusinessException("Name already taken", ErrorConstants.NameAlreadyTaken)
                 .WithParam("SchoolName", schoolName ?? string.Empty);
     }
-    public async Task SchoolNameMustNotBeEmptyAsync(string? name)
-    {
-        if (string.IsNullOrEmpty(name))
-            throw new BusinessException("Name must not be empty", ErrorConstants.NameMustNotBeEmpty);
-        await Task.CompletedTask;
-    }
-    public async Task SchoolAddressMustNotBeEmptyAsync(string? address)
-    {
-        if (string.IsNullOrEmpty(address))
-            throw new BusinessException("Address must not be empty", ErrorConstants.AddressMustNotBeEmpty);
-        await Task.CompletedTask;
-    }
     public async Task SchoolNameMustBeUniqueWhenUpdateAsync(Guid id, string schoolName)
     {
         var school = await schoolRepository.GetAsync(c => c.Id != id && c.Name == schoolName);

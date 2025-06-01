@@ -3,8 +3,5 @@
 public class ClaimConstantGroupAttribute:Attribute
 {
     public string GroupName { get; }
-    public ClaimConstantGroupAttribute(string groupName)
-    {
-        GroupName = groupName;
-    }
+    public ClaimConstantGroupAttribute(string groupName) => GroupName = groupName;
 }

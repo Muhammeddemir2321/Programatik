@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using Planora.Application.Features.AuthFeature.Rules;
 using Planora.Application.Features.AuthorityFeature.Rules;
-using Planora.Application.Features.CourseFeature.Rules;
+using Planora.Application.Features.ClassTeachingAssignmentFeature.Rules;
 using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Features.IdentityFeature.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
@@ -18,13 +19,14 @@ namespace Planora.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(m => m.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddScoped<LectureBusinessRules>();
             services.AddScoped<SchoolBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();
-            services.AddScoped<CourseBusinessRules>();
+            services.AddScoped<ClassTeachingAssignmentBusinessRules>();
             services.AddScoped<IdentityBusinessRules>();
             services.AddScoped<UserBusinessRules>();
             services.AddScoped<AuthBusinessRules>();
