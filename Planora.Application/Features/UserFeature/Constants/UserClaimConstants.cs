@@ -12,7 +12,6 @@ public class UserClaimConstants : BaseClaimConstant
     public const string ListDeleted = "User.ListDeleted";
     public const string Get = "User.Get";
     public const string UpdateUserName = "User.UpdateUserName";
-    public const string UpdateVerify = "User.UpdateVerify";
     public const string HardDelete = "User.HardDelete";
     public const string SoftDelete = "User.SoftDelete";
 }

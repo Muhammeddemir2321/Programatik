@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Planora.Application.Features.AuthFeature.Rules;
 using Planora.Application.Features.AuthorityFeature.Rules;
+using Planora.Application.Features.ClassSectionFeature.Rules;
 using Planora.Application.Features.ClassTeachingAssignmentFeature.Rules;
 using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Features.IdentityFeature.Rules;
@@ -24,6 +25,7 @@ namespace Planora.Application
             services.AddMediatR(m => m.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddScoped<LectureBusinessRules>();
             services.AddScoped<SchoolBusinessRules>();
+            services.AddScoped<ClassSectionBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();
             services.AddScoped<ClassTeachingAssignmentBusinessRules>();

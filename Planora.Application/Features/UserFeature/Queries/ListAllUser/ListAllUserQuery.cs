@@ -11,7 +11,6 @@ namespace Planora.Application.Features.UserFeature.Queries.ListAllUser;
 public class ListAllUserQuery : IRequest<UserListModel>, ISecuredRequest
 {
     public PageRequest PageRequest { get; set; }
-    public Dynamic Query { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { UserClaimConstants.List };
 
