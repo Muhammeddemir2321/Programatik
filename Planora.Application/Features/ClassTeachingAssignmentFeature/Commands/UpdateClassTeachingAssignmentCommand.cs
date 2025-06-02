@@ -4,7 +4,6 @@ using MediatR;
 using Planora.Application.Features.ClassTeachingAssignmentFeature.Constants;
 using Planora.Application.Features.ClassTeachingAssignmentFeature.Dtos;
 using Planora.Application.Features.ClassTeachingAssignmentFeature.Rules;
-using Planora.Application.Features.LectureFeature.Queries;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 using System.Text.Json.Serialization;

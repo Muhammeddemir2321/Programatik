@@ -9,9 +9,11 @@ using Planora.Application.Features.IdentityFeature.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
 using Planora.Application.Features.OperationClaimFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Rules;
 using Planora.Application.Features.TeacherFeature.Rules;
 using Planora.Application.Features.UserFeature.Rules;
 using Planora.Application.Services.AuthService;
+using Planora.Domain.Entities;
 using System.Reflection;
 
 namespace Planora.Application
@@ -25,6 +27,7 @@ namespace Planora.Application
             services.AddMediatR(m => m.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddScoped<LectureBusinessRules>();
             services.AddScoped<SchoolBusinessRules>();
+            services.AddScoped<SchoolScheduleSettingBusinessRules>();
             services.AddScoped<ClassSectionBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();

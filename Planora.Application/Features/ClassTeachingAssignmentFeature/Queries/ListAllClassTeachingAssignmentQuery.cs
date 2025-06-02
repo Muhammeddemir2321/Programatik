@@ -7,7 +7,7 @@ using Planora.Application.Features.ClassTeachingAssignmentFeature.Models;
 using Planora.Application.Services.Repositories;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.ClassTeachingAssignmentFeatures.Queries;
+namespace Planora.Application.Features.ClassTeachingAssignmentFeature.Queries;
 
 public class ListAllClassTeachingAssignmentQuery : IRequest<ClassTeachingAssignmentListModel>, ISecuredRequest
 {
