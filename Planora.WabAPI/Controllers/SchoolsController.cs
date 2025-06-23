@@ -13,7 +13,6 @@ namespace Planora.WabAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
 public class SchoolsController : BaseController
 {
     [HttpPost("GetAll")]

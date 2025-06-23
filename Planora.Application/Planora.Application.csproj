@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Planora.Domain\Planora.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\LessonScheduleFeature\Commands\CreateLessonSchedule\" />
+    <Folder Include="Features\LessonScheduleFeature\Commands\DeleteLessonSchedule\" />
+  </ItemGroup>
+
 </Project>

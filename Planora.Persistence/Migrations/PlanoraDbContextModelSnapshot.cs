@@ -405,42 +405,6 @@ namespace Planora.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Planora.Domain.Entities.ClassCourseAssignment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClassSectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ScheduleInfo")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("SchoolId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassSectionId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("SchoolId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("ClassCourseAssignments");
-                });
-
             modelBuilder.Entity("Planora.Domain.Entities.ClassSection", b =>
                 {
                     b.Property<Guid>("Id")
@@ -467,33 +431,38 @@ namespace Planora.Persistence.Migrations
                     b.ToTable("ClassSections");
                 });
 
-            modelBuilder.Entity("Planora.Domain.Entities.Course", b =>
+            modelBuilder.Entity("Planora.Domain.Entities.ClassTeachingAssignment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("LectureId")
+                    b.Property<Guid>("ClassSectionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<Guid>("LectureId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("WeeklyHours")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("WeeklyHourCount")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassSectionId");
 
                     b.HasIndex("LectureId");
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Courses");
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("ClassTeachingAssignments");
                 });
 
             modelBuilder.Entity("Planora.Domain.Entities.Grade", b =>
@@ -528,6 +497,43 @@ namespace Planora.Persistence.Migrations
                     b.ToTable("Lectures");
                 });
 
+            modelBuilder.Entity("Planora.Domain.Entities.LessonSchedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClassSectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("LectureId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("LessonIndex")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SchoolId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TeacherId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassSectionId");
+
+                    b.HasIndex("LectureId");
+
+                    b.HasIndex("SchoolId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("LessonSchedules");
+                });
+
             modelBuilder.Entity("Planora.Domain.Entities.School", b =>
                 {
                     b.Property<Guid>("Id")
@@ -546,6 +552,35 @@ namespace Planora.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Schools");
+                });
+
+            modelBuilder.Entity("Planora.Domain.Entities.SchoolScheduleSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BreakDurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DailyLessonCount")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("FirstLessonStartTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("LessonDurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SchoolId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SchoolId")
+                        .IsUnique();
+
+                    b.ToTable("SchoolScheduleSettings");
                 });
 
             modelBuilder.Entity("Planora.Domain.Entities.Teacher", b =>
@@ -744,41 +779,6 @@ namespace Planora.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Planora.Domain.Entities.ClassCourseAssignment", b =>
-                {
-                    b.HasOne("Planora.Domain.Entities.ClassSection", "ClassSection")
-                        .WithMany("ClassCourseAssignments")
-                        .HasForeignKey("ClassSectionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Planora.Domain.Entities.Course", "Course")
-                        .WithMany("ClassCourseAssignments")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Planora.Domain.Entities.School", "School")
-                        .WithMany("ClassCourseAssignments")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Planora.Domain.Entities.Teacher", "Teacher")
-                        .WithMany("ClassCourseAssignments")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ClassSection");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("School");
-
-                    b.Navigation("Teacher");
-                });
-
             modelBuilder.Entity("Planora.Domain.Entities.ClassSection", b =>
                 {
                     b.HasOne("Planora.Domain.Entities.Grade", "Grade")
@@ -798,21 +798,83 @@ namespace Planora.Persistence.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("Planora.Domain.Entities.Course", b =>
+            modelBuilder.Entity("Planora.Domain.Entities.ClassTeachingAssignment", b =>
                 {
+                    b.HasOne("Planora.Domain.Entities.ClassSection", "ClassSection")
+                        .WithMany("ClassTeachingAssignments")
+                        .HasForeignKey("ClassSectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Planora.Domain.Entities.Lecture", "Lecture")
-                        .WithMany("Courses")
+                        .WithMany("ClassTeachingAssignments")
                         .HasForeignKey("LectureId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Planora.Domain.Entities.School", "School")
-                        .WithMany("Courses")
+                        .WithMany("ClassTeachingAssignments")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Planora.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("ClassTeachingAssignments")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ClassSection");
+
                     b.Navigation("Lecture");
+
+                    b.Navigation("School");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Planora.Domain.Entities.LessonSchedule", b =>
+                {
+                    b.HasOne("Planora.Domain.Entities.ClassSection", "ClassSection")
+                        .WithMany("LessonSchedules")
+                        .HasForeignKey("ClassSectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Planora.Domain.Entities.Lecture", "Lecture")
+                        .WithMany("LessonSchedules")
+                        .HasForeignKey("LectureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Planora.Domain.Entities.School", "School")
+                        .WithMany("LessonSchedules")
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Planora.Domain.Entities.Teacher", "Teacher")
+                        .WithMany("LessonSchedules")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ClassSection");
+
+                    b.Navigation("Lecture");
+
+                    b.Navigation("School");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Planora.Domain.Entities.SchoolScheduleSetting", b =>
+                {
+                    b.HasOne("Planora.Domain.Entities.School", "School")
+                        .WithOne()
+                        .HasForeignKey("Planora.Domain.Entities.SchoolScheduleSetting", "SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("School");
                 });
@@ -871,12 +933,9 @@ namespace Planora.Persistence.Migrations
 
             modelBuilder.Entity("Planora.Domain.Entities.ClassSection", b =>
                 {
-                    b.Navigation("ClassCourseAssignments");
-                });
+                    b.Navigation("ClassTeachingAssignments");
 
-            modelBuilder.Entity("Planora.Domain.Entities.Course", b =>
-                {
-                    b.Navigation("ClassCourseAssignments");
+                    b.Navigation("LessonSchedules");
                 });
 
             modelBuilder.Entity("Planora.Domain.Entities.Grade", b =>
@@ -886,18 +945,20 @@ namespace Planora.Persistence.Migrations
 
             modelBuilder.Entity("Planora.Domain.Entities.Lecture", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("ClassTeachingAssignments");
+
+                    b.Navigation("LessonSchedules");
 
                     b.Navigation("Teachers");
                 });
 
             modelBuilder.Entity("Planora.Domain.Entities.School", b =>
                 {
-                    b.Navigation("ClassCourseAssignments");
-
                     b.Navigation("ClassSections");
 
-                    b.Navigation("Courses");
+                    b.Navigation("ClassTeachingAssignments");
+
+                    b.Navigation("LessonSchedules");
 
                     b.Navigation("Teachers");
 
@@ -906,7 +967,9 @@ namespace Planora.Persistence.Migrations
 
             modelBuilder.Entity("Planora.Domain.Entities.Teacher", b =>
                 {
-                    b.Navigation("ClassCourseAssignments");
+                    b.Navigation("ClassTeachingAssignments");
+
+                    b.Navigation("LessonSchedules");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,6 +14,7 @@ public class UpdateClassTeachingAssignmentCommand : IRequest<UpdatedClassTeachin
 {
     public Guid Id { get; set; }
     public int WeeklyHourCount { get; set; }
+    public Guid SchoolId { get; set; }
     public Guid LectureId { get; set; }
     public Guid TeacherId { get; set; }
     public Guid ClassSectionId { get; set; }

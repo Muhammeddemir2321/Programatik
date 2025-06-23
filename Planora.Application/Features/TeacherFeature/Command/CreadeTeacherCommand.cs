@@ -13,6 +13,7 @@ namespace Planora.Application.Features.TeacherFeatures.Commands;
 public class CreateTeacherCommand : IRequest<CreatedTeacherDto>, ISecuredRequest
 {
     public string FullName { get; set; }
+    public Guid SchoolId { get; set; }
     public Guid LectureId { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Create };

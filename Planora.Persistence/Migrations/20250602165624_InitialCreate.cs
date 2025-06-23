@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Planora.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,6 +61,19 @@ namespace Planora.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Authority",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authority", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Grades",
                 columns: table => new
                 {
@@ -82,6 +95,20 @@ namespace Planora.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lectures", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Group = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperationClaims", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,6 +231,107 @@ namespace Planora.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedByIp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Revoked = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RevokedByIp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ReplacedByToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReasonRevoked = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_AspNetUsers_IdentityId",
+                        column: x => x.IdentityId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityAuthority",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AuthorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityAuthority", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityAuthority_AspNetUsers_IdentityId",
+                        column: x => x.IdentityId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IdentityAuthority_Authority_AuthorityId",
+                        column: x => x.AuthorityId,
+                        principalTable: "Authority",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorityOperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AuthorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OperationClaimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorityOperationClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuthorityOperationClaims_Authority_AuthorityId",
+                        column: x => x.AuthorityId,
+                        principalTable: "Authority",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AuthorityOperationClaims_OperationClaims_OperationClaimId",
+                        column: x => x.OperationClaimId,
+                        principalTable: "OperationClaims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityOperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OperationClaimId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityOperationClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityOperationClaims_AspNetUsers_IdentityId",
+                        column: x => x.IdentityId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IdentityOperationClaims_OperationClaims_OperationClaimId",
+                        column: x => x.OperationClaimId,
+                        principalTable: "OperationClaims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClassSections",
                 columns: table => new
                 {
@@ -230,30 +358,25 @@ namespace Planora.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
+                name: "SchoolScheduleSettings",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    WeeklyHours = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FirstLessonStartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    LessonDurationMinutes = table.Column<int>(type: "int", nullable: false),
+                    BreakDurationMinutes = table.Column<int>(type: "int", nullable: false),
+                    DailyLessonCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.PrimaryKey("PK_SchoolScheduleSettings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Lectures_LectureId",
-                        column: x => x.LectureId,
-                        principalTable: "Lectures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Courses_Schools_SchoolId",
+                        name: "FK_SchoolScheduleSettings_Schools_SchoolId",
                         column: x => x.SchoolId,
                         principalTable: "Schools",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -320,39 +443,80 @@ namespace Planora.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClassCourseAssignments",
+                name: "ClassTeachingAssignments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClassSectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ScheduleInfo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClassSectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WeeklyHourCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClassCourseAssignments", x => x.Id);
+                    table.PrimaryKey("PK_ClassTeachingAssignments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClassCourseAssignments_ClassSections_ClassSectionId",
+                        name: "FK_ClassTeachingAssignments_ClassSections_ClassSectionId",
                         column: x => x.ClassSectionId,
                         principalTable: "ClassSections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ClassCourseAssignments_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
+                        name: "FK_ClassTeachingAssignments_Lectures_LectureId",
+                        column: x => x.LectureId,
+                        principalTable: "Lectures",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ClassCourseAssignments_Schools_SchoolId",
+                        name: "FK_ClassTeachingAssignments_Schools_SchoolId",
                         column: x => x.SchoolId,
                         principalTable: "Schools",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ClassCourseAssignments_Teachers_TeacherId",
+                        name: "FK_ClassTeachingAssignments_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LessonSchedules",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClassSectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DayOfWeek = table.Column<int>(type: "int", nullable: false),
+                    LessonIndex = table.Column<int>(type: "int", nullable: false),
+                    LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonSchedules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LessonSchedules_ClassSections_ClassSectionId",
+                        column: x => x.ClassSectionId,
+                        principalTable: "ClassSections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LessonSchedules_Lectures_LectureId",
+                        column: x => x.LectureId,
+                        principalTable: "Lectures",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LessonSchedules_Schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalTable: "Schools",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LessonSchedules_Teachers_TeacherId",
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "Id",
@@ -399,24 +563,14 @@ namespace Planora.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassCourseAssignments_ClassSectionId",
-                table: "ClassCourseAssignments",
-                column: "ClassSectionId");
+                name: "IX_AuthorityOperationClaims_AuthorityId",
+                table: "AuthorityOperationClaims",
+                column: "AuthorityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassCourseAssignments_CourseId",
-                table: "ClassCourseAssignments",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassCourseAssignments_SchoolId",
-                table: "ClassCourseAssignments",
-                column: "SchoolId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClassCourseAssignments_TeacherId",
-                table: "ClassCourseAssignments",
-                column: "TeacherId");
+                name: "IX_AuthorityOperationClaims_OperationClaimId",
+                table: "AuthorityOperationClaims",
+                column: "OperationClaimId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassSections_GradeId",
@@ -429,14 +583,75 @@ namespace Planora.Persistence.Migrations
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_LectureId",
-                table: "Courses",
+                name: "IX_ClassTeachingAssignments_ClassSectionId",
+                table: "ClassTeachingAssignments",
+                column: "ClassSectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassTeachingAssignments_LectureId",
+                table: "ClassTeachingAssignments",
                 column: "LectureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_SchoolId",
-                table: "Courses",
+                name: "IX_ClassTeachingAssignments_SchoolId",
+                table: "ClassTeachingAssignments",
                 column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClassTeachingAssignments_TeacherId",
+                table: "ClassTeachingAssignments",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityAuthority_AuthorityId",
+                table: "IdentityAuthority",
+                column: "AuthorityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityAuthority_IdentityId",
+                table: "IdentityAuthority",
+                column: "IdentityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityOperationClaims_IdentityId",
+                table: "IdentityOperationClaims",
+                column: "IdentityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityOperationClaims_OperationClaimId",
+                table: "IdentityOperationClaims",
+                column: "OperationClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonSchedules_ClassSectionId",
+                table: "LessonSchedules",
+                column: "ClassSectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonSchedules_LectureId",
+                table: "LessonSchedules",
+                column: "LectureId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonSchedules_SchoolId",
+                table: "LessonSchedules",
+                column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonSchedules_TeacherId",
+                table: "LessonSchedules",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_IdentityId",
+                table: "RefreshTokens",
+                column: "IdentityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SchoolScheduleSettings_SchoolId",
+                table: "SchoolScheduleSettings",
+                column: "SchoolId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teachers_LectureId",
@@ -478,7 +693,25 @@ namespace Planora.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ClassCourseAssignments");
+                name: "AuthorityOperationClaims");
+
+            migrationBuilder.DropTable(
+                name: "ClassTeachingAssignments");
+
+            migrationBuilder.DropTable(
+                name: "IdentityAuthority");
+
+            migrationBuilder.DropTable(
+                name: "IdentityOperationClaims");
+
+            migrationBuilder.DropTable(
+                name: "LessonSchedules");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "SchoolScheduleSettings");
 
             migrationBuilder.DropTable(
                 name: "Users");
@@ -487,10 +720,13 @@ namespace Planora.Persistence.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "ClassSections");
+                name: "Authority");
 
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "OperationClaims");
+
+            migrationBuilder.DropTable(
+                name: "ClassSections");
 
             migrationBuilder.DropTable(
                 name: "Teachers");
