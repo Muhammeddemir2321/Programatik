@@ -3,7 +3,7 @@
 namespace Planora.Application.Features.LectureFeature.Constants;
 
 [ClaimConstantGroup("Lecture")]
-public class LectureClaimConstants:BaseClaimConstant
+public class LectureClaimConstants : BaseClaimConstant
 {
     public const string Create = "Lecture.Create";
     public const string Update = "Lecture.Update";

@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\LessonScheduleFeature\Commands\CreateLessonSchedule\" />
-    <Folder Include="Features\LessonScheduleFeature\Commands\DeleteLessonSchedule\" />
+    <Folder Include="Features\LessonScheduleFeature\Profiles\" />
   </ItemGroup>
 
 </Project>

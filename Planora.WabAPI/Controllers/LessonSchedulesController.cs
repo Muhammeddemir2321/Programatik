@@ -1,12 +1,9 @@
-﻿using Core.Application.Requests;
-using Core.Persistence.Controllers;
-using Core.Persistence.Dynamic;
-using Microsoft.AspNetCore.Http;
+﻿using Core.Persistence.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.GradeFeature.Commands;
-using Planora.Application.Features.GradeFeature.Dtos;
-using Planora.Application.Features.GradeFeature.Models;
-using Planora.Application.Features.GradeFeature.Queries;
+using Planora.Application.Features.LessonScheduleFeature.Commands.CreateLessonSchedule;
+using Planora.Application.Features.LessonScheduleFeature.Commands.DeleteLessonSchedule;
+using Planora.Application.Features.LessonScheduleFeature.Queries.GetByIdLessonSchedule;
+using Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonSchedule;
 
 namespace Planora.WabAPI.Controllers
 {
@@ -14,37 +11,31 @@ namespace Planora.WabAPI.Controllers
     [ApiController]
     public class LessonSchedulesController : BaseController
     {
-        [HttpPost("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest, [FromBody] Dynamic query = null)
-        {
-            ListAllGradeByDynamicQuery getListGradeQuery = new() { PageRequest = pageRequest, Query = query };
-            GradeListModel result = await Mediator.Send(getListGradeQuery);
-            return Ok(result);
-        }
         [HttpGet("GetList")]
         public async Task<IActionResult> GetList()
         {
-            return Ok();
+            LessonScheduleListDto result = await Mediator.Send(new ListAllLessonScheduleQuery { });
+            return Ok(result);
         }
 
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            GetByIdGradeQuery getGradeQuery = new() { Id = id };
-            GradeGetByIdDto getGradeResult = await Mediator.Send(getGradeQuery);
-            return Ok(getGradeResult);
+            GetByIdLessonScheduleQuery getLessonScheduleQuery = new() { Id = id };
+            LessonScheduleGetByIdDto getLessonScheduleResult = await Mediator.Send(getLessonScheduleQuery);
+            return Ok(getLessonScheduleResult);
         }
         [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] CreateGradeCommand createdGrade)
+        public async Task<IActionResult> Add([FromBody] CreateLessonScheduleCommand createdLessonSchedulee)
         {
-            CreatedGradeDto result = await Mediator.Send(createdGrade);
+            List<CreatedLessonScheduleDto> result = await Mediator.Send(createdLessonSchedulee);
             return Created("", result);
         }
         [HttpGet("DeleteById/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            DeleteGradeCommand deleteGradeCommand = new() { Id = id };
-            await Mediator.Send(deleteGradeCommand);
+            DeleteLessonScheduleCommand deleteLessonScheduleCommand = new() { Id = id };
+            await Mediator.Send(deleteLessonScheduleCommand);
             return NoContent();
         }
     }
