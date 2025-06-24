@@ -1,12 +1,8 @@
 ﻿using Planora.Application.Features.LessonScheduleFeature.Constants;
+using Planora.Application.Features.LessonScheduleFeature.Constraints;
 using Planora.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Planora.Application.Features.LessonScheduleFeature.Rules;
+namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
 public class SlotFinder
 {

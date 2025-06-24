@@ -1,10 +1,9 @@
 ﻿using Planora.Application.Features.LessonScheduleFeature.Logs;
 using Planora.Domain.Entities;
-using System.Collections.Generic;
 
-namespace Planora.Application.Features.LessonScheduleFeature.Rules;
+namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
-public class LessonScheduler
+public class LessonScheduler : ILessonScheduler
 {
     public List<LessonSchedule> GenerateSchedule(
         SlotFinder slotFinder,

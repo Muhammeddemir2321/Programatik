@@ -1,5 +1,5 @@
 ﻿using Planora.Application.Features.LessonScheduleFeature.Constants;
-using Planora.Application.Features.LessonScheduleFeature.Rules;
+using Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
 namespace Planora.Application.Features.LessonScheduleFeature.Constraints;
 

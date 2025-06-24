@@ -1,6 +1,6 @@
 ﻿using Planora.Domain.Entities;
 
-namespace Planora.Application.Features.LessonScheduleFeature.Rules;
+namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
 public static class LessonScheduleFactory
 {

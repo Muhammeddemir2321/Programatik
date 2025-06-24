@@ -1,4 +1,4 @@
-﻿namespace Planora.Application.Features.LessonScheduleFeature.Rules;
+﻿namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
 public class LessonSlot
 {

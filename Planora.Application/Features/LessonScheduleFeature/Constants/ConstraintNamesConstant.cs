@@ -1,6 +1,6 @@
 ﻿namespace Planora.Application.Features.LessonScheduleFeature.Constants;
 
-public class ConstraintNamesConstant
+public static class ConstraintNamesConstant
 {
     public const string TeacherDailyLessonLimitConstraint = "TeacherDailyLessonLimitConstraint";
     public const string TeacherConflictConstraint = "TeacherConflictConstraint";

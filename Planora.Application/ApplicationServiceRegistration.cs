@@ -8,6 +8,7 @@ using Planora.Application.Features.GradeFeature.Rules;
 using Planora.Application.Features.IdentityFeature.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
 using Planora.Application.Features.LessonScheduleFeature.Rules;
+using Planora.Application.Features.LessonScheduleFeature.Scheduling;
 using Planora.Application.Features.OperationClaimFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Rules;
@@ -40,6 +41,7 @@ namespace Planora.Application
             services.AddScoped<AuthorityBusinessRules>();
             services.AddScoped<OperationClaimBusinessRules>();
             services.AddScoped<IAuthService, AuthManager>();
+            services.AddScoped<ILessonScheduler, LessonScheduler>();
             return services;
         }
     }

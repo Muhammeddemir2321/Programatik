@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Planora.Application.Features.LessonScheduleFeature.Constraints;
 using Planora.Application.Features.LessonScheduleFeature.Rules;
-using Planora.Application.Features.UserFeature.Commands.CreateUser;
+using Planora.Application.Features.LessonScheduleFeature.Scheduling;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
@@ -10,8 +11,7 @@ namespace Planora.Application.Features.LessonScheduleFeature.Commands.CreateLess
 public class CreateLessonScheduleCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
     LessonScheduleBusinessRules lessonScheduleBusinessRules,
-    IMapper mapper,
-    IMediator mediator)
+    IMapper mapper, ILessonScheduler lessonScheduler)
     : IRequestHandler<CreateLessonScheduleCommand, List<CreatedLessonScheduleDto>>
 {
     public async Task<List<CreatedLessonScheduleDto>> Handle(CreateLessonScheduleCommand request, CancellationToken cancellationToken)
@@ -33,10 +33,14 @@ public class CreateLessonScheduleCommandHandler(
         .ToList();
         var manager = new ConstraintManager(selectedConstraints);
         SlotFinder slotFinder = new SlotFinder(manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount);
-        var scheduler = new LessonScheduler();
-        List<LessonSchedule> schedules = scheduler.GenerateSchedule(slotFinder, assignments, classSections);
+        List<LessonSchedule> schedules = lessonScheduler.GenerateSchedule(slotFinder, assignments, classSections);
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
+            foreach (var schedule in schedules)
+            {
+                await lessonScheduleBusinessRules.LessonScheduleShouldExistWhenRequestedAsync(schedule);
+                await planoraUnitOfWork.LessonSchedules.AddAsync(schedule, cancellationToken: cancellationToken);
+            }
             var createdDtos = schedules.Select(s => mapper.Map<CreatedLessonScheduleDto>(s)).ToList();
 
             return createdDtos;

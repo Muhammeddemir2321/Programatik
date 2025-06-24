@@ -7,7 +7,7 @@ namespace Planora.Application.Features.LessonScheduleFeature.Rules;
 
 public class LessonScheduleBusinessRules(ILessonScheduleRepository lessonScheduleRepository)
 {
-    public async Task UserShouldExistWhenRequestedAsync(LessonSchedule? lessonSchedule)
+    public async Task LessonScheduleShouldExistWhenRequestedAsync(LessonSchedule? lessonSchedule)
     {
         if (lessonSchedule is null)
             throw new BusinessException("Requested record does not exist", ErrorConstants.RequestedRecordDoesNotExist);
