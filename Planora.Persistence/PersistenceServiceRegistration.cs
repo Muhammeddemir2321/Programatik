@@ -26,6 +26,7 @@ public static class PersistenceServiceRegistration
 
 
 
+        services.AddScoped<ILessonScheduleGroupRepository, LessonScheduleGroupRepository>();
         services.AddScoped<ILessonScheduleRepository, LessonScheduleRepository>();
         services.AddScoped<IClassSectionRepository, ClassSectionRepository>();
         services.AddScoped<IClassTeachingAssignmentRepository, ClassTeachingAssignmentRepository>();

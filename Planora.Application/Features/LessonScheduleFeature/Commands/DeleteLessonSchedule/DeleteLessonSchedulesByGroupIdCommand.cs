@@ -4,8 +4,8 @@ using Planora.Application.Features.LessonScheduleFeature.Constants;
 
 namespace Planora.Application.Features.LessonScheduleFeature.Commands.DeleteLessonSchedule;
 
-public class DeleteLessonScheduleCommand : IRequest<bool>, ISecuredRequest
+public class DeleteLessonSchedulesByGroupIdCommand : IRequest<bool>, ISecuredRequest
 {
-    public Guid Id { get; set; }
+    public Guid LessonScheduleGroupId { get; set; }
     public string[] Roles => new string[] { LessonScheduleClaimConstants.Delete };
 }

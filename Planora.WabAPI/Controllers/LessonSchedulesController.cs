@@ -34,7 +34,7 @@ namespace Planora.WabAPI.Controllers
         [HttpGet("DeleteById/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            DeleteLessonScheduleCommand deleteLessonScheduleCommand = new() { Id = id };
+            DeleteLessonSchedulesByGroupIdCommand deleteLessonScheduleCommand = new() { Id = id };
             await Mediator.Send(deleteLessonScheduleCommand);
             return NoContent();
         }

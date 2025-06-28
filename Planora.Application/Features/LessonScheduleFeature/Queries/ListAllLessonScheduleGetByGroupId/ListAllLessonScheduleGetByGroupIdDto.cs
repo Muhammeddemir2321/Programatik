@@ -1,7 +1,9 @@
-﻿namespace Planora.Application.Features.LessonScheduleFeature.Queries.GetByIdLessonSchedule;
+﻿namespace Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonScheduleGetByGroupId;
 
-public class LessonScheduleGetByIdDto
+public class ListAllLessonScheduleGetByGroupIdDto
 {
+    public Guid Id { get; set; }
+    public Guid LessonScheduleGroupId { get; set; }
     public Guid ClassSectionId { get; set; }
     public int DayOfWeek { get; set; }
     public int LessonIndex { get; set; }

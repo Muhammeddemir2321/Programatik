@@ -7,6 +7,7 @@ namespace Planora.Application.Features.LessonScheduleFeature.Commands.CreateLess
 
 public class CreateLessonScheduleCommand : IRequest<List<CreatedLessonScheduleDto>>, ISecuredRequest
 {
+    public Guid LessonScheduleGroupId { get; set; }
     public List<string> SelectedConstraintNames { get; set; } = new();
     [JsonIgnore]
     public string[] Roles => new string[] { LessonScheduleClaimConstants.Create };

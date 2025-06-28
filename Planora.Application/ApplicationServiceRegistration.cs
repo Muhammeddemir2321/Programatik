@@ -9,13 +9,13 @@ using Planora.Application.Features.IdentityFeature.Rules;
 using Planora.Application.Features.LectureFeature.Rules;
 using Planora.Application.Features.LessonScheduleFeature.Rules;
 using Planora.Application.Features.LessonScheduleFeature.Scheduling;
+using Planora.Application.Features.LessonScheduleGroupFeature.Rules;
 using Planora.Application.Features.OperationClaimFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Rules;
 using Planora.Application.Features.TeacherFeature.Rules;
 using Planora.Application.Features.UserFeature.Rules;
 using Planora.Application.Services.AuthService;
-using Planora.Domain.Entities;
 using System.Reflection;
 
 namespace Planora.Application
@@ -35,6 +35,7 @@ namespace Planora.Application
             services.AddScoped<TeacherBusinessRules>();
             services.AddScoped<ClassTeachingAssignmentBusinessRules>();
             services.AddScoped<LessonScheduleBusinessRules>();
+            services.AddScoped<LessonScheduleGroupBusinessRules>();
             services.AddScoped<IdentityBusinessRules>();
             services.AddScoped<UserBusinessRules>();
             services.AddScoped<AuthBusinessRules>();

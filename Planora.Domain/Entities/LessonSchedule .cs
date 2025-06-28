@@ -6,6 +6,8 @@ public class LessonSchedule : Entity<Guid>, ISchoolEntity
 {
     public Guid SchoolId { get; set; }
     public School School { get; set; }
+    public Guid LessonScheduleGroupId { get; set; }
+    public LessonScheduleGroup LessonScheduleGroup { get; set; }
     public Guid ClassSectionId { get; set; }
     public ClassSection ClassSection { get; set; }
     public int DayOfWeek { get; set; }         // Pazartesi = 1, Salı = 2, ...

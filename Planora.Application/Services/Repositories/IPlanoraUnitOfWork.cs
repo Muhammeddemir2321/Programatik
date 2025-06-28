@@ -12,6 +12,7 @@ public interface IPlanoraUnitOfWork : IUnitOfWork
     ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
     IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
     ILessonScheduleRepository LessonSchedules { get; }
+    ILessonScheduleGroupRepository LessonScheduleGroups { get; }
     IUserRepository Users { get; }
     IIdentityRepository Identities { get; }
     IIdentityAuthorityRepository IdentityAuthorities { get; }

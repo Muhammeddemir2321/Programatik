@@ -4,10 +4,11 @@ namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
 
 public static class LessonScheduleFactory
 {
-    public static LessonSchedule Create(ClassTeachingAssignment assignment, int day, int lessonIndex)
+    public static LessonSchedule Create(Guid lessonScheduleGroupId, ClassTeachingAssignment assignment, int day, int lessonIndex)
     {
         return new LessonSchedule
         {
+            LessonScheduleGroupId = lessonScheduleGroupId,
             ClassSectionId = assignment.ClassSectionId,
             DayOfWeek = day + 1,
             LessonIndex = lessonIndex + 1,

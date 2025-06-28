@@ -32,7 +32,7 @@ public class CreateLessonScheduleCommandHandler(
         .Select(name => constraintMap[name]())
         .ToList();
         var manager = new ConstraintManager(selectedConstraints);
-        SlotFinder slotFinder = new SlotFinder(manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount);
+        SlotFinder slotFinder = new SlotFinder(request.LessonScheduleGroupId, manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount);
         List<LessonSchedule> schedules = lessonScheduler.GenerateSchedule(slotFinder, assignments, classSections);
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {

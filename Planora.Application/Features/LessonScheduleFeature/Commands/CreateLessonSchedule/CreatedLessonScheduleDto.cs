@@ -2,6 +2,8 @@
 
 public class CreatedLessonScheduleDto
 {
+    public Guid Id { get; set; }
+    public Guid LessonScheduleGroupId { get; set; }
     public Guid ClassSectionId { get; set; }
     public int DayOfWeek { get; set; }        
     public int LessonIndex { get; set; }   

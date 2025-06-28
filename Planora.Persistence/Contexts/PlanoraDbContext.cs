@@ -17,6 +17,7 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     public DbSet<School> Schools { get; set; }
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
+    public DbSet<LessonSchedule> LessonScheduleGroups { get; set; }
     public DbSet<LessonSchedule> LessonSchedules { get; set; }
     public DbSet<SchoolScheduleSetting> SchoolScheduleSettings { get; set; }
     public DbSet<Grade> Grades { get; set; }

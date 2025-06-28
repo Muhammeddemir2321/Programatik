@@ -10,13 +10,15 @@ public class SlotFinder
     private readonly int _weeklyLessonDayCount;
     private readonly int _dailyLessonCount;
     private readonly ConstraintManager _constraintManager;
+    private readonly Guid _lessonScheduleGroupId;
 
-    public SlotFinder(ConstraintManager constraintManager, Dictionary<Guid, LessonSlot[,]> grids, int weeklyLessonDayCount, int dailyLessonCount)
+    public SlotFinder(Guid lessonScheduleGroupId, ConstraintManager constraintManager, Dictionary<Guid, LessonSlot[,]> grids, int weeklyLessonDayCount, int dailyLessonCount)
     {
         _constraintManager = constraintManager;
         _grids = grids;
         _weeklyLessonDayCount = weeklyLessonDayCount;
         _dailyLessonCount = dailyLessonCount;
+        _lessonScheduleGroupId = lessonScheduleGroupId;
     }
     public List<LessonSchedule>? FindNextAvailableSlot(ClassTeachingAssignment assignment)
     {
@@ -42,7 +44,7 @@ public class SlotFinder
                         LectureId = assignment.LectureId
                     };
 
-                    var schedule = LessonScheduleFactory.Create(assignment, day, startHour + offset);
+                    var schedule = LessonScheduleFactory.Create(_lessonScheduleGroupId, assignment, day, startHour + offset);
                     suggestedSchedules.Add(schedule);
                 }
 
