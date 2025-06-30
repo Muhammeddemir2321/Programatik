@@ -13,6 +13,7 @@ public class CreateIdentityCommand : IRequest<CreatedIdentityDto>, ISecuredReque
     public string Password { get; set; }
     public string Email { get; set; }
     public bool Status { get; set; }
+    public bool IsPartOfTransaction { get; set; } = false;
     [JsonIgnore]
     public string[] Roles => new string[] { IdentityClaimConstants.Create };
 }

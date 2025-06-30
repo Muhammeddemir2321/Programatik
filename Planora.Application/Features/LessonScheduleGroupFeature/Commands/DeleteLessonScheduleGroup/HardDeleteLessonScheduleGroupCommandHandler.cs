@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using Planora.Application.Features.LessonScheduleGroupFeature.Commands.UpdateLessonScheduleGroup;
 using Planora.Application.Features.LessonScheduleGroupFeature.Rules;
 using Planora.Application.Services.Repositories;
 
@@ -7,6 +9,7 @@ namespace Planora.Application.Features.LessonScheduleGroupFeature.Commands.Delet
 public class HardDeleteLessonScheduleGroupCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
     LessonScheduleGroupBusinessRules lessonScheduleGroupBusinesRuless,
+    IMapper mapper,
     IMediator mediator)
     : IRequestHandler<HardDeleteLessonScheduleGroupCommand, bool>
 {
@@ -19,6 +22,14 @@ public class HardDeleteLessonScheduleGroupCommandHandler(
             request.DeleteLessonSchedulesByGroupIdCommand.LessonScheduleGroupId = lessonScheduleGroup!.Id;
             await mediator.Send(request.DeleteLessonSchedulesByGroupIdCommand);
             await planoraUnitOfWork.LessonScheduleGroups.DeleteAsync(lessonScheduleGroup!, cancellationToken: cancellationToken);
+            if (lessonScheduleGroup.IsActive == true)
+            {
+                var lastGroup = (await planoraUnitOfWork.LessonScheduleGroups
+                    .GetAllAsync(l => (l.Year == lessonScheduleGroup.Year && l.Semester == lessonScheduleGroup.Semester), orderBy: q => q.OrderByDescending(x => x.CreatedAt))).FirstOrDefault();
+                var mappedLessonScheduleGroup = mapper.Map<UpdateLessonScheduleGroupIsActiveCommand>(lastGroup);
+                mappedLessonScheduleGroup.IsActive = true;
+                await mediator.Send(mappedLessonScheduleGroup);
+            }
             return true;
         });
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Planora.Persistence.Contexts;
 
@@ -54,45 +55,55 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
 
         var schoolId = _planoraUserContextAccessor.SchoolId;
 
-        //modelBuilder.Entity<Teacher>()
-        //    .HasQueryFilter(t => t.SchoolId == schoolId);
 
-        //modelBuilder.Entity<ClassTeachingAssignment>()
-        //    .HasQueryFilter(c => c.SchoolId == schoolId);
+        modelBuilder.Entity<ClassSection>()
+            .HasQueryFilter(cs => cs.SchoolId == schoolId);
 
-        //modelBuilder.Entity<ClassSection>()
-        //    .HasQueryFilter(cs => cs.SchoolId == schoolId);
+        modelBuilder.Entity<ClassTeachingAssignment>()
+            .HasQueryFilter(c => c.SchoolId == schoolId);
 
-        //modelBuilder.Entity<LessonSchedule>()
-        //    .HasQueryFilter(ca => ca.SchoolId == schoolId);
+        modelBuilder.Entity<LessonSchedule>()
+            .HasQueryFilter(ca => ca.SchoolId == schoolId);
 
-        //modelBuilder.Entity<SchoolScheduleSetting>()
-        //    .HasQueryFilter(ca => ca.SchoolId == schoolId);
+        modelBuilder.Entity<LessonScheduleGroup>()
+            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+
+        modelBuilder.Entity<SchoolScheduleSetting>()
+            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+
+        modelBuilder.Entity<Teacher>()
+            .HasQueryFilter(t => t.SchoolId == schoolId);
+
+        modelBuilder.Entity<TeacherUnavailable>()
+            .HasQueryFilter(t => t.SchoolId == schoolId);
+
+        modelBuilder.Entity<User>()
+            .HasQueryFilter(t => t.SchoolId == schoolId);
 
         base.OnModelCreating(modelBuilder);
     }
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanoraDbContext).Assembly);
+
+    //    var schoolId = _planoraUserContextAccessor.SchoolId;
+
+    //    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+    //    {
+    //        if (typeof(ISchoolEntity).IsAssignableFrom(entityType.ClrType))
+    //        {
+    //            if (schoolId == null)
+    //                throw new InvalidOperationException("SchoolId context üzerinden alınamadı.");
+    //            var parameter = Expression.Parameter(entityType.ClrType, "e");
+    //            var property = Expression.Property(parameter, nameof(ISchoolEntity.SchoolId));
+    //            var constant = Expression.Constant(schoolId.Value, typeof(Guid));
+    //            var equality = Expression.Equal(property, constant);
+    //            var lambda = Expression.Lambda(equality, parameter);
+
+    //            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+    //        }
+    //    }
+
+    //    base.OnModelCreating(modelBuilder);
+    //}
 }
-//protected override void OnModelCreating(ModelBuilder modelBuilder)
-//{
-//    modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanoraDbContext).Assembly);
-
-//    var schoolId = _planoraUserContextAccessor.SchoolId;
-
-//    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-//    {
-//        if (typeof(ISchoolEntity).IsAssignableFrom(entityType.ClrType))
-//        {
-//            if (schoolId == null)
-//                throw new InvalidOperationException("SchoolId context üzerinden alınamadı.");
-//            var parameter = Expression.Parameter(entityType.ClrType, "e");
-//            var property = Expression.Property(parameter, nameof(ISchoolEntity.SchoolId));
-//            var constant = Expression.Constant(schoolId.Value, typeof(Guid));
-//            var equality = Expression.Equal(property, constant);
-//            var lambda = Expression.Lambda(equality, parameter);
-
-//            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
-//        }
-//    }
-
-//    base.OnModelCreating(modelBuilder);
-//}

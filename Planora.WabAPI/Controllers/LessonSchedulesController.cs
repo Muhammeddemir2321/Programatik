@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Planora.Application.Features.LessonScheduleFeature.Commands.CreateLessonSchedule;
 using Planora.Application.Features.LessonScheduleFeature.Commands.DeleteLessonSchedule;
-using Planora.Application.Features.LessonScheduleFeature.Queries.GetByIdLessonSchedule;
 using Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonSchedule;
+using Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonScheduleGetByGroupId;
 
 namespace Planora.WabAPI.Controllers
 {
@@ -21,9 +21,9 @@ namespace Planora.WabAPI.Controllers
         [HttpGet("GetById/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            GetByIdLessonScheduleQuery getLessonScheduleQuery = new() { Id = id };
-            LessonScheduleGetByIdDto getLessonScheduleResult = await Mediator.Send(getLessonScheduleQuery);
-            return Ok(getLessonScheduleResult);
+            ListAllLessonScheduleGetByGroupIdQuery getListLessonScheduleGetByGroupIdQuery = new() { LessonScheduleGroupId = id };
+            List<ListAllLessonScheduleGetByGroupIdDto> result = await Mediator.Send(getListLessonScheduleGetByGroupIdQuery);
+            return Ok(result);
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] CreateLessonScheduleCommand createdLessonSchedulee)
@@ -34,7 +34,7 @@ namespace Planora.WabAPI.Controllers
         [HttpGet("DeleteById/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            DeleteLessonSchedulesByGroupIdCommand deleteLessonScheduleCommand = new() { Id = id };
+            DeleteLessonSchedulesByGroupIdCommand deleteLessonScheduleCommand = new() { LessonScheduleGroupId = id };
             await Mediator.Send(deleteLessonScheduleCommand);
             return NoContent();
         }

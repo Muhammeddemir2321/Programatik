@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Planora.Application.Features.LessonScheduleGroupFeature.Queries.GetByIdLessonScheduleGroup;
 
-public class GetByIdLessonScheduleGroupQuery : IRequest<LessonScheduleGroupGetByIdDto>, ISecuredRequest
+public class GetByIdLessonScheduleGroupWithLessonSchedulesQuery : IRequest<LessonScheduleGroupWithLessonSchedulesGetByIdDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
     [JsonIgnore]

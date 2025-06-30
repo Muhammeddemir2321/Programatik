@@ -13,7 +13,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<LessonScheduleGroup, LessonScheduleGroupGetByIdDto>().ReverseMap();
+        CreateMap<LessonScheduleGroup, LessonScheduleGroupWithLessonSchedulesGetByIdDto>().ReverseMap();
         CreateMap<LessonScheduleGroup, CreatedLessonScheduleGroupDto>().ReverseMap();
         CreateMap<LessonScheduleGroup, UpdatedLessonScheduleGroupDto>().ReverseMap();
         CreateMap<LessonScheduleGroup, LessonScheduleGroupListDto>().ReverseMap();

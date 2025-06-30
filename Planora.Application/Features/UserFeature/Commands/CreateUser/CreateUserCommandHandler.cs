@@ -17,6 +17,7 @@ public class CreateUserCommandHandler(
     {
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
+            request.createIdentityCommand.IsPartOfTransaction = true;
             var createdIdentity = await mediator.Send(request.createIdentityCommand, cancellationToken);
             var mappedUser = mapper.Map<User>(request);
             mappedUser.IsVerify = false;

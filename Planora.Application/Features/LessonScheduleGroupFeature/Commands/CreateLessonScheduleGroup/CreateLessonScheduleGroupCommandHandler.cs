@@ -10,7 +10,7 @@ namespace Planora.Application.Features.LessonScheduleGroupFeature.Commands.Creat
 public class CreateLessonScheduleGroupCommandHandler(
 
     IPlanoraUnitOfWork planoraUnitOfWork,
-    LessonScheduleGroupBusinessRules userBusinessRules,
+    LessonScheduleGroupBusinessRules lessonScheduleGroupBusiness,
     IMapper mapper,
     IMediator mediator)
     : IRequestHandler<CreateLessonScheduleGroupCommand, CreatedLessonScheduleGroupDto>
@@ -19,18 +19,20 @@ public class CreateLessonScheduleGroupCommandHandler(
     {
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            var aktiveLessonSecheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(l => l.IsActive == true && (l.Year == request.Year && l.Semester == request.Semester), cancellationToken: cancellationToken);
-            foreach (var aktiveLessonSecheduleGroup in aktiveLessonSecheduleGroups)
+            var activeLessonSecheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(l => l.IsActive == true && (l.Year == request.Year && l.Semester == request.Semester), cancellationToken: cancellationToken);
+            foreach (var activeLessonSecheduleGroup in activeLessonSecheduleGroups)
             {
-                aktiveLessonSecheduleGroup.IsActive = false;
-                await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(aktiveLessonSecheduleGroup, cancellationToken: cancellationToken);
+                activeLessonSecheduleGroup.IsActive = false;
+                await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(activeLessonSecheduleGroup, cancellationToken: cancellationToken);
             }
             var mappedLessonScheduleGroup = mapper.Map<LessonScheduleGroup>(request);
             mappedLessonScheduleGroup.IsActive = true;
-            var createdLessonScheduleGroup = await planoraUnitOfWork.LessonScheduleGroups.AddAsync(meppedLessonScheduleGroup, cancellationToken: cancellationToken);
+            var createdLessonScheduleGroup = await planoraUnitOfWork.LessonScheduleGroups.AddAsync(mappedLessonScheduleGroup, cancellationToken: cancellationToken);
             request.createLessonScheduleCommand.LessonScheduleGroupId= createdLessonScheduleGroup.Id;
-            await mediator.Send(request.createLessonScheduleCommand);
-            return mapper.Map<CreatedLessonScheduleGroupDto>(createdLessonScheduleGroup);
+            var createdLessonScheduleDtos = await mediator.Send(request.createLessonScheduleCommand);
+            var mapped = mapper.Map<CreatedLessonScheduleGroupDto>(createdLessonScheduleGroup);
+            mapped.CreatedLessonScheduleDtos = createdLessonScheduleDtos;
+            return mapped;
         });
     }
 }

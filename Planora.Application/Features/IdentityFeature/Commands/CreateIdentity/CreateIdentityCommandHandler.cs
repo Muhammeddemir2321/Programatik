@@ -14,7 +14,8 @@ public class CreateIdentityCommandHandler(IPlanoraUnitOfWork planoraUnitOfWork, 
         await identityBusinessRules.UserNameMustBeUniqeWhenCreateAsync(request.Username);
         var mappedUser = mapper.Map<Identity>(request);
         var createdUser = await planoraUnitOfWork.Identities.AddAsync(mappedUser, request.Password);
-        await planoraUnitOfWork.CommitAsync();
+        if (!request.IsPartOfTransaction)
+            await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedIdentityDto>(createdUser);
     }
 }

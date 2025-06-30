@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using Planora.Application.Features.LessonScheduleGroupFeature.Queries.GetByIdLessonScheduleGroup;
+using Planora.Application.Features.LessonScheduleGroupFeature.Rules;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
@@ -7,25 +9,31 @@ namespace Planora.Application.Features.LessonScheduleGroupFeature.Commands.Updat
 
 public class UpdateLessonScheduleGroupIsActiveCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
-    IMapper mapper)
-    : IRequestHandler<UpdateLessonScheduleGroupIsActiveCommand, bool>
+    LessonScheduleGroupBusinessRules lessonScheduleGroupBusinessRules,
+    IMapper mapper,
+    IMediator mediator)
+    : IRequestHandler<UpdateLessonScheduleGroupIsActiveCommand, List<UpdatedLessonScheduleGroupDto>>
 {
-    public async Task<bool> Handle(UpdateLessonScheduleGroupIsActiveCommand request, CancellationToken cancellationToken)
+    public async Task<List<UpdatedLessonScheduleGroupDto>> Handle(UpdateLessonScheduleGroupIsActiveCommand request, CancellationToken cancellationToken)
     {
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
+            var lessonScheduleGroup = await planoraUnitOfWork.LessonScheduleGroups.GetAsync(l => l.Id == request.Id, cancellationToken: cancellationToken);
+            await lessonScheduleGroupBusinessRules.LessonScheduleGroupShouldExistWhenRequestedAsync(lessonScheduleGroup);
+            List<LessonScheduleGroup> updatedLessonScheduleGroups = new();
             if (request.IsActive == true)
             {
-                var aktiveLessonSecheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(l => l.IsActive == true && (l.Year == request.Year && l.Semester == request.Semester), cancellationToken: cancellationToken);
-                foreach (var aktiveLessonSecheduleGroup in aktiveLessonSecheduleGroups)
+                var activeLessonScheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(l => l.IsActive == true && (l.Year == lessonScheduleGroup!.Year && l.Semester == lessonScheduleGroup.Semester), cancellationToken: cancellationToken);
+                foreach (var activeLessonScheduleGroup in activeLessonScheduleGroups)
                 {
-                    aktiveLessonSecheduleGroup.IsActive = false;
-                    await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(aktiveLessonSecheduleGroup, cancellationToken: cancellationToken);
+                    activeLessonScheduleGroup.IsActive = false;
+                    updatedLessonScheduleGroups.Add(await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(activeLessonScheduleGroup, cancellationToken: cancellationToken));
                 }
             }
 
             var mappedLessonScheduleGroup = mapper.Map<LessonScheduleGroup>(request);
-            await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(mappedLessonScheduleGroup, cancellationToken: cancellationToken);
+            updatedLessonScheduleGroups.Add(await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(mappedLessonScheduleGroup, cancellationToken: cancellationToken));
+            return mapper.Map<List<UpdatedLessonScheduleGroupDto>>(updatedLessonScheduleGroups);
         });
     }
 }

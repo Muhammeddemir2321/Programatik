@@ -1,9 +1,9 @@
-﻿using Core.Persistence.Paging;
+﻿using Planora.Application.Features.LessonScheduleGroupFeature.Queries.ListAllLessonScheduleGroup;
 
 namespace Planora.Application.Features.LessonScheduleGroupFeature.Models
 {
-    public class LessonScheduleGroupListModel: BasePageableModel
+    public class LessonScheduleGroupListModel
     {
-        public List<LessonScheduleGroupListModel> Items { get; set; }
+        public List<LessonScheduleGroupListDto> Items { get; set; }
     }
 }

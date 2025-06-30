@@ -9,7 +9,6 @@ namespace Planora.Application.Features.LessonScheduleGroupFeature.Queries.ListAl
 
 public class ListAllLessonScheduleGroupQuery : IRequest<LessonScheduleGroupListModel>, ISecuredRequest
 {
-    public PageRequest PageRequest { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { LessonScheduleGroupClaimConstants.List };
 }
