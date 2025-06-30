@@ -23,6 +23,11 @@ public static class PersistenceServiceRegistration
             options.UseSqlServer(configuration.GetConnectionString(env));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
+        //services.AddDbContext<PlanoraDbContext>(options =>
+        //{
+        //    options.UseSqlServer(configuration.GetConnectionString(env));
+        //    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        //});
 
 
 

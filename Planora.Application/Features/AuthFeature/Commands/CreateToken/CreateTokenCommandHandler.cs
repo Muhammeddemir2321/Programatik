@@ -35,6 +35,7 @@ public class CreateTokenCommandHandler(
             });
         }
         var user = await planoraUnitOfWork.Users.GetAsync(i => i.IdentityId == identity.Id, cancellationToken: cancellationToken);
+
         var refreshTokens = await planoraUnitOfWork.RefreshTokens.GetAllAsync(r => r.IdentityId == identity.Id, cancellationToken: cancellationToken);
         IdentityJwt identityJwt = new()
         {

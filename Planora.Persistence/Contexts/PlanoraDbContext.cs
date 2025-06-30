@@ -11,6 +11,7 @@ namespace Planora.Persistence.Contexts;
 public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, Guid>
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
+    public Guid? CurrentSchoolId => _planoraUserContextAccessor.SchoolId;
     public PlanoraDbContext(DbContextOptions<PlanoraDbContext> dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) : base(dbContextOptions)
     {
         _planoraUserContextAccessor = planoraUserContextAccessor;
@@ -44,7 +45,8 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
         {
             if (entry.Entity.SchoolId == Guid.Empty)
             {
-                entry.Entity.SchoolId = schoolId ?? throw new UnauthorizedAccessException("SchoolId atanamadı.");
+                entry.Entity.SchoolId = schoolId.HasValue && schoolId.Value != Guid.Empty ? schoolId.Value 
+                    : throw new UnauthorizedAccessException("SchoolId atanamadı.");
             }
         }
     }
@@ -53,29 +55,27 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanoraDbContext).Assembly);
 
-        var schoolId = _planoraUserContextAccessor.SchoolId;
-
 
         modelBuilder.Entity<ClassSection>()
-            .HasQueryFilter(cs => cs.SchoolId == schoolId);
+            .HasQueryFilter(cs => cs.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<ClassTeachingAssignment>()
-            .HasQueryFilter(c => c.SchoolId == schoolId);
+            .HasQueryFilter(c => c.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<LessonSchedule>()
-            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+            .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<LessonScheduleGroup>()
-            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+            .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<SchoolScheduleSetting>()
-            .HasQueryFilter(ca => ca.SchoolId == schoolId);
+            .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<Teacher>()
-            .HasQueryFilter(t => t.SchoolId == schoolId);
+            .HasQueryFilter(t => t.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<TeacherUnavailable>()
-            .HasQueryFilter(t => t.SchoolId == schoolId);
+            .HasQueryFilter(t => t.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<User>()
             .HasQueryFilter(t => t.SchoolId == schoolId);

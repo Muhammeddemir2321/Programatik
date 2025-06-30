@@ -44,7 +44,8 @@ public abstract class EfRepositoryBase<TEntity, TContext> :
                 return await Query().Where(predicate).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
             var queryable = Query();
             queryable = include(queryable);
-            return await queryable.Where(predicate).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+            var result= await queryable.Where(predicate).AsNoTracking().FirstOrDefaultAsync(cancellationToken); ;
+            return result;
         }, cancellationToken);
     }
     public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null, bool enableTracking = true, CancellationToken cancellationToken = default)
