@@ -22,7 +22,6 @@ public class CreateLectureCommand : IRequest<CreatedLectureDto>, ISecuredRequest
     {
         public async Task<CreatedLectureDto> Handle(CreateLectureCommand request, CancellationToken cancellationToken)
         {
-            await lectureBusinessRules.LectureNameMustNotBeEmptyAsync(request.Name);
             await lectureBusinessRules.LectureNameMustBeUniqeWhenCreateAsync(request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
             var createdLecture = await planoraUnitOfWork.Lectures.AddAsync(mappedLecture, cancellationToken: cancellationToken);

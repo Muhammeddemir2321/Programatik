@@ -27,7 +27,6 @@ public class UpdateLectureCommand : IRequest<UpdatedLectureDto>, ISecuredRequest
     {
         public async Task<UpdatedLectureDto> Handle(UpdateLectureCommand request, CancellationToken cancellationToken)
         {
-            await lectureBusinessRules.LectureNameMustNotBeEmptyAsync(request.Name);
             await lectureBusinessRules.LectureNameMustBeUniqueWhenUpdateAsync(request.Id, request.Name);
             var mappedLecture = mapper.Map<Lecture>(request);
             var updatedLecture = await planoraUnitOfWork.Lectures.UpdateAsync(mappedLecture, cancellationToken: cancellationToken);

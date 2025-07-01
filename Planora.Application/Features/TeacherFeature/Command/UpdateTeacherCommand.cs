@@ -25,7 +25,6 @@ public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
     {
         public async Task<UpdatedTeacherDto> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)
         {
-            await teacherBusinessRules.TeacherFullNameMustBeUniqueWhenUpdateAsync(request.Id, request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
             var updatedTeacher = await planoraUnitOfWork.Teachers.UpdateAsync(mappedTeacher, cancellationToken: cancellationToken);
             await planoraUnitOfWork.CommitAsync();

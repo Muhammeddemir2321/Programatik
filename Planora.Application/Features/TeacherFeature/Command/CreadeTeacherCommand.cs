@@ -22,7 +22,6 @@ public class CreateTeacherCommand : IRequest<CreatedTeacherDto>, ISecuredRequest
     {
         public async Task<CreatedTeacherDto> Handle(CreateTeacherCommand request, CancellationToken cancellationToken)
         {
-            await teacherBusinessRules.TeacherFullNameMustBeUniqeWhenCreateAsync(request.FullName);
             var mappedTeacher = mapper.Map<Teacher>(request);
             var createdTeacher = await planoraUnitOfWork.Teachers.AddAsync(mappedTeacher, cancellationToken: cancellationToken);
             await planoraUnitOfWork.CommitAsync();

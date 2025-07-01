@@ -6,12 +6,6 @@ using Planora.Domain.Entities;
 namespace Planora.Application.Features.ClassTeachingAssignmentFeature.Rules;
 
 public class ClassTeachingAssignmentBusinessRules(IClassTeachingAssignmentRepository ClassTeachingAssignmentRepository)
+    :BaseBusinessRules
 {
-    public async Task ClassTeachingAssignmentShouldExistWhenRequestedAsync(ClassTeachingAssignment ClassTeachingAssignment)
-    {
-        if (ClassTeachingAssignment is null)
-            throw new BusinessException("Requested record does not exist", ErrorConstants.RequestedRecordDoesNotExist);
-
-        await Task.CompletedTask;
-    }
 }

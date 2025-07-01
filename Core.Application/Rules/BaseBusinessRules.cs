@@ -1,12 +1,12 @@
 ﻿using Core.CrossCuttingConcerns.Constants;
 using Core.CrossCuttingConcerns.Exceptions;
-using Planora.Domain.Entities;
+using Core.Persistence.Repositories;
 
-namespace Planora.Application.Features.ClassSectionFeature.Rules;
+namespace Planora.Application.Features.ClassTeachingAssignmentFeature.Rules;
 
-public class ClassSectionBusinessRules<TEntity>
+public class BaseBusinessRules
 {
-    public async Task UserShouldExistWhenRequestedAsync(TEntity? entity)
+    public async Task EntityShouldExistWhenRequestedAsync(Entity entity)
     {
         if (entity is null)
             throw new BusinessException("Requested record does not exist", ErrorConstants.RequestedRecordDoesNotExist);

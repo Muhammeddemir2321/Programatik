@@ -11,7 +11,9 @@ namespace Planora.Persistence.Contexts;
 public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, Guid>
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
-    public Guid? CurrentSchoolId => _planoraUserContextAccessor.SchoolId;
+    public bool IsSchoolFilterEnabled { get; set; } = true;
+    public Guid? CurrentSchoolId =>
+        IsSchoolFilterEnabled ? _planoraUserContextAccessor.SchoolId : null;
     public PlanoraDbContext(DbContextOptions<PlanoraDbContext> dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) : base(dbContextOptions)
     {
         _planoraUserContextAccessor = planoraUserContextAccessor;
@@ -39,13 +41,13 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
 
     private void SetSchoolIdForNewEntities()
     {
-        var schoolId = _planoraUserContextAccessor.SchoolId;
+        //var schoolId = _planoraUserContextAccessor.SchoolId;
 
         foreach (var entry in ChangeTracker.Entries<ISchoolEntity>().Where(e => e.State == EntityState.Added))
         {
             if (entry.Entity.SchoolId == Guid.Empty)
             {
-                entry.Entity.SchoolId = schoolId.HasValue && schoolId.Value != Guid.Empty ? schoolId.Value 
+                entry.Entity.SchoolId = CurrentSchoolId.HasValue && CurrentSchoolId.Value != Guid.Empty ? CurrentSchoolId.Value 
                     : throw new UnauthorizedAccessException("SchoolId atanamadı.");
             }
         }
@@ -78,7 +80,7 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
             .HasQueryFilter(t => t.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<User>()
-            .HasQueryFilter(t => t.SchoolId == schoolId);
+            .HasQueryFilter(t => t.SchoolId == CurrentSchoolId);
 
         base.OnModelCreating(modelBuilder);
     }

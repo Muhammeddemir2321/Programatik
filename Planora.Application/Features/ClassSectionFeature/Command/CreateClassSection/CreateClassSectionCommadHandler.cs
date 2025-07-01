@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Core.Persistence.Repositories;
 using MediatR;
+using Planora.Application.Features.ClassSectionFeature.Rules;
 using Planora.Application.Features.UserFeature.Rules;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
@@ -8,7 +10,7 @@ namespace Planora.Application.Features.ClassSectionFeature.Command.CreateClassSe
 
 public class CreateClassSectionCommadHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
-    UserBusinessRules userBusinessRules,
+    ClassSectionBusinessRules<Entity> classSectionBusinessRules,
     IMapper mapper,
     IMediator mediator)
     : IRequestHandler<CreateClassSectionCommand, CreatedClassSectionDto>

@@ -12,9 +12,9 @@ public class ClassTeachingAssignment : Entity<Guid>, ISchoolEntity
     public Teacher Teacher { get; set; }
     public Guid ClassSectionId { get; set; }
     public ClassSection ClassSection { get; set; }
+    public int WeeklyHourCount { get; set; }
+    public int TeacherTotalLoad { get; set; }
     public string ClassSectionName { get; set; }
     public string TeacherName { get; set; }
     public string LectureName { get; set; }
-    public int WeeklyHourCount { get; set; }
-    public int TeacherTotalLoad { get; set; }
 }
