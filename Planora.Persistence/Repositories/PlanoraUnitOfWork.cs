@@ -41,7 +41,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         IRefreshTokenRepository refreshTokens,
         ISchoolRepository schools,
         ITeacherRepository teachers,
-        ITeacherUnavailableRepository TeacherUnavailableRepository,
+        ITeacherUnavailableRepository teacherUnavailables,
         IUserRepository users
 
     ) : base(context)
@@ -62,7 +62,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         RefreshTokens = refreshTokens;
         Schools = schools;
         Teachers = teachers;
-        TacherUnavables = teachers;
+        TeacherUnavailables = teacherUnavailables;
         Users = users;
     }
 }

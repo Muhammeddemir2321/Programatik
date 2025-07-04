@@ -14,7 +14,7 @@ public class GetByIdClassSectionQueryHandler(
     public async Task<ClassSectionGetByIdDto> Handle(GetByIdClassSectionQuery request, CancellationToken cancellationToken)
     {
         var classSection = await planoraUnitOfWork.ClassSections.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-        await classSectionBusinessRules.UserShouldExistWhenRequestedAsync(classSection);
+        await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(classSection);
         return mapper.Map<ClassSectionGetByIdDto>(classSection);
     }
 }

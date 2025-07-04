@@ -9,6 +9,7 @@ namespace Planora.Application.Features.UserFeature.Commands.UpdateUser;
 public class UpdateUserCommand : IRequest<UpdatedUserDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
+    public Guid SchoolId { get; set; }
     public bool IsVerify { get; set; }
     public UpdateIdentityCommand UpdateIdentityCommand { get; set; }
     [JsonIgnore]

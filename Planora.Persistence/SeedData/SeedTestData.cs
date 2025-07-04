@@ -124,10 +124,11 @@ public static class SeedTestData
         new Lecture {FakeId = 35, Name = "BEDEN EĞİTİMİ" }
     };
 
-    //public static List<TeacherUnavailable> SetSeedDataTeacherUnavailable() => new List<TeacherUnavailable>
-    //{
-    //    new TeacherUnavailable {TeacherId = 1, DayOfWeek=1 }
-    //};
+    public static List<TeacherUnavailable> SetSeedDataTeacherUnavailable() => new List<TeacherUnavailable>
+    {
+        new TeacherUnavailable {TeacherFakeId = 1, DayOfWeek=1 }
+    };
+
     //public static List<ClassTeachingAssignment> SetSeedDataClassTeachingAssignment() => new List<ClassTeachingAssignment>
     //{
 

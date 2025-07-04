@@ -12,7 +12,7 @@ public class DeleteClassSectionCommandHandler(
     public async Task<bool> Handle(DeleteClassSectionCommand request, CancellationToken cancellationToken)
     {
         var classSection = await planoraUnitOfWork.ClassSections.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-        await classSectionBusinessRules.UserShouldExistWhenRequestedAsync(classSection);
+        await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(classSection);
         await planoraUnitOfWork.ClassSections.DeleteAsync(classSection!, cancellationToken: cancellationToken);
         await planoraUnitOfWork.CommitAsync();
         return true;

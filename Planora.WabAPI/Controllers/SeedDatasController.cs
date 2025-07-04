@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Core.Persistence.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Planora.Application.Features.ClassSectionFeature.Command.CreateClassSection;
 using Planora.Application.Features.LectureFeature.Commands;
 using Planora.Application.Features.LectureFeature.Dtos;
 using Planora.Application.Features.SchoolFeature.Commands;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
+using Planora.Application.Features.TeacherFeatures.Commands;
 using Planora.Persistence.SeedData;
 
 namespace Planora.WabAPI.Controllers
@@ -19,14 +22,64 @@ namespace Planora.WabAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("Add")]
+        [HttpPost("AddSchool")]
         public async Task<IActionResult> AddSchool()
         {
-            CreateSchoolCommand c = new();
             var schools = SeedTestData.SetSeedDataSchool();
             foreach (var item in schools)
             {
                 var command = _mapper.Map<CreateSchoolCommand>(item);
+                var result = await Mediator.Send(command);
+                return Created("", result);
+            }
+            return Ok();
+        }
+
+        [HttpPost("AddSchoolScheduleSetting")]
+        public async Task<IActionResult> AddSchoolScheduleSetting()
+        {
+            var schoolScheduleSettings = SeedTestData.SetSeedDataSchoolchoolScheduleSetting();
+            foreach (var item in schoolScheduleSettings)
+            {
+                var command = _mapper.Map<CreateSchoolScheduleSettingCommand>(item);
+                var result = await Mediator.Send(command);
+                return Created("", result);
+            }
+            return Ok();
+        }
+
+        [HttpPost("AddClassSection")]
+        public async Task<IActionResult> AddClassSection()
+        {
+            var classSections = SeedTestData.SetSeedDataClassSection();
+            foreach (var item in classSections)
+            {
+                var command = _mapper.Map<CreateClassSectionCommand>(item);
+                var result = await Mediator.Send(command);
+                return Created("", result);
+            }
+            return Ok();
+        }
+
+        [HttpPost("AddTeacher")]
+        public async Task<IActionResult> AddTeacher()
+        {
+            var teachers = SeedTestData.SetSeedDataTeacher();
+            foreach (var item in teachers)
+            {
+                var command = _mapper.Map<CreateTeacherCommand>(item);
+                var result = await Mediator.Send(command);
+                return Created("", result);
+            }
+            return Ok();
+        }
+        [HttpPost("AddLecture")]
+        public async Task<IActionResult> AddLecture()
+        {
+            var lectures = SeedTestData.SetSeedDataLecture();
+            foreach (var item in lectures)
+            {
+                var command = _mapper.Map<CreateLectureCommand>(item);
                 var result = await Mediator.Send(command);
                 return Created("", result);
             }

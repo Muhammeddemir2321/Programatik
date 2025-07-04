@@ -20,7 +20,7 @@ public class DeleteClassTeachingAssignmentCommand : IRequest<bool>, ISecuredRequ
         public async Task<bool> Handle(DeleteClassTeachingAssignmentCommand request, CancellationToken cancellationToken)
         {
             var ClassTeachingAssignment = await planoraUnitOfWork.ClassTeachingAssignments.GetAsync(c => c.Id == request.Id, cancellationToken: cancellationToken);
-            await ClassTeachingAssignmentBusinessRules.ClassTeachingAssignmentShouldExistWhenRequestedAsync(ClassTeachingAssignment);
+            await ClassTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(ClassTeachingAssignment);
             await planoraUnitOfWork.ClassTeachingAssignments.DeleteAsync(ClassTeachingAssignment!, cancellationToken: cancellationToken);
             await planoraUnitOfWork.CommitAsync();
             return true;

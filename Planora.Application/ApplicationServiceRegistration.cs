@@ -14,6 +14,7 @@ using Planora.Application.Features.OperationClaimFeature.Rules;
 using Planora.Application.Features.SchoolFeature.Rules;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Rules;
 using Planora.Application.Features.TeacherFeature.Rules;
+using Planora.Application.Features.TeacherUnavailableFeature.Rules;
 using Planora.Application.Features.UserFeature.Rules;
 using Planora.Application.Services.AuthService;
 using System.Reflection;
@@ -33,7 +34,7 @@ namespace Planora.Application
             services.AddScoped<ClassSectionBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();
-            services.AddScoped<TeacherUnavaibleBusinessRules>();
+            services.AddScoped<TeacherUnavailableBusinessRules>();
             services.AddScoped<ClassTeachingAssignmentBusinessRules>();
             services.AddScoped<LessonScheduleBusinessRules>();
             services.AddScoped<LessonScheduleGroupBusinessRules>();

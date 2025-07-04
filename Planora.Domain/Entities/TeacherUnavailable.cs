@@ -9,4 +9,6 @@ public class TeacherUnavailable : Entity<Guid>, ISchoolEntity
     public int DayOfWeek { get; set; }
     public int? StartHour { get; set; }
     public int? EndHour { get; set; }
+
+    public int TeacherFakeId { get; set; }
 }

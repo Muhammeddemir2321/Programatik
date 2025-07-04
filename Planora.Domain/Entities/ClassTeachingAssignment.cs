@@ -18,4 +18,8 @@ public class ClassTeachingAssignment : Entity<Guid>, ISchoolEntity
     public string ClassSectionName { get; set; }
     public string TeacherName { get; set; }
     public string LectureName { get; set; }
+
+    public int ClassSectionFakeId { get; set; }
+    public int TeacherFakeId { get; set; }
+    public int LectureFakeId { get; set; }
 }
