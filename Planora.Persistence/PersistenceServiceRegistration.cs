@@ -40,6 +40,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<ISchoolRepository, SchoolRepository>();
         services.AddScoped<ISchoolScheduleSettingRepository, SchoolScheduleSettingsRepository>();
         services.AddScoped<ITeacherRepository, TeacherRepository>();
+        services.AddScoped<ITeacherUnavailableRepository, TeacherUnavailableRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IIdentityRepository, IdentityRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();

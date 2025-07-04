@@ -7,6 +7,7 @@ public class ClassTeachingAssignmentGetByIdDto
     public Guid LectureId { get; set; }
     public Guid TeacherId { get; set; }
     public Guid ClassSectionId { get; set; }
+    public bool IsOptional { get; set; }
     public int WeeklyHourCount { get; set; }
     public int TeacherTotalLoad { get; set; }
     public string ClassSectionName { get; set; }

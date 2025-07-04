@@ -9,7 +9,6 @@ public class UpdateClassSectionCommand : IRequest<UpdatedClassSectionDto>, ISecu
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public Guid SchoolId { get; set; }
     public Guid GradeId { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { ClassSectionClaimConstants.Update };

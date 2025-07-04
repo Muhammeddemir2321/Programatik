@@ -20,7 +20,7 @@ public class GetByIdClassTeachingAssignmentQuery : IRequest<ClassTeachingAssignm
         public async Task<ClassTeachingAssignmentGetByIdDto> Handle(GetByIdClassTeachingAssignmentQuery request, CancellationToken cancellationToken)
         {
             var ClassTeachingAssignment = await ClassTeachingAssignmentRepository.GetAsync(i => i.Id == request.Id, cancellationToken: cancellationToken);
-            await ClassTeachingAssignmentBusinessRules.ClassTeachingAssignmentShouldExistWhenRequestedAsync(ClassTeachingAssignment);
+            await ClassTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(ClassTeachingAssignment);
             return mapper.Map<ClassTeachingAssignmentGetByIdDto>(ClassTeachingAssignment);
         }
     }

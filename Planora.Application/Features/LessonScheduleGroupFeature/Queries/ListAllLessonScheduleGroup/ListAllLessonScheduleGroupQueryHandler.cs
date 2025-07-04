@@ -14,7 +14,7 @@ public class ListAllLessonScheduleGroupQueryHandler(
 {
     public async Task<LessonScheduleGroupListModel> Handle(ListAllLessonScheduleGroupQuery request, CancellationToken cancellationToken)
     {
-        var lessonScheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetListAsync(cancellationToken: cancellationToken);
+        var lessonScheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(cancellationToken: cancellationToken);
         return mapper.Map<LessonScheduleGroupListModel>(lessonScheduleGroups);
     }
 }

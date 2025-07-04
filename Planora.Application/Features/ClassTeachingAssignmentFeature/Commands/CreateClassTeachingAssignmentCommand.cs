@@ -20,27 +20,7 @@ public class CreateClassTeachingAssignmentCommand : IRequest<CreatedClassTeachin
     public Guid LectureId { get; set; }
     public Guid TeacherId { get; set; }
     public Guid ClassSectionId { get; set; }
+    public bool IsOptional { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { ClassTeachingAssignmentClaimConstants.Create };
-    public class CreateClassTeachingAssignmenteCommandHandler(
-        IPlanoraUnitOfWork planoraUnitOfWork, IMapper mapper, ClassTeachingAssignmentBusinessRules classTeachingAssignmentBusinessRules, IMediator mediator)
-        : IRequestHandler<CreateClassTeachingAssignmentCommand, CreatedClassTeachingAssignmentDto>
-    {
-        public async Task<CreatedClassTeachingAssignmentDto> Handle(CreateClassTeachingAssignmentCommand request, CancellationToken cancellationToken)
-        {
-            var mappedClassTeachingAssignment = mapper.Map<ClassTeachingAssignment>(request);
-            var classSection = await planoraUnitOfWork.ClassSections.GetAsync(c => c.Id == request.ClassSectionId, cancellationToken: cancellationToken);
-            var teacher = await planoraUnitOfWork.Teachers.GetAsync(t => t.Id == request.TeacherId, cancellationToken: cancellationToken);
-            var lecture = await planoraUnitOfWork.Lectures.GetAsync(l => l.Id == request.LectureId, cancellationToken: cancellationToken);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(classSection);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(teacher);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(lecture);
-            mappedClassTeachingAssignment.ClassSectionName = classSection.Name;
-            mappedClassTeachingAssignment.TeacherName = teacher.FullName;
-            mappedClassTeachingAssignment.LectureName = lecture.Name;
-            var createdClassTeachingAssignment = await planoraUnitOfWork.ClassTeachingAssignments.AddAsync(mappedClassTeachingAssignment, cancellationToken: cancellationToken);
-            await planoraUnitOfWork.CommitAsync();
-            return mapper.Map<CreatedClassTeachingAssignmentDto>(createdClassTeachingAssignment);
-        }
-    }
 }

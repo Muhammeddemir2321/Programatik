@@ -9,6 +9,7 @@ public class School : Entity<Guid>
 
     public  ICollection<ClassSection> ClassSections { get; set; }
     public  ICollection<Teacher> Teachers { get; set; }
+    public  ICollection<Lecture> lectures { get; set; }
     public  ICollection<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
     public  ICollection<LessonSchedule> LessonSchedules { get; set; }
     public  ICollection<User> Users { get; set; }
@@ -17,6 +18,7 @@ public class School : Entity<Guid>
     {
         ClassSections = new HashSet<ClassSection>();
         Teachers = new HashSet<Teacher>();
+        lectures = new HashSet<Lecture>();
         ClassTeachingAssignments = new HashSet<ClassTeachingAssignment>();
         LessonSchedules = new HashSet<LessonSchedule>();
         Users = new HashSet<User>();

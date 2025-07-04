@@ -2,13 +2,16 @@
 
 namespace Planora.Domain.Entities;
 
-public class Lecture : Entity<Guid>
+public class Lecture : Entity<Guid>, ISchoolEntity
 {
-    public Guid Id { get; set; }
+    public int FakeId { get; set; }
+    public Guid SchoolId { get; set; }
+    public School School { get; set; }
     public string Name { get; set; }
     public ICollection<Teacher> Teachers { get; set; }
     public ICollection<LessonSchedule> LessonSchedules { get; set; }
     public ICollection<ClassTeachingAssignment> ClassTeachingAssignments { get; set; }
+
     public Lecture()
     {
         Teachers = new HashSet<Teacher>();

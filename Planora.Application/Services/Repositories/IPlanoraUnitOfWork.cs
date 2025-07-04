@@ -8,6 +8,7 @@ public interface IPlanoraUnitOfWork : IUnitOfWork
     ILectureRepository Lectures { get; }
     IGradeRepository Grades { get; }
     ITeacherRepository Teachers { get; }
+    ITeacherUnavailableRepository TeacherUnavailables { get; }
     IClassSectionRepository ClassSections { get; }
     ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
     IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }

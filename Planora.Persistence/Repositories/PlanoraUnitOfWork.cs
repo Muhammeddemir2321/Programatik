@@ -10,6 +10,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
     public ILectureRepository Lectures { get; }
     public IGradeRepository Grades { get; }
     public ITeacherRepository Teachers { get; }
+    public ITeacherUnavailableRepository TeacherUnavailables { get; }
     public IClassSectionRepository ClassSections { get; }
     public ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
     public IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
@@ -40,6 +41,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         IRefreshTokenRepository refreshTokens,
         ISchoolRepository schools,
         ITeacherRepository teachers,
+        ITeacherUnavailableRepository TeacherUnavailableRepository,
         IUserRepository users
 
     ) : base(context)
@@ -60,6 +62,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         RefreshTokens = refreshTokens;
         Schools = schools;
         Teachers = teachers;
+        TacherUnavables = teachers;
         Users = users;
     }
 }

@@ -4,11 +4,11 @@ namespace Planora.Domain.Entities;
 
 public class ClassSection : Entity<Guid>, ISchoolEntity
 {
+    public int FakeId { get; set; }
     public string Name { get; set; }
     public Guid SchoolId { get; set; }
+    public School School { get; set; }
     public Guid GradeId { get; set; }
-
-    public  School School { get; set; }
     public  Grade Grade { get; set; }
 
     public  ICollection<LessonSchedule> LessonSchedules { get; set; }

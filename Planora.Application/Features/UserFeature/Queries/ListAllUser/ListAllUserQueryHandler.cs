@@ -6,7 +6,8 @@ using Planora.Application.Services.Repositories;
 
 namespace Planora.Application.Features.UserFeature.Queries.ListAllUser;
 
-public class ListAllUserQueryHandler(IUserRepository userRepository, IMapper mapper)
+public class ListAllUserQueryHandler(IUserRepository userRepository,
+    IMapper mapper)
    : IRequestHandler<ListAllUserQuery, UserListModel>
 {
     public async Task<UserListModel> Handle(ListAllUserQuery request, CancellationToken cancellationToken)

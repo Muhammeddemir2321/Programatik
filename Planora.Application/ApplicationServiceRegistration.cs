@@ -33,6 +33,7 @@ namespace Planora.Application
             services.AddScoped<ClassSectionBusinessRules>();
             services.AddScoped<GradeBusinessRules>();
             services.AddScoped<TeacherBusinessRules>();
+            services.AddScoped<TeacherUnavaibleBusinessRules>();
             services.AddScoped<ClassTeachingAssignmentBusinessRules>();
             services.AddScoped<LessonScheduleBusinessRules>();
             services.AddScoped<LessonScheduleGroupBusinessRules>();

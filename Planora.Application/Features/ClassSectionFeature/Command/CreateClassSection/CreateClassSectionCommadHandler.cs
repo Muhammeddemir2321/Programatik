@@ -10,7 +10,7 @@ namespace Planora.Application.Features.ClassSectionFeature.Command.CreateClassSe
 
 public class CreateClassSectionCommadHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
-    ClassSectionBusinessRules<Entity> classSectionBusinessRules,
+    ClassSectionBusinessRules classSectionBusinessRules,
     IMapper mapper,
     IMediator mediator)
     : IRequestHandler<CreateClassSectionCommand, CreatedClassSectionDto>
@@ -18,6 +18,9 @@ public class CreateClassSectionCommadHandler(
     public async Task<CreatedClassSectionDto> Handle(CreateClassSectionCommand request, CancellationToken cancellationToken)
     {
         var mappedClassSection = mapper.Map<ClassSection>(request);
+        var grade = await planoraUnitOfWork.Grades.GetAsync(g => g.Id == request.GradeId, cancellationToken: cancellationToken);
+        await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(grade);
+        mappedClassSection.Name = $"{request.Name}  {grade!.Name}";
         var createdClassSection = await planoraUnitOfWork.ClassSections.AddAsync(mappedClassSection);
         await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedClassSectionDto>(createdClassSection);

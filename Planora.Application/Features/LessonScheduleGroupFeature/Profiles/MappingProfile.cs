@@ -14,11 +14,12 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<LessonScheduleGroup, LessonScheduleGroupWithLessonSchedulesGetByIdDto>().ReverseMap();
+        CreateMap<IPaginate<LessonScheduleGroup>, LessonScheduleGroupListModel>().ReverseMap();
+        CreateMap<LessonScheduleGroup, CreateLessonScheduleGroupCommand>().ReverseMap();
         CreateMap<LessonScheduleGroup, CreatedLessonScheduleGroupDto>().ReverseMap();
+        CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupIsActiveCommand>().ReverseMap();
+        CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupCommand>().ReverseMap();
         CreateMap<LessonScheduleGroup, UpdatedLessonScheduleGroupDto>().ReverseMap();
         CreateMap<LessonScheduleGroup, LessonScheduleGroupListDto>().ReverseMap();
-        CreateMap<LessonScheduleGroup, CreateLessonScheduleGroupCommand>().ReverseMap();
-        CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupCommand>().ReverseMap();
-        CreateMap<IPaginate<LessonScheduleGroup>, LessonScheduleGroupListModel>().ReverseMap();
     }
 }

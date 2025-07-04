@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Planora.Domain\Planora.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\LessonScheduleFeature\Profiles\" />
-  </ItemGroup>
-
 </Project>

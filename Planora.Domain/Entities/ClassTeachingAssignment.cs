@@ -12,6 +12,7 @@ public class ClassTeachingAssignment : Entity<Guid>, ISchoolEntity
     public Teacher Teacher { get; set; }
     public Guid ClassSectionId { get; set; }
     public ClassSection ClassSection { get; set; }
+    public bool IsOptional { get; set; }
     public int WeeklyHourCount { get; set; }
     public int TeacherTotalLoad { get; set; }
     public string ClassSectionName { get; set; }

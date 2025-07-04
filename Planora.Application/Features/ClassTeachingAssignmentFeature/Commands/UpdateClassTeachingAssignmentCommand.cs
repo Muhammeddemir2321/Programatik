@@ -29,12 +29,7 @@ public class UpdateClassTeachingAssignmentCommand : IRequest<UpdatedClassTeachin
         public async Task<UpdatedClassTeachingAssignmentDto> Handle(UpdateClassTeachingAssignmentCommand request, CancellationToken cancellationToken)
         {
             var mappedClassTeachingAssignment = mapper.Map<ClassTeachingAssignment>(request);
-            var classSection = await planoraUnitOfWork.ClassSections.GetAsync(c => c.Id == request.ClassSectionId, cancellationToken: cancellationToken);
-            var teacher = await planoraUnitOfWork.Teachers.GetAsync(t => t.Id == request.TeacherId, cancellationToken: cancellationToken);
-            var lecture = await planoraUnitOfWork.Lectures.GetAsync(l => l.Id == request.LectureId, cancellationToken: cancellationToken);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(classSection);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(teacher);
-            await classTeachingAssignmentBusinessRules.EntityShouldExistWhenRequestedAsync(lecture);
+            mappedClassTeachingAssignment = await classTeachingAssignmentBusinessRules.EnrichClassTeachingAssignmentAsync(mappedClassTeachingAssignment, cancellationToken: cancellationToken);
             var updatedClassTeachingAssignment = await planoraUnitOfWork.ClassTeachingAssignments.UpdateAsync(mappedClassTeachingAssignment, cancellationToken: cancellationToken);
             return mapper.Map<UpdatedClassTeachingAssignmentDto>(updatedClassTeachingAssignment);
         }
