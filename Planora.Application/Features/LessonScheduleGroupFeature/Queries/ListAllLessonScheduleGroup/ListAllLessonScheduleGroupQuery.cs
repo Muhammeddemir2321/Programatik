@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Planora.Application.Features.LessonScheduleGroupFeature.Queries.ListAllLessonScheduleGroup;
 
-public class ListAllLessonScheduleGroupQuery : IRequest<LessonScheduleGroupListModel>, ISecuredRequest
+public class ListAllLessonScheduleGroupQuery : IRequest<List<LessonScheduleGroupListDto>>, ISecuredRequest
 {
     [JsonIgnore]
     public string[] Roles => new string[] { LessonScheduleGroupClaimConstants.List };

@@ -7,6 +7,8 @@ namespace Planora.Application.Features.TeacherUnavailableFeature.Commands.Create
 
 public class CreateTeacherUnavailableCommand : IRequest<CreatedTeacherUnavailableDto>, ISecuredRequest
 {
+    public int TeacherFakeId { get; set; }
+    public Guid TeacherId { get; set; }
     public int DayOfWeek { get; set; }
     public int? StartHour { get; set; }
     public int? EndHour { get; set; }

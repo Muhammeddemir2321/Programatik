@@ -28,7 +28,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         IAuthorityOperationClaimRepository authorityOperationClaims,
         IAuthorityRepository authorities,
         ILessonScheduleRepository lessonSchedules,
-        ILessonScheduleGroupRepository LessonScheduleGroups,
+        ILessonScheduleGroupRepository lessonScheduleGroups,
         IClassSectionRepository classSections,
         IClassTeachingAssignmentRepository classTeachingAssignments,
         ISchoolScheduleSettingRepository schoolScheduleSettings,
@@ -49,7 +49,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         AuthorityOperationClaims = authorityOperationClaims;
         Authorities = authorities;
         LessonSchedules = lessonSchedules;
-        LessonScheduleGroups = LessonScheduleGroups;
+        LessonScheduleGroups = lessonScheduleGroups;
         ClassSections = classSections;
         ClassTeachingAssignments = classTeachingAssignments;
         SchoolScheduleSettings = schoolScheduleSettings;

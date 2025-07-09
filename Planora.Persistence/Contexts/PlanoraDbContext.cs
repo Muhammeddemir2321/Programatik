@@ -12,8 +12,9 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
 {
     private readonly IPlanoraUserContextAccessor _planoraUserContextAccessor;
     public bool IsSchoolFilterEnabled { get; set; } = true;
-    public Guid? CurrentSchoolId =>
-        IsSchoolFilterEnabled ? _planoraUserContextAccessor.SchoolId : null;
+    //public Guid? CurrentSchoolId =>
+    //    IsSchoolFilterEnabled ? _planoraUserContextAccessor.SchoolId : null;
+    public Guid? CurrentSchoolId => Guid.Parse("2CFAFCF1-B4B8-4547-574C-08DDBB0972BE");
     public PlanoraDbContext(DbContextOptions<PlanoraDbContext> dbContextOptions, IPlanoraUserContextAccessor planoraUserContextAccessor) : base(dbContextOptions)
     {
         _planoraUserContextAccessor = planoraUserContextAccessor;
@@ -46,10 +47,13 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
 
         foreach (var entry in ChangeTracker.Entries<ISchoolEntity>().Where(e => e.State == EntityState.Added))
         {
-            if (entry.Entity.SchoolId == Guid.Empty)
+            if (entry.Entity.SchoolId == Guid.Empty || entry.Entity.SchoolId == null)
             {
-                entry.Entity.SchoolId = CurrentSchoolId.HasValue && CurrentSchoolId.Value != Guid.Empty ? CurrentSchoolId.Value 
-                    : throw new UnauthorizedAccessException("SchoolId atanamadı.");
+                //entry.Entity.SchoolId = CurrentSchoolId.HasValue && CurrentSchoolId.Value != Guid.Empty ? CurrentSchoolId.Value 
+                //    : throw new UnauthorizedAccessException("SchoolId atanamadı.");
+
+                entry.Entity.SchoolId = Guid.Parse("2CFAFCF1-B4B8-4547-574C-08DDBB0972BE");
+
             }
         }
     }

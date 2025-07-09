@@ -10,11 +10,11 @@ public class ListAllLessonScheduleGroupQueryHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
     LessonScheduleGroupBusinessRules lessonScheduleGroupBusinesRuless,
     IMapper mapper)
-    : IRequestHandler<ListAllLessonScheduleGroupQuery, LessonScheduleGroupListModel>
+    : IRequestHandler<ListAllLessonScheduleGroupQuery, List<LessonScheduleGroupListDto>>
 {
-    public async Task<LessonScheduleGroupListModel> Handle(ListAllLessonScheduleGroupQuery request, CancellationToken cancellationToken)
+    public async Task<List<LessonScheduleGroupListDto>> Handle(ListAllLessonScheduleGroupQuery request, CancellationToken cancellationToken)
     {
         var lessonScheduleGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(cancellationToken: cancellationToken);
-        return mapper.Map<LessonScheduleGroupListModel>(lessonScheduleGroups);
+        return mapper.Map<List<LessonScheduleGroupListDto>>(lessonScheduleGroups);
     }
 }

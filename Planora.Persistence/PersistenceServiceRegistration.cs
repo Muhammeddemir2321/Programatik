@@ -1,6 +1,4 @@
-﻿using Core.Security.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Planora.Application.Services.Repositories;
@@ -23,11 +21,6 @@ public static class PersistenceServiceRegistration
             options.UseSqlServer(configuration.GetConnectionString(env));
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        //services.AddDbContext<PlanoraDbContext>(options =>
-        //{
-        //    options.UseSqlServer(configuration.GetConnectionString(env));
-        //    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-        //});
 
 
 

@@ -1,5 +1,7 @@
 ﻿using Planora.Application.Features.LessonScheduleFeature.Constants;
 using Planora.Application.Features.LessonScheduleFeature.Constraints;
+using Planora.Application.Features.LessonScheduleFeature.Logs;
+using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
 namespace Planora.Application.Features.LessonScheduleFeature.Scheduling;
@@ -11,14 +13,21 @@ public class SlotFinder
     private readonly int _dailyLessonCount;
     private readonly ConstraintManager _constraintManager;
     private readonly Guid _lessonScheduleGroupId;
-
-    public SlotFinder(Guid lessonScheduleGroupId, ConstraintManager constraintManager, Dictionary<Guid, LessonSlot[,]> grids, int weeklyLessonDayCount, int dailyLessonCount)
+    private readonly IPlanoraUnitOfWork _planoraUnitOfWork;
+    IList<ClassSection> classSections=new List<ClassSection>();
+    IList<Lecture> lectures = new List<Lecture>();
+    IList<Teacher> teachers = new List<Teacher>();
+    public SlotFinder(Guid lessonScheduleGroupId, ConstraintManager constraintManager, Dictionary<Guid, LessonSlot[,]> grids, int weeklyLessonDayCount, int dailyLessonCount, IPlanoraUnitOfWork planoraUnitOfWork)
     {
         _constraintManager = constraintManager;
         _grids = grids;
         _weeklyLessonDayCount = weeklyLessonDayCount;
         _dailyLessonCount = dailyLessonCount;
         _lessonScheduleGroupId = lessonScheduleGroupId;
+        _planoraUnitOfWork = planoraUnitOfWork;
+        classSections = _planoraUnitOfWork.ClassSections.GetAll();
+        lectures = _planoraUnitOfWork.Lectures.GetAll();
+        teachers = _planoraUnitOfWork.Teachers.GetAll();
     }
     public List<LessonSchedule>? FindNextAvailableSlot(ClassTeachingAssignment assignment)
     {
@@ -58,7 +67,9 @@ public class SlotFinder
                 break;
             }
         }
-
+        CustomLog.WriteLogsToFile($"❌ Çakışma oluştu → {classSections.FirstOrDefault(c => c.Id == assignment.ClassSectionId)?.Name} sınıfının " +
+            $"{teachers.FirstOrDefault(t => t.Id == assignment.TeacherId)?.FullName} öğretmeninin {lectures.FirstOrDefault(l => l.Id == assignment.LectureId)?.Name} dersinin " +
+            $"{assignment.WeeklyHourCount} saatlik çakışması oldu ");
         return null;
     }
     private int FindContinuousFreeBlock(LessonSlot[,] grid, int day, int requiredBlockLength, ClassTeachingAssignment assignment)

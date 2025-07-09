@@ -1,11 +1,5 @@
-﻿using Core.Application.Requests;
-using Core.Persistence.Controllers;
-using Core.Persistence.Dynamic;
+﻿using Core.Persistence.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.GradeFeature.Commands;
-using Planora.Application.Features.GradeFeature.Dtos;
-using Planora.Application.Features.GradeFeature.Models;
-using Planora.Application.Features.GradeFeature.Queries;
 using Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonScheduleGetByGroupId;
 using Planora.Application.Features.LessonScheduleGroupFeature.Commands.CreateLessonScheduleGroup;
 using Planora.Application.Features.LessonScheduleGroupFeature.Commands.DeleteLessonScheduleGroup;
@@ -20,11 +14,11 @@ namespace Planora.WabAPI.Controllers
     [ApiController]
     public class LessonScheduleGroupsController : BaseController
     {
-        [HttpGet("GetList")]
-        public async Task<IActionResult> GetList()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
             ListAllLessonScheduleGroupQuery getListLessonScheduleGroupQuery = new();
-            LessonScheduleGroupListModel result = await Mediator.Send(getListLessonScheduleGroupQuery);
+            List<LessonScheduleGroupListDto> result = await Mediator.Send(getListLessonScheduleGroupQuery);
             return Ok(result);
         }
         [HttpGet("GetById/{id}")]

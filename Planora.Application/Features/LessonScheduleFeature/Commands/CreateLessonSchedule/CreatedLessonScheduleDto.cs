@@ -1,4 +1,7 @@
-﻿namespace Planora.Application.Features.LessonScheduleFeature.Commands.CreateLessonSchedule;
+﻿using Planora.Application.Features.ClassSectionFeature.Queries.ListAllClassSection;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.GetByIdSchoolScheduleSetting;
+
+namespace Planora.Application.Features.LessonScheduleFeature.Commands.CreateLessonSchedule;
 
 public class CreatedLessonScheduleDto
 {

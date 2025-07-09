@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Security", "Core.Secur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Planora.Persistence", "Planora.Persistence\Planora.Persistence.csproj", "{1F7FC051-6E19-466D-AE22-992FC6547F43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Planora.Web", "Planora.Web\Planora.Web.csproj", "{EBC7814E-61D8-4E08-B2F2-84E23B2E3016}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{1F7FC051-6E19-466D-AE22-992FC6547F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F7FC051-6E19-466D-AE22-992FC6547F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F7FC051-6E19-466D-AE22-992FC6547F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC7814E-61D8-4E08-B2F2-84E23B2E3016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC7814E-61D8-4E08-B2F2-84E23B2E3016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC7814E-61D8-4E08-B2F2-84E23B2E3016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC7814E-61D8-4E08-B2F2-84E23B2E3016}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{52F70C4C-81AD-476C-A83A-129471B530ED} = {5BAD89CE-9D12-4034-86A5-1B16C241EB3D}
 		{ED84F88E-9379-47EA-AE9E-29AB46BF1CC5} = {5BAD89CE-9D12-4034-86A5-1B16C241EB3D}
 		{1F7FC051-6E19-466D-AE22-992FC6547F43} = {5FB41438-3331-41D1-8C4F-947AFCC93C25}
+		{EBC7814E-61D8-4E08-B2F2-84E23B2E3016} = {5FB41438-3331-41D1-8C4F-947AFCC93C25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {55DD5665-BED4-4409-B480-2FC661AAB4E9}

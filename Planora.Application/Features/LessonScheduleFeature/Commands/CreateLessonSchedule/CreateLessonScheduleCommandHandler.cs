@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using Planora.Application.Features.ClassSectionFeature.Queries.ListAllClassSection;
 using Planora.Application.Features.LessonScheduleFeature.Constraints;
 using Planora.Application.Features.LessonScheduleFeature.Rules;
 using Planora.Application.Features.LessonScheduleFeature.Scheduling;
+using Planora.Application.Features.LessonScheduleGroupFeature.Commands.CreateLessonScheduleGroup;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.GetByIdSchoolScheduleSetting;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
@@ -12,14 +15,17 @@ public class CreateLessonScheduleCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,
     LessonScheduleBusinessRules lessonScheduleBusinessRules,
     IMapper mapper, ILessonScheduler lessonScheduler)
-    : IRequestHandler<CreateLessonScheduleCommand, List<CreatedLessonScheduleDto>>
+    : IRequestHandler<CreateLessonScheduleCommand, CreatedLessonScheduleGroupDto>
 {
-    public async Task<List<CreatedLessonScheduleDto>> Handle(CreateLessonScheduleCommand request, CancellationToken cancellationToken)
+    public async Task<CreatedLessonScheduleGroupDto> Handle(CreateLessonScheduleCommand request, CancellationToken cancellationToken)
     {
         var settings = await planoraUnitOfWork.SchoolScheduleSettings.GetAllAsync(cancellationToken: cancellationToken);
         var classSections = await planoraUnitOfWork.ClassSections.GetAllAsync(cancellationToken: cancellationToken);
+        CreatedLessonScheduleGroupDto createdLessonScheduleGroupDto = new();
         var assignments=await planoraUnitOfWork.ClassTeachingAssignments.GetAllAsync(cancellationToken: cancellationToken);
         var setting = settings.FirstOrDefault();
+        createdLessonScheduleGroupDto.SchoolScheduleSettingGetByIdDto = mapper.Map<SchoolScheduleSettingGetByIdDto>(setting);
+        createdLessonScheduleGroupDto.classSectionListDtos = mapper.Map<List<ClassSectionListDto>>(classSections);
         var weeklyGrid = new Dictionary<Guid, LessonSlot[,]>();
         foreach (var classSection in classSections)
         {
@@ -32,19 +38,18 @@ public class CreateLessonScheduleCommandHandler(
         .Select(name => constraintMap[name]())
         .ToList();
         var manager = new ConstraintManager(selectedConstraints);
-        SlotFinder slotFinder = new SlotFinder(request.LessonScheduleGroupId, manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount);
+        SlotFinder slotFinder = new SlotFinder(request.LessonScheduleGroupId, manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount, planoraUnitOfWork);
         List<LessonSchedule> schedules = lessonScheduler.GenerateSchedule(slotFinder, assignments, classSections);
-        return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
-        {
-            foreach (var schedule in schedules)
-            {
-                await lessonScheduleBusinessRules.LessonScheduleShouldExistWhenRequestedAsync(schedule);
-                await planoraUnitOfWork.LessonSchedules.AddAsync(schedule, cancellationToken: cancellationToken);
-            }
-            var createdDtos = schedules.Select(s => mapper.Map<CreatedLessonScheduleDto>(s)).ToList();
 
-            return createdDtos;
-        });
-        
+        foreach (var schedule in schedules)
+        {
+            await lessonScheduleBusinessRules.LessonScheduleShouldExistWhenRequestedAsync(schedule);
+            await planoraUnitOfWork.LessonSchedules.AddAsync(schedule, cancellationToken: cancellationToken);
+        }
+        var createdDtos = schedules.Select(s => mapper.Map<CreatedLessonScheduleDto>(s)).ToList();
+
+        createdLessonScheduleGroupDto.CreatedLessonScheduleDtos = createdDtos;
+        return createdLessonScheduleGroupDto;
+
     }
 }

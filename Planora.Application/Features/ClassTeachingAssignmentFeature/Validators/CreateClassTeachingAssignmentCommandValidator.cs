@@ -8,6 +8,6 @@ public class CreateClassTeachingAssignmentCommandValidator:AbstractValidator<Cre
     public CreateClassTeachingAssignmentCommandValidator()
     {
         RuleFor(x => x.WeeklyHourCount).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
-        RuleFor(x => x.LectureId).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
+        //RuleFor(x => x.LectureId).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
     }
 }

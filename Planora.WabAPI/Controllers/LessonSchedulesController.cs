@@ -25,12 +25,6 @@ namespace Planora.WabAPI.Controllers
             List<ListAllLessonScheduleGetByGroupIdDto> result = await Mediator.Send(getListLessonScheduleGetByGroupIdQuery);
             return Ok(result);
         }
-        [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] CreateLessonScheduleCommand createdLessonSchedulee)
-        {
-            List<CreatedLessonScheduleDto> result = await Mediator.Send(createdLessonSchedulee);
-            return Created("", result);
-        }
         [HttpGet("DeleteById/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

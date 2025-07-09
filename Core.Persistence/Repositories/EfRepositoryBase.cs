@@ -58,6 +58,7 @@ public abstract class EfRepositoryBase<TEntity, TContext> :
             if (predicate != null) queryable.Where(predicate);
             if (orderBy != null)
                 return await orderBy(queryable).ToListAsync(cancellationToken);
+            var result= await queryable.ToListAsync(cancellationToken);
             return await queryable.ToListAsync(cancellationToken);
         }, cancellationToken);
         

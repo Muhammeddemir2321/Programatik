@@ -13,7 +13,7 @@ public class ListAllLessonScheduleGetByGroupIdQueryHandler(
 {
     public async Task<List<ListAllLessonScheduleGetByGroupIdDto>> Handle(ListAllLessonScheduleGetByGroupIdQuery request, CancellationToken cancellationToken)
     {
-        var lessonSchedules = await planoraUnitOfWork.LessonSchedules.GetAllAsync(l => l.LessonScheduleGroupId == request.LessonScheduleGroupId, cancellationToken: cancellationToken);
+        var lessonSchedules = await planoraUnitOfWork.LessonSchedules.GetAllByGroupIdAsync(request.LessonScheduleGroupId, cancellationToken: cancellationToken);
         return mapper.Map<List<ListAllLessonScheduleGetByGroupIdDto>>(lessonSchedules);
     }
 }
