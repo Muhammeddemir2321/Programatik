@@ -26,6 +26,6 @@ public static class LectureDistributionStrategy
     }
     public static List<int> GetDefault(int totalHours)
     {
-        return GetOptions(totalHours).First();
+        return GetOptions(totalHours).First().OrderByDescending(option => option).ToList();
     }
 }

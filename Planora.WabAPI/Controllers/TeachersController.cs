@@ -14,6 +14,13 @@ namespace Planora.WabAPI.Controllers;
 [ApiController]
 public class TeachersController : BaseController
 {
+    [HttpGet("GetListAll")]
+    public async Task<IActionResult> GetListAll()
+    {
+        ListTeacherQuery getListTeacherQuery = new();
+        List<TeacherListDto> result = await Mediator.Send(getListTeacherQuery);
+        return Ok(result);
+    }
     [HttpPost("GetAll")]
     public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest, [FromBody] Dynamic query = null)
     {

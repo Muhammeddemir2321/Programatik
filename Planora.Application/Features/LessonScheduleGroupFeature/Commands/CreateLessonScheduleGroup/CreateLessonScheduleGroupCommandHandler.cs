@@ -19,8 +19,6 @@ public class CreateLessonScheduleGroupCommandHandler(
     {
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            if (planoraUnitOfWork?.LessonScheduleGroups == null)
-                throw new Exception("LessonScheduleGroups repository null!");
             var activeLessonSecheduleGroups = await planoraUnitOfWork.LessonScheduleGroups
                   .GetAllAsync(l => l.IsActive == true &&
                       l.Year == request.Year &&
@@ -33,10 +31,14 @@ public class CreateLessonScheduleGroupCommandHandler(
             }
             var mappedLessonScheduleGroup = mapper.Map<LessonScheduleGroup>(request);
             mappedLessonScheduleGroup.IsActive = true;
+
             var createdLessonScheduleGroup = await planoraUnitOfWork.LessonScheduleGroups.AddAsync(mappedLessonScheduleGroup, cancellationToken: cancellationToken);
             request.createLessonScheduleCommand.LessonScheduleGroupId= createdLessonScheduleGroup.Id;
             var mapped = mapper.Map<CreatedLessonScheduleGroupDto>(createdLessonScheduleGroup);
             var createdLessonScheduleGroupDto = await mediator.Send(request.createLessonScheduleCommand);
+
+            //mapped = createdLessonScheduleGroupDto;
+
             mapped.CreatedLessonScheduleDtos = createdLessonScheduleGroupDto.CreatedLessonScheduleDtos;
             mapped.SchoolScheduleSettingGetByIdDto = createdLessonScheduleGroupDto.SchoolScheduleSettingGetByIdDto;
             mapped.classSectionListDtos = createdLessonScheduleGroupDto.classSectionListDtos;

@@ -15,25 +15,58 @@ namespace Planora.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLessonSchedulesByGroupId(Guid groupId)
+        public async Task<IActionResult> GetLessonSchedulesByGroupId(Guid groupId, string viewType = "class")
         {
             if (groupId == Guid.Empty)
                 return RedirectToAction("Index", "Home");
 
             var result = await _groupApiService.GetAsync(groupId);
-
-
             if (result == null)
             {
                 TempData["Error"] = "Ders programı bulunamadı.";
                 return RedirectToAction("Index", "Home");
             }
+
             var schedules = result.listAllLessonScheduleGetByGroupIdDtos;
             var classSections = result.classSectionListDtos;
             var settings = result.SchoolScheduleSettingGetByIdDto;
 
+            if (viewType == "teacher")
+            {
+                var teacherViewModels = result.teacherListDtos.Select(teacher =>
+                {
+                    var teacherVm = new TeacherScheduleViewModel
+                    {
+                        TeacherName = teacher.FullName
+                    };
 
-            var viewModels = classSections.Select(classs =>
+                    for (int i = 0; i < settings.DailyLessonCount; i++)
+                    {
+                        var row = new TeacherLessonRow { LessonIndex = i + 1 };
+
+                        for (int j = 0; j < settings.WeeklyLessonDayCount; j++)
+                        {
+                            var matching = schedules.FirstOrDefault(s =>
+                                s.TeacherId == teacher.Id &&
+                                s.DayOfWeek == j + 1 &&
+                                s.LessonIndex == i + 1);
+
+                            if (matching == null)
+                                row.LessonsPerDay.Add("Boş");
+                            else
+                                row.LessonsPerDay.Add($"{matching.LectureName} – {matching.ClassSectionName}");
+                        }
+
+                        teacherVm.Rows.Add(row);
+                    }
+
+                    return teacherVm;
+                }).ToList();
+
+                return View("TeacherSchedule", teacherViewModels);
+            }
+
+            var classViewModels = classSections.Select(classs =>
             {
                 var vm = new ClassScheduleViewModel { ClassName = classs.Name };
 
@@ -64,8 +97,9 @@ namespace Planora.Web.Controllers
                 return vm;
             }).ToList();
 
-            return View("Index", viewModels);
+            return View("ClassSchedule", classViewModels);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> CreateLessonSchedule(ScheduleOptionsViewModel model)

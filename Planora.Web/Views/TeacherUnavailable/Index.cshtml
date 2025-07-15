@@ -1,0 +1,169 @@
+﻿@model TeacherUnavailableViewModel
+@{
+    ViewData["Title"] = "Öğretmen Uygun Olmayan Saatler";
+    var teachers = ViewBag.Teachers as List<SelectListItem>;
+    int maxHoursPerDay = 8;
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container mt-5">
+    <h3 class="mb-4 text-primary">🕒 Öğretmen Uygun Olmayan Saatler</h3>
+
+    <!-- Öğretmen Seçimi -->
+    <form method="get" asp-action="Index">
+        <div class="mb-4">
+            <label class="form-label fw-bold">👨‍🏫 Öğretmen Seçin</label>
+            <select class="form-select" name="teacherId" onchange="this.form.submit()">
+                <option value="">-- Öğretmen Seçiniz --</option>
+                @foreach (var item in teachers!)
+                {
+                    <option value="@item.Value" selected="@(item.Value == Model.TeacherId.ToString())">@item.Text</option>
+                }
+            </select>
+        </div>
+    </form>
+
+    <!-- Saat Girişi -->
+    @if (Model.TeacherId != Guid.Empty)
+    {
+        <form asp-action="CreateTeacherUnavailable" method="post" id="unavailableForm">
+            <input type="hidden" name="TeacherId" value="@Model.TeacherId" />
+
+            @for (int day = 1; day <= 5; day++)
+            {
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <strong>@GetDayName(day)</strong>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="toggleFullDay(@day)">Tüm Günü Seç / Kaldır</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @for (int hour = 1; hour <= maxHoursPerDay; hour++)
+                            {
+                                // Bu saat seçili mi diye kontrol
+                                var isChecked = Model.UnavailableSlots.Any(slot =>
+                                slot.DayOfWeek == day &&
+                                (
+                                (slot.StartHour == null && slot.EndHour == null) || // tüm gün seçili ise
+                                (slot.StartHour <= hour && hour <= slot.EndHour)
+                                )
+                                );
+
+                                <div class="col-6 col-md-3 col-lg-2 mb-2">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input"
+                                               id="chk-@day-@hour"
+                                               data-day="@day"
+                                               data-hour="@hour"
+                                        @(isChecked ? "checked" : "") />
+                                        <label class="form-check-label" for="chk-@day-@hour">@hour. Saat</label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <button type="submit" class="btn btn-success w-100 mt-4">💾 Kaydet</button>
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Tüm günü seç / kaldır toggle
+        function toggleFullDay(day) {
+            let allChecked = true;
+            for (let hour = 1; hour <= 8; hour++) {
+                const chk = document.getElementById(`chk-${day}-${hour}`);
+                if (!chk.checked) {
+                    allChecked = false;
+                    break;
+                }
+            }
+            const setTo = !allChecked;
+            for (let hour = 1; hour <= 8; hour++) {
+                document.getElementById(`chk-${day}-${hour}`).checked = setTo;
+            }
+        }
+
+        // Form submit olmadan önce modeldeki UnavailableSlots listesini oluşturup ekle
+        document.getElementById("unavailableForm").addEventListener("submit", function (e) {
+            // Önce var olan gizli inputları temizle
+            document.querySelectorAll("input[name='UnavailableSlots.Index']").forEach(i => i.remove());
+            document.querySelectorAll("input[name^='UnavailableSlots'][type='hidden']").forEach(i => i.remove());
+
+            let slots = [];
+
+            for (let day = 1; day <= 5; day++) {
+                let selectedHours = [];
+                for (let hour = 1; hour <= 8; hour++) {
+                    const chk = document.getElementById(`chk-${day}-${hour}`);
+                    if (chk.checked) {
+                        selectedHours.push(hour);
+                    }
+                }
+
+                if (selectedHours.length === 0) continue;
+
+                if (selectedHours.length === 8) {
+                    // Tüm gün seçili ise StartHour ve EndHour null
+                    slots.push({ DayOfWeek: day, StartHour: null, EndHour: null });
+                } else {
+                    // Değilse min ve max saatleri set et
+                    slots.push({ DayOfWeek: day, StartHour: Math.min(...selectedHours), EndHour: Math.max(...selectedHours) });
+                }
+            }
+
+            // Şimdi slots listesini form için gizli inputlara dönüştürelim (model binding için)
+            for (let i = 0; i < slots.length; i++) {
+                const slot = slots[i];
+
+                // Index için MVC model binding uyumu
+                let indexInput = document.createElement("input");
+                indexInput.type = "hidden";
+                indexInput.name = `UnavailableSlots.Index`;
+                indexInput.value = i;
+                this.appendChild(indexInput);
+
+                // DayOfWeek
+                let dayInput = document.createElement("input");
+                dayInput.type = "hidden";
+                dayInput.name = `UnavailableSlots[${i}].DayOfWeek`;
+                dayInput.value = slot.DayOfWeek;
+                this.appendChild(dayInput);
+
+                // StartHour
+                let startInput = document.createElement("input");
+                startInput.type = "hidden";
+                startInput.name = `UnavailableSlots[${i}].StartHour`;
+                startInput.value = slot.StartHour ?? "";
+                this.appendChild(startInput);
+
+                // EndHour
+                let endInput = document.createElement("input");
+                endInput.type = "hidden";
+                endInput.name = `UnavailableSlots[${i}].EndHour`;
+                endInput.value = slot.EndHour ?? "";
+                this.appendChild(endInput);
+            }
+        });
+    </script>
+}
+
+@functions {
+    private string GetDayName(int day)
+    {
+        return day switch
+        {
+            1 => "Pazartesi",
+            2 => "Salı",
+            3 => "Çarşamba",
+            4 => "Perşembe",
+            5 => "Cuma",
+            _ => "Bilinmeyen Gün"
+        };
+    }
+}

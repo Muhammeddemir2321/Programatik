@@ -4,50 +4,83 @@
     var constraints = ViewBag.AllConstraints as List<(string Key, string Display)>;
 }
 
-<h2>Ders Programı Ayarları</h2>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-<form asp-action="CreateLessonSchedule" asp-controller="Schedule" method="post">
-    <div class="mb-3">
-        <label for="Year" class="form-label">Yıl</label>
-        <input type="number" class="form-control" id="Year" name="Year" value="@Model.Year" required />
-    </div>
-    <div class="mb-3">
-        <label for="Semester" class="form-label">Dönem</label>
-        <input type="number" class="form-control" id="Semester" name="Semester" value="@Model.Semester" required />
-    </div>
-    <div class="mb-3">
-        <label for="Description" class="form-label">Açıklama</label>
-        <input type="text" class="form-control" id="Description" name="Description" value="@Model.Description" />
-    </div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">📘 Ders Programı Oluştur</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="CreateLessonSchedule" asp-controller="Schedule" method="post" id="createForm">
+                        <div class="mb-3">
+                            <label for="Year" class="form-label">Yıl</label>
+                            <input type="number" class="form-control" id="Year" name="Year" value="@Model.Year" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Semester" class="form-label">Dönem</label>
+                            <input type="number" class="form-control" id="Semester" name="Semester" value="@Model.Semester" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label">Açıklama</label>
+                            <input type="text" class="form-control" id="Description" name="Description" value="@Model.Description" />
+                        </div>
 
-    <h4>Kullanılacak Kısıtlamaları Seçin</h4>
-    @foreach (var (key, display) in constraints!)
-    {
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="SelectedConstraintNames" value="@key" id="@key" />
-            <label class="form-check-label" for="@key">@display</label>
+                        <h6 class="mt-4">📋 Kullanılacak Kısıtlamalar</h6>
+                        @foreach (var (key, display) in constraints!)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedConstraintNames" value="@key" id="@key" />
+                                <label class="form-check-label" for="@key">@display</label>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-success mt-4 w-100">Ders Programını Oluştur</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    }
 
-    <button type="submit" class="btn btn-primary mt-3">Ders Programını Oluştur</button>
-</form>
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">📖 Kayıtlı Programı Görüntüle</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Schedule" asp-action="GetLessonSchedulesByGroupId" method="get">
+                        <div class="mb-3">
+                            <label for="groupId" class="form-label">📁 Program Grubu</label>
+                            <select class="form-select" name="groupId" id="groupId" required>
+                                <option value="">Grup seçiniz...</option>
+                                @foreach (var item in (List<SelectListItem>)ViewBag.LessonGroups)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
 
-<h4 class="mt-4">Ya da kayıtlı ders programı grubunu seçin</h4>
+                        <div class="mb-3">
+                            <label class="form-label">🔍 Görüntüleme Türü</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="viewType" id="byClass" value="class" checked />
+                                <label class="form-check-label" for="byClass">Sınıfa Göre</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="viewType" id="byTeacher" value="teacher" />
+                                <label class="form-check-label" for="byTeacher">Öğretmene Göre</label>
+                            </div>
+                        </div>
 
-<form asp-controller="Schedule" asp-action="GetLessonSchedulesByGroupId" method="get">
-    <div class="mb-3">
-        <label for="groupId" class="form-label">Ders Programı Grubu Seçin</label>
-        <select class="form-select" name="groupId" id="groupId" required>
-            <option value="">Grup seçiniz...</option>
-            @foreach (var item in (List<SelectListItem>)ViewBag.LessonGroups)
-            {
-                <option value="@item.Value">@item.Text</option>
-            }
-        </select>
+                        <button type="submit" class="btn btn-outline-primary w-100">Ders Programını Göster</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-secondary">Grubu Görüntüle</button>
-</form>
-<!-- loading spinner -->
+</div>
+
 <div id="loadingSpinner" class="d-none" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:rgba(0,0,0,0.6); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
     <div class="spinner-border text-light" role="status" style="width: 4rem; height: 4rem;"></div>
     <div style="color:white; margin-top: 20px; font-size: 1.5rem; font-weight:bold;">
@@ -58,7 +91,7 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form');
+            const form = document.getElementById('createForm');
             const spinner = document.getElementById('loadingSpinner');
 
             if (form && spinner) {

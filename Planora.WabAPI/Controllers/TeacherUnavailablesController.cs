@@ -16,6 +16,13 @@ namespace Planora.WabAPI.Controllers
     [ApiController]
     public class TeacherUnavailablesController : BaseController
     {
+        [HttpPost("GetListAll")]
+        public async Task<IActionResult> GetListAll()
+        {
+            ListAllTeacherUnavailableQuery getListTeacherUnavailableQuery = new();
+            TeacherUnavailableListModel result = await Mediator.Send(getListTeacherUnavailableQuery);
+            return Ok(result.Items);
+        }
         [HttpPost("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] PageRequest pageRequest, [FromBody] Dynamic query = null)
         {
@@ -37,6 +44,13 @@ namespace Planora.WabAPI.Controllers
             GetByIdTeacherUnavailableQuery getTeacherUnavailableQuery = new() { Id = id };
             TeacherUnavailableGetByIdDto getTeacherUnavailableResult = await Mediator.Send(getTeacherUnavailableQuery);
             return Ok(getTeacherUnavailableResult);
+        }
+        [HttpGet("GetByTeacherId/{teacherId}")]
+        public async Task<IActionResult> GetByTeacherId(Guid teacherId)
+        {
+            GetByTeacherIdTeacherUnavailableQuery getTeacherUnavailableQuery = new() { TeacherId = teacherId };
+            List<TeacherUnavailableListDto> result = await Mediator.Send(getTeacherUnavailableQuery);
+            return Ok(result);
         }
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] CreateTeacherUnavailableCommand createdTeacherUnavailable)

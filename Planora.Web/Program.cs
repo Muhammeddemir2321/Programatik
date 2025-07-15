@@ -10,6 +10,10 @@ builder.Services.AddHttpClient<LessonScheduleGroupApiService>(opt =>
     opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
 
 });
+builder.Services.AddHttpClient<TeacherUnavailableApiService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
 
 var app = builder.Build();
 

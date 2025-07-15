@@ -4,8 +4,8 @@ using Planora.Application.Features.ClassSectionFeature.Queries.ListAllClassSecti
 using Planora.Application.Features.LessonScheduleFeature.Queries.ListAllLessonScheduleGetByGroupId;
 using Planora.Application.Features.LessonScheduleGroupFeature.Rules;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.GetByIdSchoolScheduleSetting;
+using Planora.Application.Features.TeacherFeature.Dtos;
 using Planora.Application.Services.Repositories;
-using Planora.Domain.Entities;
 
 namespace Planora.Application.Features.LessonScheduleGroupFeature.Queries.GetByIdLessonScheduleGroup;
 
@@ -21,6 +21,7 @@ public class GetByIdLessonScheduleGroupWithLessonSchedulesQueryHandler(
         var settings = await planoraUnitOfWork.SchoolScheduleSettings.GetAllAsync(cancellationToken: cancellationToken);
         var setting = settings.FirstOrDefault();
         var classSections = await planoraUnitOfWork.ClassSections.GetAllAsync(cancellationToken: cancellationToken);
+        var teachers = await planoraUnitOfWork.Teachers.GetAllAsync(cancellationToken: cancellationToken);
         var lessonScheduleGroup = await planoraUnitOfWork.LessonScheduleGroups.GetAsync(l => l.Id == request.Id);
         await lessonScheduleGroupBusinesRuless.LessonScheduleGroupShouldExistWhenRequestedAsync(lessonScheduleGroup);
         var lessonSchedulesGetByGrupId = await mediator.Send(new ListAllLessonScheduleGetByGroupIdQuery { LessonScheduleGroupId = request.Id });
@@ -28,6 +29,7 @@ public class GetByIdLessonScheduleGroupWithLessonSchedulesQueryHandler(
         mapped.listAllLessonScheduleGetByGroupIdDtos = lessonSchedulesGetByGrupId;
         mapped.SchoolScheduleSettingGetByIdDto = mapper.Map<SchoolScheduleSettingGetByIdDto>(setting);
         mapped.classSectionListDtos = mapper.Map<List<ClassSectionListDto>>(classSections);
+        mapped.teacherListDtos = mapper.Map<List<TeacherListDto>>(teachers);
         return mapped;
     }
 }
