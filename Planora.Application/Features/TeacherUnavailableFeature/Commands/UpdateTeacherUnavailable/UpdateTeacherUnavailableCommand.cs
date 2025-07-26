@@ -12,6 +12,7 @@ public class UpdateTeacherUnavailableCommand : IRequest<UpdatedTeacherUnavailabl
     public Guid TeacherId { get; set; }
     public int DayOfWeek { get; set; }
     public int? StartHour { get; set; }
+    public int? EndHour { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherUnavailableClaimConstant.Update };
 }

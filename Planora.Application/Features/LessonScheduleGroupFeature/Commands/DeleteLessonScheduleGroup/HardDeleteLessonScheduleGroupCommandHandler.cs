@@ -26,7 +26,7 @@ public class HardDeleteLessonScheduleGroupCommandHandler(
             {
                 var lastGroup = (await planoraUnitOfWork.LessonScheduleGroups
                     .GetAllAsync(l => (l.Year == lessonScheduleGroup.Year && l.Semester == lessonScheduleGroup.Semester), orderBy: q => q.OrderByDescending(x => x.CreatedAt))).FirstOrDefault();
-                var mappedLessonScheduleGroup = mapper.Map<UpdateLessonScheduleGroupIsActiveCommand>(lastGroup);
+                var mappedLessonScheduleGroup = mapper.Map<UpdateLessonScheduleGroupStatusCommand>(lastGroup);
                 mappedLessonScheduleGroup.IsActive = true;
                 await mediator.Send(mappedLessonScheduleGroup);
             }

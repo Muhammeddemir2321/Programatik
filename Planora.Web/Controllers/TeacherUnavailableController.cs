@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Planora.Application.Features.LessonScheduleFeature.Commands.CreateLessonSchedule;
 using Planora.Application.Features.LessonScheduleGroupFeature.Commands.CreateLessonScheduleGroup;
 using Planora.Application.Features.TeacherUnavailableFeature.Commands.CreateTeacherUnavailable;
+using Planora.Application.Features.TeacherUnavailableFeature.Commands.UpdateTeacherUnavailable;
 using Planora.Web.Models;
 using Planora.Web.Services;
 
@@ -47,21 +48,50 @@ public class TeacherUnavailableController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateTeacherUnavailable(TeacherUnavailableViewModel model)
     {
-        var commands = model.UnavailableSlots.Select(slot => new CreateTeacherUnavailableCommand
-        {
-            TeacherId = model.TeacherId,
-            DayOfWeek = slot.DayOfWeek,
-            StartHour = slot.StartHour,
-            EndHour = slot.EndHour
-        }).ToList();
+        var newSlots = model.UnavailableSlots;
+        var existingSlots = await _teacherUnavailableApiService.GetUnavailableByTeacherIdAsync(model.TeacherId);
 
-        foreach (var command in commands)
+        // Aynı gün için gelen yeni kayıtlar
+        foreach (var newSlot in newSlots)
         {
-            await _teacherUnavailableApiService.SaveAsync(command);
+            var existing = existingSlots.FirstOrDefault(e => e.DayOfWeek == newSlot.DayOfWeek);
+            if (existing == null)
+            {
+                // ✅ Yeni gün – kaydet
+                await _teacherUnavailableApiService.SaveAsync(new CreateTeacherUnavailableCommand
+                {
+                    TeacherId = model.TeacherId,
+                    DayOfWeek = newSlot.DayOfWeek,
+                    StartHour = newSlot.StartHour,
+                    EndHour = newSlot.EndHour
+                });
+            }
+            else if (existing.StartHour != newSlot.StartHour || existing.EndHour != newSlot.EndHour)
+            {
+                // 🔁 Güncellenmiş – update et
+                await _teacherUnavailableApiService.UpdateAsync(new UpdateTeacherUnavailableCommand
+                {
+                    Id = existing.Id, // mevcut kaydın ID'si olmalı
+                    TeacherId = model.TeacherId,
+                    DayOfWeek = newSlot.DayOfWeek,
+                    StartHour = newSlot.StartHour,
+                    EndHour = newSlot.EndHour
+                });
+            }
+        }
+
+        // ❌ Artık seçilmemiş günler – sil
+        foreach (var oldSlot in existingSlots)
+        {
+            if (!newSlots.Any(s => s.DayOfWeek == oldSlot.DayOfWeek))
+            {
+                await _teacherUnavailableApiService.DeleteAsync(oldSlot.Id);
+            }
         }
 
         return RedirectToAction("Index", new { teacherId = model.TeacherId });
     }
+
 
 
 }

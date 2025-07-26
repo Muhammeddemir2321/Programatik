@@ -1,9 +1,9 @@
 ﻿using Core.Application.Requests;
 using Core.Persistence.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.DeleteSchoolScheduleSetting;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.UpdateSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.DeleteSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.UpdateSchoolScheduleSetting;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Models;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.GetByIdSchoolScheduleSetting;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.ListAllSchoolScheduleSetting;

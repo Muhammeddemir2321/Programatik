@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Persistence.Paging;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.UpdateSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.UpdateSchoolScheduleSetting;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Models;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.GetByIdSchoolScheduleSetting;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Queries.ListAllSchoolScheduleSetting;

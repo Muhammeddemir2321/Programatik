@@ -5,6 +5,7 @@ using Planora.Application.Features.LessonScheduleGroupFeature.Commands.CreateLes
 using Planora.Application.Features.LessonScheduleGroupFeature.Commands.DeleteLessonScheduleGroup;
 using Planora.Application.Features.LessonScheduleGroupFeature.Commands.UpdateLessonScheduleGroup;
 using Planora.Application.Features.LessonScheduleGroupFeature.Models;
+using Planora.Application.Features.LessonScheduleGroupFeature.Queries.GetAllConstraints;
 using Planora.Application.Features.LessonScheduleGroupFeature.Queries.GetByIdLessonScheduleGroup;
 using Planora.Application.Features.LessonScheduleGroupFeature.Queries.ListAllLessonScheduleGroup;
 
@@ -28,13 +29,6 @@ namespace Planora.WabAPI.Controllers
             LessonScheduleGroupWithLessonSchedulesGetByIdDto result = await Mediator.Send(getLessonScheduleGroupQuery);
             return Ok(result);
         }
-        [HttpGet("GetListLessonScheduleGetByGroupId/{id}")]
-        public async Task<IActionResult> GetListLessonScheduleGetByGroupId(Guid id)
-        {
-            ListAllLessonScheduleGetByGroupIdQuery getListLessonScheduleGetByGroupIdQuery = new() { LessonScheduleGroupId = id };
-            List<ListAllLessonScheduleGetByGroupIdDto> result = await Mediator.Send(getListLessonScheduleGetByGroupIdQuery);
-            return Ok(result);
-        }
         [HttpPost("Add")]
         public async Task<IActionResult> Add([FromBody] CreateLessonScheduleGroupCommand createdLessonScheduleGroupCommand)
         {
@@ -47,10 +41,10 @@ namespace Planora.WabAPI.Controllers
             UpdatedLessonScheduleGroupDto result = await Mediator.Send(updateLessonScheduleGroupCommand);
             return Created("", result);
         }
-        [HttpPost("UpdateIsActive")]
-        public async Task<IActionResult> UpdateIsActive([FromBody] UpdateLessonScheduleGroupIsActiveCommand updateLessonScheduleGroupIsActiveCommand)
+        [HttpPost("UpdateStatus")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateLessonScheduleGroupStatusCommand updateLessonScheduleGroupStatusCommand)
         {
-            List<UpdatedLessonScheduleGroupDto> result = await Mediator.Send(updateLessonScheduleGroupIsActiveCommand);
+            List<LessonScheduleGroupListDto> result = await Mediator.Send(updateLessonScheduleGroupStatusCommand);
             return Created("", result);
         }
         [HttpGet("DeleteById/{id}")]
@@ -59,6 +53,12 @@ namespace Planora.WabAPI.Controllers
             HardDeleteLessonScheduleGroupCommand hardDeleteLessonScheduleGroupCommand = new() { Id = id };
             await Mediator.Send(hardDeleteLessonScheduleGroupCommand);
             return NoContent();
+        }
+        [HttpGet("GetAllConstraints")]
+        public async Task<IActionResult> GetAllConstraints()
+        {
+            var result = await Mediator.Send(new GetAllConstraintsQuery());
+            return Ok(result);
         }
     }
 }

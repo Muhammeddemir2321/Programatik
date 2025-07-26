@@ -6,7 +6,7 @@ using Planora.Application.Features.ClassTeachingAssignmentFeature.Commands;
 using Planora.Application.Features.LectureFeature.Commands;
 using Planora.Application.Features.LectureFeature.Dtos;
 using Planora.Application.Features.SchoolFeature.Commands;
-using Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
+using Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
 using Planora.Application.Features.TeacherFeatures.Commands;
 using Planora.Application.Features.TeacherUnavailableFeature.Commands.CreateTeacherUnavailable;
 using Planora.Persistence.SeedData;

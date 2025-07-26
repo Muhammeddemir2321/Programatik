@@ -11,6 +11,15 @@ namespace Planora.WabAPI.Controllers
     [ApiController]
     public class LessonSchedulesController : BaseController
     {
+
+        [HttpGet("GetListLessonScheduleGetByGroupId/{id}")]
+        public async Task<IActionResult> GetListLessonScheduleGetByGroupId(Guid id)
+        {
+            ListAllLessonScheduleGetByGroupIdQuery getListLessonScheduleGetByGroupIdQuery = new() { LessonScheduleGroupId = id };
+            List<ListAllLessonScheduleGetByGroupIdDto> result = await Mediator.Send(getListLessonScheduleGetByGroupIdQuery);
+            return Ok(result);
+        }
+
         [HttpGet("GetList")]
         public async Task<IActionResult> GetList()
         {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Planora.Application.Features.ClassSectionFeature.Queries.ListAllClassSection;
+using Planora.Application.Features.LessonScheduleFeature.Constants;
 using Planora.Application.Features.LessonScheduleFeature.Constraints;
 using Planora.Application.Features.LessonScheduleFeature.Rules;
 using Planora.Application.Features.LessonScheduleFeature.Scheduling;
@@ -33,11 +34,21 @@ public class CreateLessonScheduleCommandHandler(
         }
         var constraintFactory = new ConstraintFactory(weeklyGrid, teacherUnavailables);
         var constraintMap = constraintFactory.GetConstraintMap();
-        var selectedConstraints = request.SelectedConstraintNames
+
+        var mandatoryConstraints = new List<ICanAssignConstraint>
+        {
+            constraintMap[ConstraintNamesConstant.TeacherConflictConstraint](),
+            constraintMap[ConstraintNamesConstant.TeacherUnavailableConstraint]()
+        };
+
+        var optionalConstraints = request.SelectedConstraintNames
         .Where(name => constraintMap.ContainsKey(name))
         .Select(name => constraintMap[name]())
         .ToList();
-        var manager = new ConstraintManager(selectedConstraints);
+
+        var allConstraints = mandatoryConstraints.Concat(optionalConstraints).ToList();
+
+        var manager = new ConstraintManager(allConstraints);
         SlotFinder slotFinder = new SlotFinder(request.LessonScheduleGroupId, manager, weeklyGrid, setting!.WeeklyLessonDayCount, setting.DailyLessonCount, planoraUnitOfWork);
         List<LessonSchedule> schedules = lessonScheduler.GenerateSchedule(slotFinder, assignments, classSections);
 

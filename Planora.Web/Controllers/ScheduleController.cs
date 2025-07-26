@@ -29,11 +29,12 @@ namespace Planora.Web.Controllers
 
             var schedules = result.listAllLessonScheduleGetByGroupIdDtos;
             var classSections = result.classSectionListDtos;
+            var teachers = result.teacherListDtos;
             var settings = result.SchoolScheduleSettingGetByIdDto;
 
             if (viewType == "teacher")
             {
-                var teacherViewModels = result.teacherListDtos.Select(teacher =>
+                var teacherViewModels = teachers.Select(teacher =>
                 {
                     var teacherVm = new TeacherScheduleViewModel
                     {

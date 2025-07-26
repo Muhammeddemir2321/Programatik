@@ -20,10 +20,8 @@ public class ListAllTeacherQuery : IRequest<TeacherListModel>, ISecuredRequest
     {
         public async Task<TeacherListModel> Handle(ListAllTeacherQuery request, CancellationToken cancellationToken)
         {
-            var teachers = await teacherRepository.GetListAsync(cancellationToken: cancellationToken);
+            var teachers = await teacherRepository.GetListAsync(index: request.PageRequest.Page, size: request.PageRequest.PageSize,cancellationToken: cancellationToken);
             return mapper.Map<TeacherListModel>(teachers);
-            //var teachers = await teacherRepository.GetAllAsync(cancellationToken: cancellationToken);
-            //return mapper.Map<TeacherListModel>(teachers);
         }
     }
 }

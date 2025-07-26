@@ -21,6 +21,7 @@ public class CreateTeacherUnavailableCommandHandler(
         //    throw new BusinessException("Belirtilen FakeId ile eşleşen öğretmen bulunamadı.");
 
         //mappedTeacherUnavailable.TeacherId = teacher.Id;
+        await teacherUnavailableBusinessRules.CheckCreateTeacherUnavailableModelAsync(mappedTeacherUnavailable);
         var createdTeacherUnavailable = await planoraUnitOfWork.TeacherUnavailables.AddAsync(mappedTeacherUnavailable, cancellationToken: cancellationToken);
         await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedTeacherUnavailableDto>(createdTeacherUnavailable);

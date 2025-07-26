@@ -3,7 +3,7 @@ using MediatR;
 using Planora.Application.Features.SchoolScheduleSettingFeature.Constants;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
 
 public class CreateSchoolScheduleSettingCommand : IRequest<CreatedSchoolScheduleSettingDto>, ISecuredRequest
 {

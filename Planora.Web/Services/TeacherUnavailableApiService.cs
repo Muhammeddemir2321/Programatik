@@ -1,9 +1,12 @@
 ﻿using Planora.Application.Features.LessonScheduleGroupFeature.Commands.CreateLessonScheduleGroup;
 using Planora.Application.Features.TeacherFeature.Dtos;
 using Planora.Application.Features.TeacherUnavailableFeature.Commands.CreateTeacherUnavailable;
+using Planora.Application.Features.TeacherUnavailableFeature.Commands.UpdateTeacherUnavailable;
 using Planora.Application.Features.TeacherUnavailableFeature.Queries.GetByIdTeacherUnavailable;
 using Planora.Application.Features.TeacherUnavailableFeature.Queries.ListAllTeacherUnavailable;
+using Planora.Domain.Entities;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Planora.Web.Services
 {
@@ -43,6 +46,26 @@ namespace Planora.Web.Services
             var responseBody = await response.Content.ReadFromJsonAsync<CreatedTeacherUnavailableDto>();
 
             return responseBody!;
+        }
+
+        public async Task<UpdatedTeacherUnavailableDto> UpdateAsync(UpdateTeacherUnavailableCommand updateTeacherUnavailableCommand)
+        {
+
+
+            var response = await _httpClient.PutAsJsonAsync("TeacherUnavailables/Update", updateTeacherUnavailableCommand);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+            var responseBody = await response.Content.ReadFromJsonAsync<UpdatedTeacherUnavailableDto>();
+
+            return responseBody!;
+        }
+
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            var response = await _httpClient.DeleteAsync($"TeacherUnavailables/DeleteById/{id}");
+
+            return response.IsSuccessStatusCode;
         }
     }
 }

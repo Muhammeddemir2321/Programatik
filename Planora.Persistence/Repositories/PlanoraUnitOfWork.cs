@@ -13,6 +13,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
     public ITeacherUnavailableRepository TeacherUnavailables { get; }
     public IClassSectionRepository ClassSections { get; }
     public ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
+    public ILectureDistributionOptionRepository LectureDistributionOptions { get; }
     public IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
     public ILessonScheduleRepository LessonSchedules { get; }
     public ILessonScheduleGroupRepository LessonScheduleGroups { get; }
@@ -32,6 +33,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         IClassSectionRepository classSections,
         IClassTeachingAssignmentRepository classTeachingAssignments,
         ISchoolScheduleSettingRepository schoolScheduleSettings,
+        ILectureDistributionOptionRepository lectureDistributionOptions,
         IGradeRepository grades,
         IIdentityAuthorityRepository identityAuthorities,
         IIdentityOperationClaimRepository identityOperationClaims,
@@ -53,6 +55,7 @@ public class PlanoraUnitOfWork : UnitOfWork<PlanoraDbContext>, IPlanoraUnitOfWor
         ClassSections = classSections;
         ClassTeachingAssignments = classTeachingAssignments;
         SchoolScheduleSettings = schoolScheduleSettings;
+        LectureDistributionOptions = lectureDistributionOptions;
         Grades = grades;
         IdentityAuthorities = identityAuthorities;
         IdentityOperationClaims = identityOperationClaims;

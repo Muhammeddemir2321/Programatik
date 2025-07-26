@@ -1,6 +1,6 @@
-﻿namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.UpdateSchoolScheduleSetting;
+﻿namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
 
-public class UpdatedSchoolScheduleSettingDto
+public class CreatedSchoolScheduleSettingDto
 {
     public Guid Id { get; set; }
     public Guid SchoolId { get; set; }

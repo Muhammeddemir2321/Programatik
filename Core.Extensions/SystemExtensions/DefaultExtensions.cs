@@ -14,6 +14,7 @@ namespace Core.Extensions.SystemExtensions;
 
 public static class DefaultExtensions
 {
+    private const string CorsPolicyName = "AllowAngularClient";
     public static WebApplicationBuilder ConfigureCustomApplicationBuilder(this WebApplicationBuilder builder, Assembly assembly)
     {
         var configuration = new ConfigurationBuilder()
@@ -21,14 +22,16 @@ public static class DefaultExtensions
             .AddJsonFile("general.settings.json")
             .Build();
         builder.Configuration.AddConfiguration(configuration);
-        builder.Services.AddCors(
-            policy =>
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(CorsPolicyName, policy =>
             {
-                policy.AddDefaultPolicy(c =>
-                {
-                    c.AllowAnyHeader().AllowAnyMethod().AllowCredentials();
-                });
+                policy.WithOrigins("http://localhost:4200") // ✅ Angular için gerekli
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials(); // Cookie destekliyorsa true, yoksa kaldır
             });
+        });
         builder.Services.AddControllers(options =>
         {
             options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
@@ -81,8 +84,7 @@ public static class DefaultExtensions
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseHttpsRedirection();
-
-        app.UseCors();
+        app.UseCors(CorsPolicyName);
 
         app.UseAuthentication();
         app.UseAuthorization();

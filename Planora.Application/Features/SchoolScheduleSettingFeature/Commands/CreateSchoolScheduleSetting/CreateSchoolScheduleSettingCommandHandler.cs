@@ -3,7 +3,7 @@ using MediatR;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.CreateSchoolScheduleSetting;
 
 public class CreateSchoolScheduleSettingCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,

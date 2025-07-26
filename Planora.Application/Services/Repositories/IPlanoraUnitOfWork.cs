@@ -11,6 +11,7 @@ public interface IPlanoraUnitOfWork : IUnitOfWork
     ITeacherUnavailableRepository TeacherUnavailables { get; }
     IClassSectionRepository ClassSections { get; }
     ISchoolScheduleSettingRepository SchoolScheduleSettings { get; }
+    ILectureDistributionOptionRepository LectureDistributionOptions { get; }
     IClassTeachingAssignmentRepository ClassTeachingAssignments { get; }
     ILessonScheduleRepository LessonSchedules { get; }
     ILessonScheduleGroupRepository LessonScheduleGroups { get; }

@@ -3,7 +3,7 @@ using MediatR;
 using Planora.Application.Services.Repositories;
 using Planora.Domain.Entities;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.UpdateSchoolScheduleSetting;
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.UpdateSchoolScheduleSetting;
 
 public class UpdateSchoolScheduleSettingCommandHandler(
     IPlanoraUnitOfWork planoraUnitOfWork,

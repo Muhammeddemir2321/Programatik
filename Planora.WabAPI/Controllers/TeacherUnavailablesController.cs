@@ -58,13 +58,13 @@ namespace Planora.WabAPI.Controllers
             CreatedTeacherUnavailableDto result = await Mediator.Send(createdTeacherUnavailable);
             return Created("", result);
         }
-        [HttpPost("Update")]
+        [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] UpdateTeacherUnavailableCommand updateTeacherUnavailable)
         {
             UpdatedTeacherUnavailableDto result = await Mediator.Send(updateTeacherUnavailable);
             return Created("", result);
         }
-        [HttpGet("DeleteById/{id}")]
+        [HttpDelete("DeleteById/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             DeleteTeacherUnavailableCommand deleteTeacherUnavailableCommand = new() { Id = id };

@@ -26,6 +26,7 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     public DbSet<LessonSchedule> LessonScheduleGroups { get; set; }
     public DbSet<LessonSchedule> LessonSchedules { get; set; }
     public DbSet<SchoolScheduleSetting> SchoolScheduleSettings { get; set; }
+    public DbSet<LectureDistributionOption> LectureDistributionOptions { get; set; }
     public DbSet<Grade> Grades { get; set; }
     public DbSet<Lecture> Lectures { get; set; }
     public DbSet<ClassSection> ClassSections { get; set; }
@@ -45,7 +46,7 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
     {
         //var schoolId = _planoraUserContextAccessor.SchoolId;
 
-        foreach (var entry in ChangeTracker.Entries<ISchoolEntity>().Where(e => e.State == EntityState.Added))
+        foreach (var entry in ChangeTracker.Entries<ISchoolEntity>().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
         {
             if (entry.Entity.SchoolId == Guid.Empty || entry.Entity.SchoolId == null)
             {
@@ -79,6 +80,9 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
             .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<SchoolScheduleSetting>()
+            .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
+
+        modelBuilder.Entity<LectureDistributionOption>()
             .HasQueryFilter(ca => ca.SchoolId == CurrentSchoolId);
 
         modelBuilder.Entity<Teacher>()

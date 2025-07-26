@@ -19,15 +19,15 @@ public class CreateLessonScheduleGroupCommandHandler(
     {
         return await planoraUnitOfWork.ExecuteInTransactionAsync(async () =>
         {
-            var activeLessonSecheduleGroups = await planoraUnitOfWork.LessonScheduleGroups
-                  .GetAllAsync(l => l.IsActive == true &&
-                      l.Year == request.Year &&
-                      l.Semester == request.Semester,
-                 cancellationToken: cancellationToken);
-            foreach (var activeLessonSecheduleGroup in activeLessonSecheduleGroups)
+            var samePeriodActiveGroups = await planoraUnitOfWork.LessonScheduleGroups.GetAllAsync(
+                l => l.IsActive &&
+                    l.Year == request.Year &&
+                    l.Semester == request.Semester,
+                cancellationToken: cancellationToken);
+            foreach (var group in samePeriodActiveGroups)
             {
-                activeLessonSecheduleGroup.IsActive = false;
-                await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(activeLessonSecheduleGroup, cancellationToken: cancellationToken);
+                group.IsActive = false;
+                await planoraUnitOfWork.LessonScheduleGroups.UpdateAsync(group, cancellationToken: cancellationToken);
             }
             var mappedLessonScheduleGroup = mapper.Map<LessonScheduleGroup>(request);
             mappedLessonScheduleGroup.IsActive = true;
@@ -36,8 +36,6 @@ public class CreateLessonScheduleGroupCommandHandler(
             request.createLessonScheduleCommand.LessonScheduleGroupId= createdLessonScheduleGroup.Id;
             var mapped = mapper.Map<CreatedLessonScheduleGroupDto>(createdLessonScheduleGroup);
             var createdLessonScheduleGroupDto = await mediator.Send(request.createLessonScheduleCommand);
-
-            //mapped = createdLessonScheduleGroupDto;
 
             mapped.CreatedLessonScheduleDtos = createdLessonScheduleGroupDto.CreatedLessonScheduleDtos;
             mapped.SchoolScheduleSettingGetByIdDto = createdLessonScheduleGroupDto.SchoolScheduleSettingGetByIdDto;

@@ -2,7 +2,7 @@
 using Planora.Application.Features.SchoolScheduleSettingFeature.Rules;
 using Planora.Application.Services.Repositories;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.DeleteSchoolScheduleSetting
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.DeleteSchoolScheduleSetting
 {
     public class DeleteSchoolScheduleSettingCommandHandler(
         IPlanoraUnitOfWork planoraUnitOfWork,

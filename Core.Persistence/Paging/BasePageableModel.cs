@@ -9,9 +9,9 @@ public class BasePageableModel
     public bool HasPrevious { get; set; }
     public bool HasNext { get; set; }
     public BasePageableModel() { }
-    public BasePageableModel(int ındex, int size, int count, int pages, bool hasPrevious, bool hasNext)
+    public BasePageableModel(int index, int size, int count, int pages, bool hasPrevious, bool hasNext)
     {
-        Index = ındex;
+        Index = index;
         Size = size;
         Count = count;
         Pages = pages;

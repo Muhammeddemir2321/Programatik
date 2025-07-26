@@ -4,7 +4,7 @@ using Planora.Application.Features.SchoolScheduleSettingFeature.Constants;
 using Planora.Domain.Entities;
 using System.Text.Json.Serialization;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.DeleteSchoolScheduleSetting;
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.DeleteSchoolScheduleSetting;
 
 public class DeleteSchoolScheduleSettingCommand : IRequest<bool>, ISecuredRequest
 {

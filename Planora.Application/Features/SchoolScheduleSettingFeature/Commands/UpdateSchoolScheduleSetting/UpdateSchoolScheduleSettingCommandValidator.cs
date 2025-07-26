@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Planora.Domain.Entities;
 
-namespace Planora.Application.Features.SchoolScheduleSettingFeature.Command.CreateSchoolScheduleSetting;
+namespace Planora.Application.Features.SchoolScheduleSettingFeature.Commands.UpdateSchoolScheduleSetting;
 
-public class CreateSchoolScheduleSettingCommandValidator:AbstractValidator<SchoolScheduleSetting>
+public class UpdateSchoolScheduleSettingCommandValidator:AbstractValidator<SchoolScheduleSetting>
 {
-    public CreateSchoolScheduleSettingCommandValidator()
+    public UpdateSchoolScheduleSettingCommandValidator()
     {
         RuleFor(x => x.FirstLessonStartTime).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
         RuleFor(x => x.BreakDurationMinutes).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");

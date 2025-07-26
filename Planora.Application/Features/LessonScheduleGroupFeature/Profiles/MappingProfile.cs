@@ -17,7 +17,7 @@ public class MappingProfile : Profile
         CreateMap<IPaginate<LessonScheduleGroup>, LessonScheduleGroupListModel>().ReverseMap();
         CreateMap<LessonScheduleGroup, CreateLessonScheduleGroupCommand>().ReverseMap();
         CreateMap<LessonScheduleGroup, CreatedLessonScheduleGroupDto>().ReverseMap();
-        CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupIsActiveCommand>().ReverseMap();
+        CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupStatusCommand>().ReverseMap();
         CreateMap<LessonScheduleGroup, UpdateLessonScheduleGroupCommand>().ReverseMap();
         CreateMap<LessonScheduleGroup, UpdatedLessonScheduleGroupDto>().ReverseMap();
         CreateMap<LessonScheduleGroup, LessonScheduleGroupListDto>().ReverseMap();
