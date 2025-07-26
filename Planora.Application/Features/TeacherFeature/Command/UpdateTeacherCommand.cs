@@ -13,7 +13,8 @@ namespace Planora.Application.Features.TeacherFeatures.Commands;
 public class UpdateTeacherCommand : IRequest<UpdatedTeacherDto>, ISecuredRequest
 {
     public Guid Id { get; set; }
-    public string FullName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public Guid LectureId { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { TeacherClaimConstants.Update };

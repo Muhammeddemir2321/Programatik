@@ -16,10 +16,11 @@ public class CreateClassSectionCommadHandler(
     public async Task<CreatedClassSectionDto> Handle(CreateClassSectionCommand request, CancellationToken cancellationToken)
     {
         var mappedClassSection = mapper.Map<ClassSection>(request);
-        mappedClassSection.GradeId= Guid.Parse("D281D7DC-0FFD-41DD-50A4-08DDBB11CFE5");
-        //var grade = await planoraUnitOfWork.Grades.GetAsync(g => g.Id == request.GradeId, cancellationToken: cancellationToken);,,,,
-        //await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(grade);
-        //mappedClassSection.Name = $"{request.Name}  {grade!.Name}";
+        var grade = await planoraUnitOfWork.Grades.GetAsync(g => g.Id == request.GradeId, cancellationToken: cancellationToken);
+
+        await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(grade);
+        mappedClassSection.Name = $"{grade!.Name} {request.Name} ";
+
         var createdClassSection = await planoraUnitOfWork.ClassSections.AddAsync(mappedClassSection);
         await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedClassSectionDto>(createdClassSection);

@@ -4,8 +4,9 @@ namespace Planora.Domain.Entities;
 
 public class Teacher : Entity<Guid>, ISchoolEntity
 {
-    public int FakeId { get; set; }
-    public string FullName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Branch { get; set; }
     public Guid SchoolId { get; set; }
     public School School { get; set; }
     public Guid LectureId { get; set; }

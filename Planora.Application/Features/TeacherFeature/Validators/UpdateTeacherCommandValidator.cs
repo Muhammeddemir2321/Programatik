@@ -7,6 +7,7 @@ public class UpdateTeacherCommandValidator:AbstractValidator<UpdateTeacherComman
 {
     public UpdateTeacherCommandValidator()
     {
-        RuleFor(x => x.FullName).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
+        RuleFor(x => x.FirstName).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
+        RuleFor(x => x.LastName).NotNull().WithMessage("{PropertyName} is required").NotEmpty().WithMessage("{PropertyName} is required");
     }
 }

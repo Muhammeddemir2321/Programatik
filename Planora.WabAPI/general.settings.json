@@ -1,0 +1,25 @@
+{
+  "TokenOptions": {
+    "Issuer": "planoraissuer",
+    "Audience": "planoraaudience",
+    "AccessTokenExpiration": 5,
+    "RefreshTokenExpiration": 600,
+    "SecurityKey": "supersecurekeysupersecurekeysupersecurekeysupersecurekeysupersecurekeyplanora123!"
+  },
+
+  "AllowedHostList": [
+    "http://localhost:4200",
+    "https://localhost:4200"
+  ],
+
+  "ConnectionStrings": {
+
+    "Production": "Server=MUHAMMED\\SQLEXPRESS01; Database=PlanoraDB; Trusted_Connection=True; MultipleActiveResultSets=true; TrustServerCertificate=True",
+    "Test": "Server=MUHAMMED\\SQLEXPRESS01; Database=PlanoraDBTest; Trusted_Connection=True; MultipleActiveResultSets=true; TrustServerCertificate=True",
+    "Debug": "Server=MUHAMMED\\SQLEXPRESS01; Database=PlanoraDBDebug; Trusted_Connection=True; MultipleActiveResultSets=true; TrustServerCertificate=True"
+  }
+
+
+
+}
+

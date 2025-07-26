@@ -12,7 +12,6 @@ namespace Planora.Application.Features.LectureFeature.Commands;
 
 public class CreateLectureCommand : IRequest<CreatedLectureDto>, ISecuredRequest
 {
-    public int FakeId { get; set; }
     public string Name { get; set; }
     [JsonIgnore]
     public string[] Roles => new string[] { LectureClaimConstants.Create };

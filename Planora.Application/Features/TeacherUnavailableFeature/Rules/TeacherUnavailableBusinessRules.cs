@@ -15,7 +15,7 @@ namespace Planora.Application.Features.TeacherUnavailableFeature.Rules
 
             await Task.CompletedTask;
         }
-        public async Task<TeacherUnavailable> CheckCreateTeacherUnavailableModelAsync(TeacherUnavailable teacherUnavailable)
+        public async Task<TeacherUnavailable> CheckTeacherUnavailableHourAsync(TeacherUnavailable teacherUnavailable)
         {
             if (teacherUnavailable.StartHour == 1 && teacherUnavailable.EndHour == 8)
             {

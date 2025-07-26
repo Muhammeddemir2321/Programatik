@@ -121,8 +121,7 @@ namespace Planora.Persistence.Migrations
                     TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
                     StartHour = table.Column<int>(type: "int", nullable: true),
-                    EndHour = table.Column<int>(type: "int", nullable: true),
-                    TeacherFakeId = table.Column<int>(type: "int", nullable: false)
+                    EndHour = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -341,7 +340,6 @@ namespace Planora.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FakeId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GradeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -364,11 +362,30 @@ namespace Planora.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LectureDistributionOptions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalHours = table.Column<int>(type: "int", nullable: false),
+                    Distribution = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LectureDistributionOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LectureDistributionOptions_Schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalTable: "Schools",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Lectures",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FakeId = table.Column<int>(type: "int", nullable: false),
                     SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -436,7 +453,7 @@ namespace Planora.Persistence.Migrations
                         column: x => x.SchoolId,
                         principalTable: "Schools",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -481,8 +498,9 @@ namespace Planora.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FakeId = table.Column<int>(type: "int", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Branch = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SchoolId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -516,11 +534,9 @@ namespace Planora.Persistence.Migrations
                     WeeklyHourCount = table.Column<int>(type: "int", nullable: false),
                     TeacherTotalLoad = table.Column<int>(type: "int", nullable: false),
                     ClassSectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TeacherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LectureName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClassSectionFakeId = table.Column<int>(type: "int", nullable: false),
-                    TeacherFakeId = table.Column<int>(type: "int", nullable: false),
-                    LectureFakeId = table.Column<int>(type: "int", nullable: false)
+                    TeacherFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TeacherLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LectureName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -564,7 +580,8 @@ namespace Planora.Persistence.Migrations
                     TeacherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LectureId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClassSectionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TeacherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TeacherFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TeacherLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LectureName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -702,6 +719,11 @@ namespace Planora.Persistence.Migrations
                 column: "OperationClaimId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LectureDistributionOptions_SchoolId",
+                table: "LectureDistributionOptions",
+                column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lectures_SchoolId",
                 table: "Lectures",
                 column: "SchoolId");
@@ -797,6 +819,9 @@ namespace Planora.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityOperationClaims");
+
+            migrationBuilder.DropTable(
+                name: "LectureDistributionOptions");
 
             migrationBuilder.DropTable(
                 name: "LessonSchedule");

@@ -38,7 +38,8 @@ namespace Planora.Web.Controllers
                 {
                     var teacherVm = new TeacherScheduleViewModel
                     {
-                        TeacherName = teacher.FullName
+                        TeacherFirstName = teacher.FirstName,
+                        TeacherLastName = teacher.LastName
                     };
 
                     for (int i = 0; i < settings.DailyLessonCount; i++)

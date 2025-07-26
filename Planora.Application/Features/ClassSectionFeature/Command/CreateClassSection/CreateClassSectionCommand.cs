@@ -7,7 +7,6 @@ namespace Planora.Application.Features.ClassSectionFeature.Command.CreateClassSe
 
 public class CreateClassSectionCommand : IRequest<CreatedClassSectionDto>, ISecuredRequest
 {
-    public int FakeId { get; set; }
     public string Name { get; set; }
     public Guid GradeId { get; set; }
     [JsonIgnore]

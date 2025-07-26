@@ -16,8 +16,10 @@ public class UpdateClassSectionCommandHandler(
     {
         var mappedClassSection = mapper.Map<ClassSection>(request);
         var grade = await planoraUnitOfWork.Grades.GetAsync(g => g.Id == request.GradeId, cancellationToken: cancellationToken);
+
         await classSectionBusinessRules.EntityShouldExistWhenRequestedAsync(grade);
-        mappedClassSection.Name = $"{request.Name}  {grade!.Name}";
+        mappedClassSection.Name = $"{grade!.Name}  {request.Name}";
+
         var updatedClassSection = await planoraUnitOfWork.ClassSections.UpdateAsync(mappedClassSection, cancellationToken: cancellationToken);
         await planoraUnitOfWork.CommitAsync();
         return mapper.Map<UpdatedClassSectionDto>(updatedClassSection);

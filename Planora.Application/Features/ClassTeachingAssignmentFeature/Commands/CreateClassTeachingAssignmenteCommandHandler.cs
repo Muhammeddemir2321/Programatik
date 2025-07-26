@@ -14,7 +14,9 @@ public class CreateClassTeachingAssignmenteCommandHandler(
     public async Task<CreatedClassTeachingAssignmentDto> Handle(CreateClassTeachingAssignmentCommand request, CancellationToken cancellationToken)
     {
         var mappedClassTeachingAssignment = mapper.Map<ClassTeachingAssignment>(request);
+
         mappedClassTeachingAssignment = await classTeachingAssignmentBusinessRules.EnrichClassTeachingAssignmentAsync(mappedClassTeachingAssignment, cancellationToken: cancellationToken);
+
         var createdClassTeachingAssignment = await planoraUnitOfWork.ClassTeachingAssignments.AddAsync(mappedClassTeachingAssignment, cancellationToken: cancellationToken);
         await planoraUnitOfWork.CommitAsync();
         return mapper.Map<CreatedClassTeachingAssignmentDto>(createdClassTeachingAssignment);

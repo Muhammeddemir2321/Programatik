@@ -16,10 +16,7 @@ public class ClassTeachingAssignment : Entity<Guid>, ISchoolEntity
     public int WeeklyHourCount { get; set; }
     public int TeacherTotalLoad { get; set; }
     public string ClassSectionName { get; set; }
-    public string TeacherName { get; set; }
+    public string TeacherFirstName { get; set; }
+    public string TeacherLastName { get; set; }
     public string LectureName { get; set; }
-
-    public int ClassSectionFakeId { get; set; }
-    public int TeacherFakeId { get; set; }
-    public int LectureFakeId { get; set; }
 }

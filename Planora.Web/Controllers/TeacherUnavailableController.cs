@@ -25,7 +25,7 @@ public class TeacherUnavailableController : Controller
         ViewBag.Teachers = allTeachers.Select(g => new SelectListItem
         {
             Value = g.Id.ToString(),
-            Text = $"{g.FullName}"
+            Text = $"{g.FirstName}  {g.LastName}"
         }).ToList();
 
         var model = new TeacherUnavailableViewModel();

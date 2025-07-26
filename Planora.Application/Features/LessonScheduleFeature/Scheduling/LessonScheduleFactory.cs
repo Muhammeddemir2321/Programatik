@@ -16,7 +16,8 @@ public static class LessonScheduleFactory
             LectureId = assignment.LectureId,
             SchoolId = assignment.SchoolId,
             ClassSectionName = assignment.ClassSectionName,
-            TeacherName = assignment.TeacherName,
+            TeacherFirstName = assignment.TeacherFirstName,
+            TeacherLastName = assignment.TeacherLastName,
             LectureName = assignment.LectureName
         };
     }

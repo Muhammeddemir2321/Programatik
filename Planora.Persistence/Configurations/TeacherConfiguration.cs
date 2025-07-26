@@ -10,7 +10,8 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
     {
         builder.HasKey(t => t.Id);
         builder.Property(t => t.Id).ValueGeneratedOnAdd();
-        builder.Property(t => t.FullName).IsRequired().HasMaxLength(100);
+        builder.Property(t => t.FirstName).IsRequired().HasMaxLength(100);
+        builder.Property(t => t.LastName).IsRequired().HasMaxLength(100);
 
         builder.HasOne(t => t.School)
                .WithMany(s => s.Teachers)

@@ -67,9 +67,15 @@ public class SlotFinder
                 break;
             }
         }
-        CustomLog.WriteLogsToFile($"❌ Çakışma oluştu → {classSections.FirstOrDefault(c => c.Id == assignment.ClassSectionId)?.Name} sınıfının " +
-            $"{teachers.FirstOrDefault(t => t.Id == assignment.TeacherId)?.FullName} öğretmeninin {lectures.FirstOrDefault(l => l.Id == assignment.LectureId)?.Name} dersinin " +
+
+        CustomLog.WriteLogsToFile($"❌ Çakışma oluştu → {assignment.ClassSectionName} sınıfının " +
+            $"{assignment.TeacherFirstName} {assignment.TeacherLastName} öğretmeninin {assignment.LectureName} dersinin " +
             $"{assignment.WeeklyHourCount} saatlik çakışması oldu ");
+
+        //CustomLog.WriteLogsToFile($"❌ Çakışma oluştu → {classSections.FirstOrDefault(c => c.Id == assignment.ClassSectionId)?.Name} sınıfının " +
+        //    $"{teachers.FirstOrDefault(t => t.Id == assignment.TeacherId)?.FullName} öğretmeninin {lectures.FirstOrDefault(l => l.Id == assignment.LectureId)?.Name} dersinin " +
+        //    $"{assignment.WeeklyHourCount} saatlik çakışması oldu ");
+
         return null;
     }
     private int FindContinuousFreeBlock(LessonSlot[,] grid, int day, int requiredBlockLength, ClassTeachingAssignment assignment)

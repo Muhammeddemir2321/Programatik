@@ -2,7 +2,8 @@
 
 public class TeacherScheduleViewModel
 {
-    public string TeacherName { get; set; } = string.Empty;
+    public string TeacherFirstName { get; set; } = string.Empty;
+    public string TeacherLastName { get; set; } = string.Empty;
     public List<TeacherLessonRow> Rows { get; set; } = new();
 }
 

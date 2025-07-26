@@ -96,28 +96,6 @@ public class PlanoraDbContext : IdentityDbContext<Identity, IdentityRole<Guid>, 
 
         base.OnModelCreating(modelBuilder);
     }
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlanoraDbContext).Assembly);
 
-    //    var schoolId = _planoraUserContextAccessor.SchoolId;
 
-    //    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-    //    {
-    //        if (typeof(ISchoolEntity).IsAssignableFrom(entityType.ClrType))
-    //        {
-    //            if (schoolId == null)
-    //                throw new InvalidOperationException("SchoolId context üzerinden alınamadı.");
-    //            var parameter = Expression.Parameter(entityType.ClrType, "e");
-    //            var property = Expression.Property(parameter, nameof(ISchoolEntity.SchoolId));
-    //            var constant = Expression.Constant(schoolId.Value, typeof(Guid));
-    //            var equality = Expression.Equal(property, constant);
-    //            var lambda = Expression.Lambda(equality, parameter);
-
-    //            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
-    //        }
-    //    }
-
-    //    base.OnModelCreating(modelBuilder);
-    //}
 }

@@ -17,6 +17,7 @@ public class LessonSchedule : Entity<Guid>, ISchoolEntity
     public Guid LectureId { get; set; }
     public Lecture Lecture { get; set; }
     public string ClassSectionName { get; set; }
-    public string TeacherName { get; set; }
+    public string TeacherFirstName { get; set; }
+    public string TeacherLastName { get; set; }
     public string LectureName { get; set; }
 }

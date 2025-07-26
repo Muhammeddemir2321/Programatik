@@ -17,6 +17,6 @@ public class SchoolScheduleSettingConfiguration : IEntityTypeConfiguration<Schoo
         builder.HasOne(x => x.School)
         .WithOne()
         .HasForeignKey<SchoolScheduleSetting>(x => x.SchoolId)
-        .OnDelete(DeleteBehavior.Cascade);
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

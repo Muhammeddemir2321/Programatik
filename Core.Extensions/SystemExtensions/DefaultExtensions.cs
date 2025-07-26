@@ -26,10 +26,10 @@ public static class DefaultExtensions
         {
             options.AddPolicy(CorsPolicyName, policy =>
             {
-                policy.WithOrigins("http://localhost:4200") // ✅ Angular için gerekli
+                policy.WithOrigins("http://localhost:4200") 
                       .AllowAnyHeader()
                       .AllowAnyMethod()
-                      .AllowCredentials(); // Cookie destekliyorsa true, yoksa kaldır
+                      .AllowCredentials();
             });
         });
         builder.Services.AddControllers(options =>
